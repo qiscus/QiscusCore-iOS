@@ -1,0 +1,16 @@
+
+Pod::Spec.new do |s|
+  s.name = "QiscusCore"
+  s.version = "0.0.1"
+  s.summary = "QiscusCore is the iOS client interface for the Qiscus communications cloud."
+  s.license = "Commercial"
+  s.authors = {"Qiscus"=>"contact@qiscus.com", "Ashari Juang"=>"asharijuang@qiscus.co", "Ahmad Athaullah"=>"a-athaullah@qiscus.co"}
+  s.homepage = 'http://qiscus.com'
+  s.libraries = ["z"]
+  s.requires_arc = true
+  s.source = { git: 'https://github.com/layerhq/releases-ios', tag: "v#{s.version}" }
+
+  s.ios.deployment_target    = '9.0'
+  s.ios.vendored_framework   = 'QiscusCore.framework'
+  s.ios.frameworks = ["CFNetwork", "Security", "MobileCoreServices", "SystemConfiguration", "UIKit"]
+end
