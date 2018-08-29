@@ -5,7 +5,10 @@
 [![Languages](https://img.shields.io/badge/language-Objective--C%20%7C%20Swift-orange.svg)](https://github.com/qiscus)
 [![CocoaPods](https://img.shields.io/badge/pod-v3.0.109-green.svg)](https://cocoapods.org/pods/QiscusCore)
 
+## TODO
 
+- [ ] Build for device
+- [ ] Local DB
 
 ### Main Features
 
