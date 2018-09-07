@@ -14,23 +14,23 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		uqXEzh44ASDd1v6kPj/taPGbUFk=
+		Dqb2UtFSmF/hrys2WbQ0Uuceol0=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftdoc</key>
 		<data>
-		R9Vk9jCtBV9iqlbKZktLTKbsMgg=
+		92aFL6PmCkaEC1bSawPi32v4GQk=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftmodule</key>
 		<data>
-		6zJLWteXkUWWawbq6qaiIXj+f7U=
+		RIFyPoG+7gMxzU+DNqqCIB0H1IY=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		7hCX1itAu/YnigTNcMjZWv3rpL4=
+		tLm1oJEQNg7ZuJgmTJq35SUKigg=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		zJE0XHnxwR3yBNKkUYDqi1q2dpk=
+		INP0pVLZs4wrNh/9h2ahQu8SeEE=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -69,44 +69,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			R9Vk9jCtBV9iqlbKZktLTKbsMgg=
+			92aFL6PmCkaEC1bSawPi32v4GQk=
 			</data>
 			<key>hash2</key>
 			<data>
-			+d2P128cBafl7Cu9J7RECagGP1MYJMc5YXGUJ12xXMI=
+			lEtpLNErGBFs3Sr0+mjlZWTR93ULiDPtzWdA4bPj6f4=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			6zJLWteXkUWWawbq6qaiIXj+f7U=
+			RIFyPoG+7gMxzU+DNqqCIB0H1IY=
 			</data>
 			<key>hash2</key>
 			<data>
-			q5FWFW558Y74ff2fXXICi0vqahykJ6MgzVGbgoiDTuU=
+			Dag5qqNBAceQRR7GmFG9JCvJC4qU8+Nrwy/WMFHkHtM=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			7hCX1itAu/YnigTNcMjZWv3rpL4=
+			tLm1oJEQNg7ZuJgmTJq35SUKigg=
 			</data>
 			<key>hash2</key>
 			<data>
-			f2GnMhTtZBZg2tsZL8HEvK7AoTg49ijzcnLoUOhBDb4=
+			tZ13Nc2jfJCe1SQM6sIKUswf1Rk2/o0/UDPMEwvug3c=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			zJE0XHnxwR3yBNKkUYDqi1q2dpk=
+			INP0pVLZs4wrNh/9h2ahQu8SeEE=
 			</data>
 			<key>hash2</key>
 			<data>
-			iRobsJEp2r/lhQcaDzBQbhNkZptGjJVmLVPch/dudOE=
+			9r1gVL0FMPR/7gXP11elHaAsTNWXSQV8r+I9WffYroU=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
