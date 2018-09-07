@@ -8,9 +8,10 @@ DESC
 s.homepage     = "https://qisc.us"
 s.license      = "MIT"
 s.author       = "Qiscus"
-s.source       = { :git => "https://github.com/qiscus/qiscus-sdk-ios.git", :tag => "#{s.version}" }
-s.source_files  = "QiscusCore/**/*.{swift}"
-s.platform      = :ios, "10.0"
+s.source       = { :git => "https://github.com/qiscus/QiscusCore-iOS.git", :tag => "#{s.version}" }
+s.platform      = :ios, "9.0"
+s.ios.vendored_frameworks = 'QiscusCore.framework'
+s.ios.frameworks = ["UIKit", "QuartzCore", "CFNetwork", "Security", "Foundation", "MobileCoreServices"]
 s.dependency 'QiscusRealtime'
 s.dependency 'SwiftyJSON'
 end
