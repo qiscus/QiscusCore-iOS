@@ -27,7 +27,7 @@
 - [x] Login with JWT
 - [x] Register DeviceToken Apns nor Pushkit
 - [x] Receive Realtime Event(new message, message status, etc)
-- [x] [Complete Documentation](https://qiscus.com)
+- [x] [Complete Documentation](https://qiscuscoreios.firebaseapp.com/Classes/QiscusCore.html)
 
 ## Component Libraries
 
