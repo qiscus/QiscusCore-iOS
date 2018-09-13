@@ -22,7 +22,7 @@
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftmodule</key>
 		<data>
-		ysRTPnZvEXC6fmi1Irz+D1hRjsk=
+		3t/rvuKKruBZT/ua6eeckv9/zGY=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		SDEwZIAAdoXpfXCoduNKugV5u5k=
+		xisOaE2wBEDWGoR/8GbgaJiGacA=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -38,7 +38,7 @@
 		</data>
 		<key>Qiscus.momd/Qiscus.mom</key>
 		<data>
-		E4wGlUN9wpYz+QRNpC+S4dag3js=
+		AWtjIPBsSjQBm3ZQBb23EyGiVAc=
 		</data>
 		<key>Qiscus.momd/VersionInfo.plist</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>QiscusCore.podspec</key>
 		<data>
-		dIzY7hTnC10UQTIv+soyNcAYzDs=
+		ieRp557PL1J7unu/17/85yzLAQM=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -88,11 +88,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ysRTPnZvEXC6fmi1Irz+D1hRjsk=
+			3t/rvuKKruBZT/ua6eeckv9/zGY=
 			</data>
 			<key>hash2</key>
 			<data>
-			mZenzDUQ2855LCCF+p5BDITn0edBwGe+HdZAfkcvhCA=
+			83R/TBuWFiG+clk69Ovg4+RFd6DGkKx6FnbyEFklj28=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
@@ -110,11 +110,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			SDEwZIAAdoXpfXCoduNKugV5u5k=
+			xisOaE2wBEDWGoR/8GbgaJiGacA=
 			</data>
 			<key>hash2</key>
 			<data>
-			wzBlC9vIteh+uN2x84g0w4WVtwFlm0h/RdT6Dpqu1t4=
+			rLChrUYRaGGPLiIG/xRPHWfDSjzQeHEbASw5dkUARa0=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -132,11 +132,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			E4wGlUN9wpYz+QRNpC+S4dag3js=
+			AWtjIPBsSjQBm3ZQBb23EyGiVAc=
 			</data>
 			<key>hash2</key>
 			<data>
-			cOfGExYKIHrqlLjx0Wr3+UjG/AZp6tkGmnZmQ18LMUs=
+			4d/dispPXbFJmaGG7K1I7j21m3EXx7yw0LgWbfwtowg=
 			</data>
 		</dict>
 		<key>Qiscus.momd/VersionInfo.plist</key>
@@ -154,11 +154,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			dIzY7hTnC10UQTIv+soyNcAYzDs=
+			ieRp557PL1J7unu/17/85yzLAQM=
 			</data>
 			<key>hash2</key>
 			<data>
-			FKdFdsBM6z90yp+R44B0dCptMQtsGm+FEuINscBkPeA=
+			cbdl8P2s+4CyD4IG8LGu0jB5LNDLclvkdC1vyvo+7N8=
 			</data>
 		</dict>
 	</dict>
