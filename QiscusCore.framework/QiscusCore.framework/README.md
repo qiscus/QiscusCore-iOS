@@ -13,8 +13,8 @@
 |-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Lite Version Chat SDK**                   | Qiscus Chat SDK without UI.                                       |
 | **Realtime Event**                          | QiscusCore handle realtime event like publish typing or online status and Automatic subscribe all Qiscus Messaging Event(incoming message, change message status, etc). |
-| **Local Database**                       | Database to save comment and room. |
-| **Local Storage**                       | In Progress, save downloaded file and uploaded file. |
+| **Local Database**                       | Save Room and Comment in local db. |
+| **Local Storage**                       | Manage downloaded file and uploaded file. |
 
 ## Features
 
@@ -142,6 +142,35 @@ QiscusCore.shared.sendMessage(roomID: "roomId", comment: message) { (result, err
 
 ### load messages
 
+* Get rooms from server
+
+```
+QiscusCore.shared.getAllRoom(limit: 50, page: 1) { (rooms, meta, error) in
+    if let results = rooms {
+        // success load rooms
+    }else {
+        // failed load rooms
+    }
+}
+```
+
+* Get from local
+
+Get all rooms from local
+
+```
+ let rooms : [RoomModel]? = QiscusCore.database.room.all()
+```
+
+Get room by room id
+
+```
+let rooms : RoomModel? = QiscusCore.database.room.find(id: "room id")
+```
+
+
+### load messages
+
 * Get message from server
 
 ```
@@ -159,13 +188,13 @@ QiscusCore.shared.loadComments(roomID: id, limit: limit) { (result, error) in
 Get all comments from local
 
 ```
- let comments : [CommentModel]? = QiscusCore.dataStore.getComments
+ let comments : [CommentModel]? = QiscusCore.database.comment.all()
 ```
 
 Get comments by room id
 
 ```
- let comments : [CommentModel]? = QiscusCore.dataStore.getCommentbyRoomID(id: "123")
+ let comments : [CommentModel]? = QiscusCore.database.comment.find(roomId: "123")
 ```
 
 ## File Management

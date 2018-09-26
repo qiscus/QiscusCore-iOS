@@ -207,7 +207,7 @@ Qiscus uploader, upload your file as Data to Qiscus. Example:
 let data = UIImageJPEGRepresentation(YourImage, 0.5)!
 let timestamp = "\(NSDate().timeIntervalSince1970 * 1000).jpg"
 QiscusCore.shared.upload(data: data, filename: timestamp, onSuccess: { (file) in 
-	print(file.url.absoluteString)
+    print(file.url.absoluteString)
 }, onError: { (error) in
     print(error)
 }) { (progress) in
