@@ -7,5 +7,5 @@ target 'sample' do
 
   # Pods for sample
   pod 'QiscusCore', :path => '.'
-  pod 'QiscusRealtime', :git => 'https://github.com/qiscus/QiscusRealtime-iOS.git'
+  pod 'QiscusRealtime'
 end

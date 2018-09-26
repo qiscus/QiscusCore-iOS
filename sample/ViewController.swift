@@ -11,10 +11,17 @@ import QiscusCore
 
 class ViewController: UIViewController {
     
+    var rooms = [RoomModel]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         QiscusCore.setup(WithAppID: "sampleapp-65ghcsaysse")
         QiscusCore.enableDebugPrint = true
+        
+        if QiscusCore.isLogined {
+            // database
+            rooms = QiscusCore.database.room.all()
+        }
         
     }
     
@@ -25,8 +32,7 @@ class ViewController: UIViewController {
     @IBAction func clickLogin(_ sender: Any) {
         QiscusCore.login(userID: "amsibsan", userKey: "12345678") { (user, error) in
             print("result:: \(user!)")
-            // database
-//            QiscusCore.database.
+            
             QiscusCore.shared.getAllRoom(completion: { (rooms, meta, error) in
                 if let r = rooms {
                     print("rooms count : \(r.count)")
