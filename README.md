@@ -13,8 +13,8 @@
 |-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Lite Version Chat SDK**                   | Qiscus Chat SDK without UI.                                       |
 | **Realtime Event**                          | QiscusCore handle realtime event like publish typing or online status and Automatic subscribe all Qiscus Messaging Event(incoming message, change message status, etc). |
-| **Local Database**                       | In Progress. |
-| **Local Storage**                       | Not Yet. |
+| **Local Database**                       | Save Room and Comment in local db. |
+| **Local Storage**                       | Manage downloaded file and uploaded file. |
 
 ## Features
 
@@ -27,7 +27,7 @@
 - [x] Login with JWT
 - [x] Register DeviceToken Apns nor Pushkit
 - [x] Receive Realtime Event(new message, message status, etc)
-- [x] [Complete Documentation](https://qiscuscoreios.firebaseapp.com/Classes/QiscusCore.html)
+- [x] [API Reference](https://qiscuscoreios.firebaseapp.com/Classes/QiscusCore.html)
 
 ## Component Libraries
 
@@ -142,6 +142,35 @@ QiscusCore.shared.sendMessage(roomID: "roomId", comment: message) { (result, err
 
 ### load messages
 
+* Get rooms from server
+
+```
+QiscusCore.shared.getAllRoom(limit: 50, page: 1) { (rooms, meta, error) in
+    if let results = rooms {
+        // success load rooms
+    }else {
+        // failed load rooms
+    }
+}
+```
+
+* Get from local
+
+Get all rooms from local
+
+```
+ let rooms : [RoomModel]? = QiscusCore.database.room.all()
+```
+
+Get room by room id
+
+```
+let rooms : RoomModel? = QiscusCore.database.room.find(id: "room id")
+```
+
+
+### load messages
+
 * Get message from server
 
 ```
@@ -159,13 +188,13 @@ QiscusCore.shared.loadComments(roomID: id, limit: limit) { (result, error) in
 Get all comments from local
 
 ```
- let comments : [CommentModel]? = QiscusCore.dataStore.getComments
+ let comments : [CommentModel]? = QiscusCore.database.comment.all()
 ```
 
 Get comments by room id
 
 ```
- let comments : [CommentModel]? = QiscusCore.dataStore.getCommentbyRoomID(id: "123")
+ let comments : [CommentModel]? = QiscusCore.database.comment.find(roomId: "123")
 ```
 
 ## File Management
@@ -178,7 +207,7 @@ Qiscus uploader, upload your file as Data to Qiscus. Example:
 let data = UIImageJPEGRepresentation(YourImage, 0.5)!
 let timestamp = "\(NSDate().timeIntervalSince1970 * 1000).jpg"
 QiscusCore.shared.upload(data: data, filename: timestamp, onSuccess: { (file) in 
-	print(file.url.absoluteString)
+    print(file.url.absoluteString)
 }, onError: { (error) in
     print(error)
 }) { (progress) in
