@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/QiscusCore-Swift.h</key>
 		<data>
-		fua4oZymVpb6EwHUma5mGaGZ/Qg=
+		zSyLk2HI3sR1DB/X9T1oaURByNc=
 		</data>
 		<key>Headers/QiscusCore.h</key>
 		<data>
@@ -14,31 +14,43 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		Dqb2UtFSmF/hrys2WbQ0Uuceol0=
+		NPYsffBAyXzyhXMOwrBKaYSkg8Q=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftdoc</key>
 		<data>
-		Pk2dDDctg8xJCylgELAsqo+FR0w=
+		QLrnMaMg5T1fPdCDkBGaDQpmwlw=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftmodule</key>
 		<data>
-		+iiZBtUPhb3B2DR7raO4WxnkZbg=
+		BkUyWDFFVVM0fGKQOBAiOPJCGGI=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		QXL7QrZp2RnOXzbjrzPjKrzwZWY=
+		+jZvy5jNtuDWSIpxtKfHfbuQxjU=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		zbt4cqMFn/kutrH/m2LygZpKfi4=
+		yxvdX4T+DEqx11keMg1G9vig++Q=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
 		MWy8zLGamcpncmS6jMZcm1WCqpk=
 		</data>
+		<key>Qiscus.momd/Qiscus.mom</key>
+		<data>
+		iBcg/SH+98+i7ApRz5pZOiT69d0=
+		</data>
+		<key>Qiscus.momd/VersionInfo.plist</key>
+		<data>
+		txrbPhQIo48kcb+oLH5WOGDJMpA=
+		</data>
 		<key>QiscusCore.podspec</key>
 		<data>
-		dIzY7hTnC10UQTIv+soyNcAYzDs=
+		KX4A/S1+p23Q0gMyxOjjr0DUb1c=
+		</data>
+		<key>README.md</key>
+		<data>
+		xzuxT5EkrUlc457LCeQ6rqKpo7Q=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -47,11 +59,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			fua4oZymVpb6EwHUma5mGaGZ/Qg=
+			zSyLk2HI3sR1DB/X9T1oaURByNc=
 			</data>
 			<key>hash2</key>
 			<data>
-			8QNwLi53or8uJzmqZ9QLTPzL2/YczD4sWBuiVrmSmRk=
+			Z7ORJecMG0n+/6wgW9IFRDroCcFJ1/f+aeCCRvQjCJ8=
 			</data>
 		</dict>
 		<key>Headers/QiscusCore.h</key>
@@ -69,44 +81,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Pk2dDDctg8xJCylgELAsqo+FR0w=
+			QLrnMaMg5T1fPdCDkBGaDQpmwlw=
 			</data>
 			<key>hash2</key>
 			<data>
-			H0MUFLG/gg5OM97SPJjq0iiA5a2phMr44KtwYEV1Dyk=
+			3/YMdo+87hXlpm5EhYj+4k42s0TjYIsCgzXTmNyqrcE=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			+iiZBtUPhb3B2DR7raO4WxnkZbg=
+			BkUyWDFFVVM0fGKQOBAiOPJCGGI=
 			</data>
 			<key>hash2</key>
 			<data>
-			aJevAd8yWzUrPab8MBmja4KM7uugOrRw610jFF+En0Y=
+			A2KGI6mgCr96SMRn3VvTHRNss1ZZ+dmv3M5L47nupaA=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			QXL7QrZp2RnOXzbjrzPjKrzwZWY=
+			+jZvy5jNtuDWSIpxtKfHfbuQxjU=
 			</data>
 			<key>hash2</key>
 			<data>
-			UU0qruLoDymBTrjF0VLd/23yLSL2FnbPrvRLNcYIkwU=
+			rZ7trZLUibT1hmbwqI+AmDl5hpJjKOVed5ndrkuLsUE=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			zbt4cqMFn/kutrH/m2LygZpKfi4=
+			yxvdX4T+DEqx11keMg1G9vig++Q=
 			</data>
 			<key>hash2</key>
 			<data>
-			juRXBFLYn1a+O8/fvMDjvRQZ2C+c74UbjA3hz6It+0s=
+			HrmijKx+iNpLk+mh79xRqaJD/7ZZCAkunsA39CPVXxk=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -120,15 +132,48 @@
 			oZcN6STSdfqZhHrOL2yptzvYztB9sp8CkNmWWsibFBQ=
 			</data>
 		</dict>
+		<key>Qiscus.momd/Qiscus.mom</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			iBcg/SH+98+i7ApRz5pZOiT69d0=
+			</data>
+			<key>hash2</key>
+			<data>
+			rTkqFvQ+wixTpuo/8S8s9X+BsEqPbG0kUbVZU1rpWSU=
+			</data>
+		</dict>
+		<key>Qiscus.momd/VersionInfo.plist</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			txrbPhQIo48kcb+oLH5WOGDJMpA=
+			</data>
+			<key>hash2</key>
+			<data>
+			7RerOizdZ2eVUYKp2h9e8Egh+u6rPb16s61xjGc8iRs=
+			</data>
+		</dict>
 		<key>QiscusCore.podspec</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			dIzY7hTnC10UQTIv+soyNcAYzDs=
+			KX4A/S1+p23Q0gMyxOjjr0DUb1c=
 			</data>
 			<key>hash2</key>
 			<data>
-			FKdFdsBM6z90yp+R44B0dCptMQtsGm+FEuINscBkPeA=
+			R6IXeACQqvAsYg7TeGSMInD+uabMQlY25m8JU2cibSw=
+			</data>
+		</dict>
+		<key>README.md</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			xzuxT5EkrUlc457LCeQ6rqKpo7Q=
+			</data>
+			<key>hash2</key>
+			<data>
+			zW64uadyNaQjDPs6TNCrfwJBczRXM/T31MdIRqEoj1g=
 			</data>
 		</dict>
 	</dict>
