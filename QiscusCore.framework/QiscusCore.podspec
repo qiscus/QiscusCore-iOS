@@ -10,6 +10,7 @@ s.license      = "MIT"
 s.author       = "Qiscus"
 s.source       = { :git => "https://github.com/qiscus/qiscus-sdk-ios.git", :tag => "#{s.version}" }
 s.platform      = :ios, "10.0"
+#s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.1' }
 s.source_files  = "QiscusCore/**/*.{swift}"
 s.resource_bundles = {
     'QiscusCore' => ['QiscusCore/**/*.{xcdatamodeld,xcdatamodel}']
