@@ -18,19 +18,19 @@
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftdoc</key>
 		<data>
-		KtvRKQt/rE4MfeRVFqPHZR6UZw8=
+		kK3mHHpMosU0k/qkddEEdYY7yJY=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftmodule</key>
 		<data>
-		SjDoL8hmq5/6jzGzsoYemqbZqZs=
+		4hmKTux4Sy14wSSBExFXg+f4/qk=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		pVg35yDYy9cVIQ3qto8+l8kDC0I=
+		e0hovFsQZxp0AtG8tJ5Da6O1bGg=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		5+Ly1yLkKO/VlCZMKlskCvxq06E=
+		gdNb7b4jaY/sDdjP/YWZFTolnD4=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -38,19 +38,19 @@
 		</data>
 		<key>Qiscus.momd/Qiscus.mom</key>
 		<data>
-		+YYG2OwJ0RGgCtIe9ZHd2i650FA=
+		D3n/414ZygJX+gP5HfW9hT0f5Vk=
 		</data>
 		<key>Qiscus.momd/VersionInfo.plist</key>
 		<data>
-		0PYp18bXspgHeqrnRNClx2JqIf8=
+		k7N8WGOsdZQKV1127dG6b50zBQE=
 		</data>
 		<key>QiscusCore.podspec</key>
 		<data>
-		9dYd9rlCYM3JDlVQ3w2Y5KND26M=
+		8hmk1wi7UN1YdpHWreI0TBpGNaA=
 		</data>
 		<key>README.md</key>
 		<data>
-		rX3Y0cU+2fB15VgRYPmUgPPV8Gs=
+		xzuxT5EkrUlc457LCeQ6rqKpo7Q=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -81,44 +81,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			KtvRKQt/rE4MfeRVFqPHZR6UZw8=
+			kK3mHHpMosU0k/qkddEEdYY7yJY=
 			</data>
 			<key>hash2</key>
 			<data>
-			3BCt35OQq0MVBIlNU6jbxgw12PAJdu+DKNU8G6Bx3ck=
+			yJjtbpUpnEwbXL/SCLH2M92dt7cljQmDPa75CX6/GWM=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			SjDoL8hmq5/6jzGzsoYemqbZqZs=
+			4hmKTux4Sy14wSSBExFXg+f4/qk=
 			</data>
 			<key>hash2</key>
 			<data>
-			uAf7QCORH4Ses+peeqwGJ7pmS/MGJGA7f54e24u65kw=
+			dHKJ5W6JErk6J7pZN4kSHWL8GOQ/OIbG0BiSemwt7aE=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			pVg35yDYy9cVIQ3qto8+l8kDC0I=
+			e0hovFsQZxp0AtG8tJ5Da6O1bGg=
 			</data>
 			<key>hash2</key>
 			<data>
-			eHcU/E6RXN4qcqcBGdXFJH7MnEQln6P2DvgiwYqMhJ0=
+			cTj8yijeVHpKyaZ6/UViWZp90ozEHCUooFVB950OTMY=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			5+Ly1yLkKO/VlCZMKlskCvxq06E=
+			gdNb7b4jaY/sDdjP/YWZFTolnD4=
 			</data>
 			<key>hash2</key>
 			<data>
-			rhbV2QBiUoabSauiblenEWl8y/Oci6umWfH9dczNBqY=
+			TZwYTNyZZB8vF6+xGc+wb6yAH+4jwaHSPNgB4wvDtNg=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -136,44 +136,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			+YYG2OwJ0RGgCtIe9ZHd2i650FA=
+			D3n/414ZygJX+gP5HfW9hT0f5Vk=
 			</data>
 			<key>hash2</key>
 			<data>
-			fuR5BmZXh7ohKZ619B2B8B0o7fXTJ+81X0tLovhfsp0=
+			aXKNXFzimyzNKd29MAqgea5F65JzoHVztT1vM+NJCzY=
 			</data>
 		</dict>
 		<key>Qiscus.momd/VersionInfo.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			0PYp18bXspgHeqrnRNClx2JqIf8=
+			k7N8WGOsdZQKV1127dG6b50zBQE=
 			</data>
 			<key>hash2</key>
 			<data>
-			aQ/WIG9nokfIKFgKQLvvoOiGMZa1bA9lOrFep8BCRJA=
+			c55PbJYR5bKiufxo3qoWNa6B/En8cVgO0Q5HKVtWOEg=
 			</data>
 		</dict>
 		<key>QiscusCore.podspec</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			9dYd9rlCYM3JDlVQ3w2Y5KND26M=
+			8hmk1wi7UN1YdpHWreI0TBpGNaA=
 			</data>
 			<key>hash2</key>
 			<data>
-			P+bxOJMW6rAHtOtJoJPaOs+SKmjV5t0FzqFniqx5iJg=
+			5rQS7JkW4KfoZUxEsruipFcbkdU/tqeU2crM/p0Zgx4=
 			</data>
 		</dict>
 		<key>README.md</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			rX3Y0cU+2fB15VgRYPmUgPPV8Gs=
+			xzuxT5EkrUlc457LCeQ6rqKpo7Q=
 			</data>
 			<key>hash2</key>
 			<data>
-			Q8Uv7T+Gp8B9pbIcXBzl6sQBw+d1fFbOtq+L0SyipYE=
+			zW64uadyNaQjDPs6TNCrfwJBczRXM/T31MdIRqEoj1g=
 			</data>
 		</dict>
 	</dict>
