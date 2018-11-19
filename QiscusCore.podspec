@@ -9,7 +9,7 @@ s.homepage     = "https://qiscus.com"
 s.license      = "MIT"
 s.author       = "Qiscus"
 s.source       = { :git => "https://github.com/qiscus/QiscusCore-iOS.git", :tag => "#{s.version}" }
-s.platform      = :ios, "10.0"
+s.platform      = :ios, "9.0"
 s.swift_version	= "4.2"
 s.ios.vendored_frameworks = 'QiscusCore.framework'
 s.ios.frameworks = ["UIKit", "QuartzCore", "CFNetwork", "Security", "Foundation", "MobileCoreServices", "CoreData"]
