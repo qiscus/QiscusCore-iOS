@@ -5,7 +5,7 @@ s.summary      = "Qiscus Core SDK for iOS"
 s.description  = <<-DESC
 Qiscus SDK for iOS contains Qiscus public Model.
 DESC
-s.homepage     = "https://qisc.us"
+s.homepage     = "https://qiscus.com"
 s.license      = "MIT"
 s.author       = "Qiscus"
 s.source       = { :git => "https://github.com/qiscus/qiscus-sdk-ios.git", :tag => "#{s.version}" }
