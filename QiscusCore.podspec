@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name         = "QiscusCore"
-s.version      = "0.1.6"
+s.version      = "0.1.7"
 s.summary      = "Qiscus Core SDK for iOS"
 s.description  = <<-DESC
 Qiscus SDK for iOS contains Qiscus public Model.
@@ -13,5 +13,5 @@ s.platform      = :ios, "10.0"
 s.ios.vendored_frameworks = 'QiscusCore.framework'
 s.ios.frameworks = ["UIKit", "QuartzCore", "CFNetwork", "Security", "Foundation", "MobileCoreServices", "CoreData"]
 s.dependency 'QiscusRealtime', '~> 0.1.5'
-s.dependency 'SwiftyJSON', '~> 4.2.0'
+s.dependency 'SwiftyJSON', '4.1.0'
 end
