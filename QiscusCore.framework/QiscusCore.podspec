@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
 s.name         = "QiscusCore"
-s.version      = "0.2.1"
+s.version      = "0.1.5"
 s.summary      = "Qiscus Core SDK for iOS"
 s.description  = <<-DESC
 Qiscus SDK for iOS contains Qiscus public Model.
 DESC
-s.homepage     = "https://qiscus.com"
+s.homepage     = "https://qisc.us"
 s.license      = "MIT"
 s.author       = "Qiscus"
 s.source       = { :git => "https://github.com/qiscus/qiscus-sdk-ios.git", :tag => "#{s.version}" }
@@ -16,6 +16,6 @@ s.resource_bundles = {
     'QiscusCore' => ['QiscusCore/**/*.{xcdatamodeld,xcdatamodel}']
 }
 s.ios.frameworks = ["UIKit", "QuartzCore", "CFNetwork", "Security", "Foundation", "MobileCoreServices", "CoreData"]
-s.dependency 'QiscusRealtime', '~> 0.2.0'
+s.dependency 'QiscusRealtime', '0.1.5'
 s.dependency 'SwiftyJSON'
 end
