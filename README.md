@@ -557,6 +557,7 @@ QiscusCore.shared.removeParticipant(userEmails: userEmails, roomId: id) { (remov
 
 * Publish start and stop typing
 You can use this API to publish typing event. set **true** for start typing, and set **false** stop typing
+
 ```
 /// Start typing in room,
 ///
@@ -581,8 +582,9 @@ QiscusCore.shared.updateCommentRead(roomId: roomId, lastCommentReadId: commentId
 ```
 
 * Viewing who has read a message
-```
+
 Get room from local db
+
 ```
 if let room = QiscusCore.dataStore.findRoom(byID: (self.room?.id)!){
             var userMemberRead = [MemberModel]()
@@ -623,6 +625,7 @@ QiscusCore.shared.getRoom(withID: "123") { (roomData, error) in
                 print("error load room \(String(describing: error?.message))")
             }
         }
+```
 
 ## Events handler
 
