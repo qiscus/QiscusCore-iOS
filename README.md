@@ -34,7 +34,6 @@
 In order to keep QiscusCore focused specifically on core messaging implementation, additional libraries have beed create by the [Qiscus IOS] (https://qiscus.com).
 
 * [QiscusRaltime](https://github.com/qiscus) - An realtime messaging library. Already handle realtime event like user typing, online status, etc.
-* [QiscusUI](https://github.com/qiscus) - An chat component library, make it easy to custom your chat UI.
 * [Qiscus](https://github.com/qiscus) - An chat sdk with complete feature, simple, easy to integrate.
 
 
