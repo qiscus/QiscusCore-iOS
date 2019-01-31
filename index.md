@@ -33,8 +33,7 @@ The messaging flow is simple: a user register to Qiscus Server, a user open a ro
 
 To start building your application using Qiscus Chat SDK you need a key called APP ID. This APP ID acts as identifier of your Application so that Qiscus Chat SDK can connect a user to other users. You can get your APP ID [here](https://www.qiscus.com/dashboard/register). You can find your APP ID on your Qiscus application dashboard. Here you can see the picture as a reference.
 
-[Image Dashboard APP ID]
-
+<img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/ss_qiscus_chat_dashboard_app_id_docs.png" width="80%" />
 
 > **Note**
 *All users within the same APP ID are able to communicate with each other, across all platforms. This means users using iOS, Android, Web clients, etc. can all chat with one another. However, users in different Qiscus applications cannot talk to each other.*
@@ -93,7 +92,7 @@ QiscusCore.setup(WithAppID: "yourAppId")
 
 ### Step 4 : Authentication to Qiscus 
 
-To use Qiscus Chat SDK features a user firstly need to authenticate to Qiscus Server, for further detail you might figure out [Authentication section link]. This authentication is done by calling `loginOrRegister`() function. This function will retrieve or create user credential based on the unique **User Id, **for example:
+To use Qiscus Chat SDK features a user firstly need to authenticate to Qiscus Server, for further detail you might figure out [Authentication section link]. This authentication is done by calling `loginOrRegister`() function. This function will retrieve or create user credential based on the unique **User Id** ,for example:
 
 ```
 /// SDK Connect with userId and passkey. The handler to be called once the request has finished.
@@ -112,7 +111,7 @@ Where:
 * ***userKey*** (string): userKey for authentication purpose, so even if a stranger knows your user Id, he cannot access the user data.
 * ***username*** (string): Username for display name inside Chat Room purposes.
 * ***avatarUrl*** (string, optional): to display user's avatar, fallback to default avatar if not provided.
-* **extras [**string:any]: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer**.** **
+* **extras [string:any]**: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer**.** **
 
 ### Step 5 : Create Chat Room
 
@@ -126,12 +125,12 @@ QiscusCore.shared.getRoom(withUser: withUserId, onSuccess: { (room, comments) in
 }
 ```
 
-> **Note:  **Make sure that your targeted user has been registered in Qiscus Chat SDK 
+> **Note:**  Make sure that your targeted user has been registered in Qiscus Chat SDK 
 
 ### Step 6 : Send message
 
 You can send any type of data through Qiscus Chat SDK, in this section let's send a “Hi” **message**, 
-with type value is **text. **For further detail about message you can find at [Message section link]
+with type value is **text**. For further detail about message you can find at [Message section link]
 
 ```
 let message = CommentModel()
@@ -204,7 +203,7 @@ QiscusCore.setup(WithAppID: "yourAppId")
 ```
 
 
-If you have your own server **(on Premise) **you can change the URL, here's the example 
+If you have your own server **(on Premise)** you can change the URL, here's the example 
 
 ```
 let customServer = QiscusServer(url: URLCustomServer, realtimeURL: realtimeURL, realtimePort: realtimePort)
@@ -221,8 +220,7 @@ Where:
 For further detail on premise information you can contact us [link contact.us@qiscus.com].
 
 
-> **Note:  
-**The initialization should be called always . The best practise you can put in AppDelegate
+> **Note**: The initialization should be called always . The best practise you can put in AppDelegate
 
 
 There are 2 type of authentications that you can choose to use: Client Authentication and Server Authentication
@@ -251,7 +249,7 @@ Where:
 * ***userKey*** (string): userKey for authentication purpose, so even if a stranger knows your user Id, he cannot access the user data.
 * ***username*** (string): Username for display name inside Chat Room purposes.
 * ***avatarUrl*** (string, optional): to display user's avatar, fallback to default avatar if not provided.
-* **extras [**string:any]: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer**.** **
+* **extras [string:any]**: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer**.** **
 
 > **Note**
 Email addresses are a bad choice for user IDs because users may change their email address. It also unnecessarily exposes private information. We recommend to be *unique* for every user in your app, and *stable*, meaning that they can never change
@@ -318,7 +316,7 @@ HMACSHA256(
 
 To make this easier, we provide sample backends in PHP   [l[PHP sample identity token](https://bitbucket.org/qiscus/qiscus-sdk-php/src/ff4f04a59100/?at=master)] You can use any other language or platform
 
-* Step 2 : Start to get a **Nonce **
+* Step 2 : Start to get a **Nonce**
 
 You need to request a Nonce from Qiscus Server. **Nonce (Number Used Once)** is a unique, randomly generated string used to identify a single request. Please be noted that a Nonce will expire in 10 minutes. So you need to implement your code to request JWT from your backend right after you got the returned Nonce. Here's the how to get a Nonce:
 
@@ -370,11 +368,11 @@ Qiscus Chat SDK has three term of user, Qiscus Account and Participant. Qiscus A
 
 Term of user Table:
 
-|Type	|Description	|
-|---	|---	|
-|Qiscus Account	|The user who can use Qiscus Chat SDK features that has been verified in Qiscus Server	|
-|Participant	|The user who is in a Chat Room	|
-|Blocked User	|The user who is blocked by another user	|
+|Type |Description  |
+|---  |---  |
+|Qiscus Account |The user who can use Qiscus Chat SDK features that has been verified in Qiscus Server  |
+|Participant  |The user who is in a Chat Room |
+|Blocked User |The user who is blocked by another user  |
 
 ### Blocked User 
 
@@ -400,17 +398,17 @@ Channel is Chat Room which allow users to join without invitation. This will all
 
 ### Chat Room Type Comparison Table 
 
-|Item	|1-1	|Group	|Channel	|
-|---	|---	|---	|---	|
-|Number of participant	|2	|100	|5000	|
-|Sent Receipt	|v	|v	|-	|
-|Delivered Receipt	|v	|v	|-	|
-|Read Receipt	|v	|v	|-	|
-|Push Notification	|v	|v	|-	|
-|Unread Count	|v	|v	|v	|
-|Support Chatbot interface	|v	|v	|v	|
-|Block User	|v	|-	|-	|
-|Adding or  Removing participant	|-	|v	|v	|
+|Item |1-1  |Group  |Channel  |
+|---  |---  |---  |---  |
+|Number of participant  |2  |100  |5000 |
+|Sent Receipt |v  |v  |-  |
+|Delivered Receipt  |v  |v  |-  |
+|Read Receipt |v  |v  |-  |
+|Push Notification  |v  |v  |-  |
+|Unread Count |v  |v  |v  |
+|Support Chatbot interface  |v  |v  |v  |
+|Block User |v  |-  |-  |
+|Adding or  Removing participant  |-  |v  |v  |
 
 ## User
 
@@ -434,12 +432,12 @@ Where:
 
 * **username**: username of its user, for display name purpose if in 1-on-1 Chat Room
 * **avatarUrl** : Url to display user's avatar, fallback to default avatar if not provided.
-* **extras** : metadata that can be as additional information to user, which consist key-value, for example **key: position, **and** value: engineer**.** **
+* **extras** : metadata that can be as additional information to user, which consist key-value, for example **key: position, **and** value: engineer**.
 
-### Check is user AUtHENtiCAtED
+### Check is user Authenticated
 
 You can check whether user is authenticated or not, and make sure that a user allow to use Qiscus Chat SDK features.
-When return **true **means user already authenticated, otherwise **false **means user not yet authenticate.
+When return **true** means user already authenticated, otherwise **false** means user not yet authenticate.
 
 ```
 QiscusCore.isLogined //boolean
@@ -483,11 +481,10 @@ QiscusCore.shared.listBlocked(page: page, limit: limit, onSuccess: { (memberUser
 
 ## Chat Room
 
-This section consist Chat Room Qiscus Chat SDK behaviour In Chat Room you can add additional information called **options. options** is automatically synchronized by each participant in the conversation. While Qiscus has gone to great lengths to implement **options** in a way that maximizes efficiency on the wire, it is important that the amount of data stored in **options** is kept to a minimum to ensure the quickest synchronization possible. You can use **options **tag a room for changing background colour purposes, or you can add a latitude or longitude.
+This section consist Chat Room Qiscus Chat SDK behaviour In Chat Room you can add additional information called **options. options** is automatically synchronized by each participant in the conversation. While Qiscus has gone to great lengths to implement **options** in a way that maximizes efficiency on the wire, it is important that the amount of data stored in **options** is kept to a minimum to ensure the quickest synchronization possible. You can use **options** tag a room for changing background colour purposes, or you can add a latitude or longitude.
 
 
-> Note
-options consist string key-value pairs
+> **Note:** options consist string key-value pairs
 
 ### Create 1-on-1 Chat Room with METADATA
 
@@ -504,7 +501,7 @@ QiscusCore.shared.getRoom(withUser: withUserId,options: options, onSuccess: { (r
 Where:
 
 * `userId`:  A User identifier that will be used to identify a user and used whenever another user need to chat with this user. It can be anything, whether is is user's email, your user database index, etc. As long as it is unique and a string.
-* `options:` metadata that can be as additional information to Chat Room, which consist key-value, for example **key: background, **and** value: red. **
+* `options:` metadata that can be as additional information to Chat Room, which consist key-value, for example **key: background, **and** value: red.**
 
 ### Create Group Chat Room with METADATA
 
@@ -537,7 +534,7 @@ if let room =  QiscusCore.database.room.find(id: roomId){
 
 The ideal creating Channel Chat Room is for use cases that requires a lot of number of participant. You need set `uniqueId` for identify a Channel Chat Room, If a Chat Room with predefined `unique id `is not exist then it create a new one with requester as the only one participant. Otherwise, if Chat Room with predefined unique id is already exist, it will return that room and add requester as a participant. 
 
-When first call (room is not exist), if requester did not send `avatar_ur`l and/or room `name` it will use default value. But, after the second call (room is exist) and user (requester) send `avatar_url` and/or room `name`, it will be updated to that value.
+When first call (room is not exist), if requester did not send `avatar_ur`l and/or room `name` it will use default value. But, after the second call (room is exist) and user (requester) send `avatar_url` and / or room `name`, it will be updated to that value.
 
 ```
 QiscusCore.shared.getRoom(withChannel: channel, options: options, onSuccess: { (room) in
@@ -746,13 +743,13 @@ QiscusCore.shared.unreadCount { (count, error) in
 
 ## Message
 
-This section consist of Message Qiscus Chat SDK behaviour. In Message you can add metadata called **extras. ****extras** is automatically synchronized by each participant in the Chat Room. Qiscus Chat SDK has 3 statues, Sent, Delivered, and Read for a message. 
+This section consist of Message Qiscus Chat SDK behaviour. In Message you can add metadata called **extras.** **extras** is automatically synchronized by each participant in the Chat Room. Qiscus Chat SDK has 3 statues, Sent, Delivered, and Read for a message. 
 
 ### Send message 
 
-You can send a **text** message or **custom** message **type**. Ideal case for **custom** message is for creating custom UI message needs by sending structured data, such as you need to **send location** message, a **ticket concert **message, a **product** info, and others UI message that need to be customized. You need to create  CommentModel() object first before sending it, for example: 
+You can send a **text** message or **custom** message **type**. Ideal case for **custom** message is for creating custom UI message needs by sending structured data, such as you need to **send location** message, a **ticket concert** message, a **product** info, and others UI message that need to be customized. You need to create  CommentModel() object first before sending it, for example: 
 
-Create CommentModel** **object, **text** type :
+Create CommentModel object, **text** type :
 
 ```
 let message = CommentModel()
@@ -778,7 +775,7 @@ Where:
 
 * **roomId**:  ChatRoom Identity (Id), you can get this Id in QiscusChatRoom object 
 * **text**: message text that you send to other participant
-* **type**: message type, that you can define freely, there are predefined rich messages **type, **for example: ***text, file_attachment, account_linking, buttons, button_postback_response, replay, system_event, card, custom, location, contact_person, carousel. ***These type have taken, if you use it you may face your structured data will not work, these type for bot API, hence you need define other type name.
+* **type**: message type, that you can define freely, there are predefined rich messages **type, ** for example: text, file_attachment, account_linking, buttons, button_postback_response, replay, system_event, card, custom, location, contact_person, carousel.** These type have taken, if you use it you may face your structured data will not work, these type for bot API, hence you need define other type name.
 * **payload**: Payload for defining the structured message data, for example you want to create your own **file** message, you can fill the `content` using this example JSON :
 
 ```
@@ -789,7 +786,7 @@ Where:
 }
 ```
 
-You can find how to implement this `content` in Sample [[l](https://github.com/qiscus/QiscusCore-Example)[ink sample line xx](https://github.com/qiscus/QiscusCore-Example)].  Another example `content` you can craft:
+You can find how to implement this `content` in Sample [[l](https://github.com/qiscus/QiscusCore-Example)[ink sample](https://github.com/qiscus/QiscusCore-Example)].  Another example `content` you can craft:
 
 ```
 {
@@ -807,7 +804,7 @@ You can find how to implement this `content` in Sample [[l](https://github.com/q
 }
 ```
 
-You can add **extras **before sending a message, for example:
+You can add **extras** before sending a message, for example:
 
 ```
 let extraData : [String: Any] =[
@@ -843,8 +840,8 @@ For updating to be **Read** status you can find further in [Event handler sectio
 
 ### Update message READ status
 
-You can set your message status into **read**, the ideal case of this is to notify other participant that a message has **read.  **
-You need to pass `roomId ` and lastCommentReadId.  When you have **10 messages**, and the latest message Id, let say is **10**, once you set read message status with the latest message, in this case is **10, **your previous messages will update into **read** as well. You can update message read status by calling updateCommentRead method, for example:
+You can set your message status into **read**, the ideal case of this is to notify other participant that a message has **read.**
+You need to pass `roomId ` and lastCommentReadId.  When you have **10 messages**, and the latest message Id, let say is **10**, once you set read message status with the latest message, in this case is **10**, your previous messages will update into **read** as well. You can update message read status by calling updateCommentRead method, for example:
 
 ```
 /// Mark Comment as read, include comment before
@@ -885,7 +882,7 @@ You can a get from local data, you can set `limit` to get number of comments, fo
 
 ### Viewing who has read, Delivered a MESSAGE
 
-You can get information who has read your message by passing `commentId` in return you get participants who have **pending**, **delivered**, and **read **message status, for example: 
+You can get information who has read your message by passing `commentId` in return you get participants who have **pending**, **delivered**, and **read** message status, for example: 
 
 ```
  QiscusCore.shared.readReceiptStatus(commentId: commentId, onSuccess: { (commentInfo) in
@@ -957,13 +954,13 @@ QiscusCore.shared.deleteAllMessage(roomUniqID: roomsID) { (error) in
 
 ## Event Handler
 
-Qiscus Chat SDK provides a simple way to let applications publish and listen some real time event. You can publish **typing, read, user status, custom event **and you can handle freely in event handler. This lets you inform users that another participant is actively engaged in communicating with them.
+Qiscus Chat SDK provides a simple way to let applications publish and listen some real time event. You can publish **typing, read, user status, custom event** and you can handle freely in event handler. This lets you inform users that another participant is actively engaged in communicating with them.
 
 Qiscus Chat SDK is using delegate for broadcasting event to entire application. What you need to do is registering the object which will receive event from delegate.
 
 ### Event handler in Chat Room
 
-You need register delegate:** **
+You need register delegate:
 
 ```
 //set your delegate in viewWillAppear
@@ -1050,7 +1047,7 @@ extension YourViewController : QiscusCoreRoomDelegate {
 
 ### **Event handler in List Chat Room**
 
-You need register delegate:** **
+You need register delegate:
 
 ```
 //set your delegate in viewWillAppear
@@ -1161,7 +1158,7 @@ extension YourViewController : QiscusCoreDelegate {
 
 ### START and STOP typing INDICATOR
 
-You can have typing indicator by publish the typing event. You need to pass `roomId` and `typing` status. Set **true **to indicate the `typing` event is active, set **false **to indicate the event is inactive. The ideal of this case is if you can put this to any class for example, you need to put in Homepage, to notify that there's an active user. for example:
+You can have typing indicator by publish the typing event. You need to pass `roomId` and `typing` status. Set **true** to indicate the `typing` event is active, set **false** to indicate the event is inactive. The ideal of this case is if you can put this to any class for example, you need to put in Homepage, to notify that there's an active user. for example:
 
 ```
 QiscusCore.shared.isTyping(true, roomID: r.id)
@@ -1175,7 +1172,7 @@ After you call func `QiscusCore.shared.getRoom()`, it's automatic subscribe room
 
 ### Custom REALTIME Event
 
-You can publish and listen any events such as when **participant is listening music**, **writing document, **and many other case that you need to tell an event to other participant in a Chat Room. 
+You can publish and listen any events such as when **participant is listening music**, **writing document**, and many other case that you need to tell an event to other participant in a Chat Room. 
 
 Firstly you need passing `roomId` which ChatRoom you want to set, and the structured `data` for defining what event you want to send. Example of structured `data` of **writing document** event:
 
@@ -1386,7 +1383,7 @@ Qiscus Chat SDK is available to be deployed on premise option. For further infor
 ## Support  
 
 If you are facing any issue in the Qiscus Chat SDK then you can contact us and share as much information as you can. 
-Firstly, you can enable the **debugger **to get the logs, we recommend to use these debugger only in development environment. You can enable or disable the **debugger **using enableDebugPrint method for example: 
+Firstly, you can enable the **debugger** to get the logs, we recommend to use these debugger only in development environment. You can enable or disable the **debugger** using enableDebugPrint method for example: 
 
 ```
 QiscusCore.enableDebugPrint = true
