@@ -467,7 +467,7 @@ QiscusCore.shared.unblockUser(email: user_email, onSuccess: { (memberUser) in
 }
 ```
 
-### GET Blocked User LIST 
+### GET Blocked User List 
 
 You can get blocked user list with pagination, with `page`  parameter and you can set also the `limit` number of blocked users, for example: 
 
@@ -684,7 +684,7 @@ QiscusCore.shared.getParticipant(roomUniqeId: roomUniqeId, onSuccess: { (partici
         }
 ```
 
-You can get advance by adding some parameter, for example you can order the list based on either ascending `(asc)` or descending `(desc)`, or you can sort by `username` . 
+You can get advance by adding some parameter, for example you can order the list based on either ascending `(asc)` or descending `(desc)`. 
 
 ```
 QiscusCore.shared.getParticipant(roomUniqeId: roomUniqeId, offset: offset, sorting: .asc, onSuccess: { (participants) in
@@ -715,7 +715,7 @@ QiscusCore.shared.addParticipant(userEmails: userEmails, roomId: roomID, onSucce
 }
 ```
 
-### Remove Participant in CHAT room
+### Remove Participant in Chat Room
 
 You can remove more than a participant in Chat Room by calling this method removeParticipant() you can pass multiple `userId` . Once a participant remove from the Chat Room, they will not find related Chat Room in their Chat Room list.
 
@@ -1265,11 +1265,11 @@ Under the Keychain Access, click the Certificates category from the left menu. F
 
 Then, log in to the [dashboard](https://www.qiscus.com/dashboard/login) and upload your `.p12` file to the Push Notification section, under Settings.
 
-<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns9.png" width="100%" /><br/></p>
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns9.png" width="100%" /><br/></p>
 
 klik add and fill the form upload certificates
 
-<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns10.png" width="100%" /><br/></p>
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns10.png" width="100%" /><br/></p>
 
 ### STEP 4: Register A Device Token In Qiscus SDK And Parse Qiscus APNS Messages.   
 
