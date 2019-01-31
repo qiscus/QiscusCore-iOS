@@ -15,7 +15,7 @@ Qiscus Chat SDK provides features such as:
 * Delete message
 * Offline message
 * Block user
-* Custom realtime event
+* Custom real-time event
 * Server side integration with Server API and Webhook
 * Embed bot engine in your App
 * Enable Push notification
@@ -31,7 +31,7 @@ The messaging flow is simple: a user register to Qiscus Server, a user open a ro
 
 * Application
 
-To start building your application using Qiscus Chat SDK you need a key called APP ID. This APP ID acts as identifier of your Application so that Qiscus Chat SDK can connect a user to other users. You can get your APP ID [here](https://www.qiscus.com/dashboard/register). You can find your APP ID on your Qiscus application dashboard. Here you can see the picture as a reference.
+To start building your application using Qiscus Chat SDK you need a key called APP ID. This APP ID acts as identifier of your Application so that Qiscus Chat SDK can connect a user to other users. You can get your APP ID [here](https://dashboard.qiscus.com/dashboard/login). You can find your APP ID on your Qiscus application dashboard. Here you can see the picture as a reference.
 
 <p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/app_id_docs.png" width="100%" /><br/></p>
 
@@ -130,7 +130,7 @@ QiscusCore.shared.getRoom(withUser: withUserId, onSuccess: { (room, comments) in
 ### Step 6 : Send Message
 
 You can send any type of data through Qiscus Chat SDK, in this section let's send a “Hi” **message**, 
-with type value is **text**. For further detail about message you can find at [Message](#Message)
+with type value is **text**. For further detail about message you can find at [Message](#message)
 
 ```
 let message = CommentModel()
@@ -364,7 +364,7 @@ QiscusCore.logout { (error) in
 
 ## Term Of User
 
-Qiscus Chat SDK has three term of user, Qiscus Account and Participant. Qiscus Account is user who success through authentication phase, hence this  user able to use Qiscus Chat SDK features. In other hand, Participant is user who in a Chat Room. At some case, you need add more user to your Chat Room, what you can do you can add participant, then your Chat Room increase the number of participant and decrease whenever you remove participant. To use add participant you can refer to this [add participant](#Add-Participant-In-Chat-Room)
+Qiscus Chat SDK has three term of user, Qiscus Account and Participant. Qiscus Account is user who success through authentication phase, hence this  user able to use Qiscus Chat SDK features. In other hand, Participant is user who in a Chat Room. At some case, you need add more user to your Chat Room, what you can do you can add participant, then your Chat Room increase the number of participant and decrease whenever you remove participant. To use add participant you can refer to this [add participant](#add-participant-in-chat-room)
 
 Term of user Table:
 
@@ -445,7 +445,7 @@ QiscusCore.isLogined //boolean
 
 ### Block User
 
-You can block a user with related **user Id** parameter, this block user only works in 1-on-1 Chat Room. When a user in same Group or Channel with blocked user, a user still receive message from blocked user, for further information you can see this [User - blocked](#Block-User). You can use this function by calling this method, for example: 
+You can block a user with related **user Id** parameter, this block user only works in 1-on-1 Chat Room. When a user in same Group or Channel with blocked user, a user still receive message from blocked user, for further information you can see this [User - blocked](#block-user). You can use this function by calling this method, for example: 
 
 ```
 QiscusCore.shared.blockUser(email: user_email, onSuccess: { (memberUser) in
@@ -488,7 +488,7 @@ This section consist Chat Room Qiscus Chat SDK behaviour In Chat Room you can ad
 
 ### Create 1-on-1 Chat Room With Metadata
 
-The ideal creating 1-on-1 Chat Room is for use cases that require 2 users, for further information you can see this [Chat Room-1-on-1 section](#1-On-1-Chat-Room). After success creating a 1-on-1 Chat room, room name is another userId.
+The ideal creating 1-on-1 Chat Room is for use cases that require 2 users, for further information you can see this [Chat Room-1-on-1 section](#1-on-1-chat-room). After success creating a 1-on-1 Chat room, room name is another userId.
 
 ```
 QiscusCore.shared.getRoom(withUser: withUserId,options: options, onSuccess: { (roomModel, _) in
@@ -554,7 +554,7 @@ if let room =  QiscusCore.database.room.find(uniqID: uniqID){
 
 ### Get Chat Room By Id (Enter Existing Chat Room)
 
-You can enter existing Chat Room by using `roomId` and creating freely your own chat UI. The return as pair of a Chat Room and List of `Comments` that you can use to init data comment for the first time as reference you can see in sample [Sample github link] (https://github.com/qiscus/QiscusCore-Example). You can use to 1-on-1 Chat Room, Group Chat room or Channel, here's how to get a Chat Room by `roomId:`
+You can enter existing Chat Room by using `roomId` and creating freely your own chat UI. The return as pair of a Chat Room and List of `Comments` that you can use to init data comment for the first time as reference you can see in sample [Sample github](https://github.com/qiscus/QiscusCore-Example). You can use to 1-on-1 Chat Room, Group Chat room or Channel, here's how to get a Chat Room by `roomId:`
 
 ```
 QiscusCore.shared.getRoom(withID: roomId, onSuccess: { (roomModel,comments) in
@@ -650,9 +650,9 @@ Where:
 
 ### Get Participant List In Chat Room
 
-You can get participant list in Chat Room, you can get from getRoom() directly, from your local data, or you can retrieve from Qiscus Server.
+You can get participant list in Chat Room, you can get from `getRoom()` directly, from your local data, or you can retrieve from Qiscus Server.
 
-This example code you can retrieve from object getRoom()
+This example code you can retrieve from object `getRoom()`
 
 ```
 QiscusCore.shared.getRoom(withID: roomID, onSuccess: { (room, comments) in
@@ -705,7 +705,7 @@ Default return 100 participants
 
 ### Add Participant in Chat Room
 
-You can add more than a participant in Chat Room by calling this method addParticipant() you can pass multiple `userId` . Once a participant success join the Chat Room, they get new Chat Room in their Chat Room list.
+You can add more than a participant in Chat Room by calling this method `addParticipant()` you can pass multiple `userId` . Once a participant success join the Chat Room, they get new Chat Room in their Chat Room list.
 
 ```
 QiscusCore.shared.addParticipant(userEmails: userEmails, roomId: roomID, onSuccess: { (participants) in
@@ -717,7 +717,7 @@ QiscusCore.shared.addParticipant(userEmails: userEmails, roomId: roomID, onSucce
 
 ### Remove Participant in Chat Room
 
-You can remove more than a participant in Chat Room by calling this method removeParticipant() you can pass multiple `userId` . Once a participant remove from the Chat Room, they will not find related Chat Room in their Chat Room list.
+You can remove more than a participant in Chat Room by calling this method `removeParticipant()` you can pass multiple `userId` . Once a participant remove from the Chat Room, they will not find related Chat Room in their Chat Room list.
 
 ```
 QiscusCore.shared.removeParticipant(userEmails: userEmails, roomId: roomID, onSuccess: { (success) in
@@ -773,7 +773,7 @@ message.payload = yourPayload
 
 Where:
 
-* `roomId`:  ChatRoom Identity (Id), you can get this Id in QiscusChatRoom object 
+* `roomId`:  ChatRoom Identity (Id), you can get this Id in RoomModel object 
 * `text`: message text that you send to other participant
 * `type`: message type, that you can define freely, there are predefined rich messages **type, for example: text, file_attachment, account_linking, buttons, button_postback_response, replay, system_event, card, custom, location, contact_person, carousel.** These type have taken, if you use it you may face your structured data will not work, these type for bot API, hence you need define other type name.
 * `payload`: Payload for defining the structured message data, for example you want to create your own **file** message, you can fill the `content` using this example JSON :
@@ -825,7 +825,7 @@ message.extras  = extraData
 Metadata is automatically synchronized by each participant in the Chat Room, it is important that the amount of data stored in metadata is kept to a minimum to ensure the quickest synchronization possible.
 
 
-Secondly, you can send a message using sendMessage`()`  method and need a message / commentModel as parameter, for example:
+Secondly, you can send a message using `sendMessage()`  method and need a message / commentModel as parameter, for example:
 
 ```
 QiscusCore.shared.sendMessage(roomID: roomId, comment: message, onSuccess: { (commentModel) in
@@ -835,7 +835,7 @@ QiscusCore.shared.sendMessage(roomID: roomId, comment: message, onSuccess: { (co
 }
 ```
 
-For updating to be **Read** status you can find further in [Event handler section](#Event-Handler)
+For updating to be **Read** status you can find further in [Event handler section](#event-handler)
 
 
 ### Update Message Read Status
