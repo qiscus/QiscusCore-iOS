@@ -27,7 +27,7 @@ We recommend that you understand the concept before proceeding with the rest
 
 * Messaging
 
-The messaging flow is simple: a user register to Qiscus Server, a user open a room, send a message to a Chat Room, and then other participants will receive the message within the room. As long as user connect to Qiscus Server user will get events in [event handler section](#Event-Handler), such as **on receive message, read receipt**, and so on.  
+The messaging flow is simple: a user register to Qiscus Server, a user open a room, send a message to a Chat Room, and then other participants will receive the message within the room. As long as user connect to Qiscus Server user will get events in [event handler section](#event-handler), such as **on receive message, read receipt**, and so on.  
 
 * Application
 
