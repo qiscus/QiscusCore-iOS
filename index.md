@@ -111,11 +111,11 @@ Where:
 * ***userKey*** (string): userKey for authentication purpose, so even if a stranger knows your user Id, he cannot access the user data.
 * ***username*** (string): Username for display name inside Chat Room purposes.
 * ***avatarUrl*** (string, optional): to display user's avatar, fallback to default avatar if not provided.
-* **extras [string:any]**: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer**.** **
+* **extras [string:any]**: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer.**
 
 ### Step 5 : Create Chat Room
 
-There are three Chat Room types, 1-on-1, group, and channel, for further detail you can see [link Chat Room type] for this section let's use 1-on-1. We assume that you already know a targeted user you want to chat with. To start a conversation with your targeted user, it can be done with `getRoom(withUser)`** **method. Qiscus Chat SDK, then, will serve you a new Chat Room, asynchronously. When the room is successfully created, Qiscus Chat SDK will return a Chat Room and comment package through `onSuccess()` 
+There are three Chat Room types, 1-on-1, group, and channel, for further detail you can see [link Chat Room type] for this section let's use 1-on-1. We assume that you already know a targeted user you want to chat with. To start a conversation with your targeted user, it can be done with `getRoom(withUser)`method. Qiscus Chat SDK, then, will serve you a new Chat Room, asynchronously. When the room is successfully created, Qiscus Chat SDK will return a Chat Room and comment package through `onSuccess()` 
 
 ```
 QiscusCore.shared.getRoom(withUser: withUserId, onSuccess: { (room, comments) in
@@ -217,7 +217,7 @@ Where:
 * **WithAppID** : your appID
 * **server** : your custom server host, with parameter url, realtimeURL, realtimePort
 
-For further detail on premise information you can contact us [link contact.us@qiscus.com].
+For further detail on premise information you can contact us link [contact.us@qiscus.com].
 
 
 > **Note**: The initialization should be called always . The best practise you can put in AppDelegate
@@ -249,7 +249,7 @@ Where:
 * ***userKey*** (string): userKey for authentication purpose, so even if a stranger knows your user Id, he cannot access the user data.
 * ***username*** (string): Username for display name inside Chat Room purposes.
 * ***avatarUrl*** (string, optional): to display user's avatar, fallback to default avatar if not provided.
-* **extras [string:any]**: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer**.** **
+* **extras [string:any]**: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer**.
 
 > **Note**
 Email addresses are a bad choice for user IDs because users may change their email address. It also unnecessarily exposes private information. We recommend to be *unique* for every user in your app, and *stable*, meaning that they can never change
@@ -314,7 +314,7 @@ HMACSHA256(
   Qiscus Secret Key)
 ```
 
-To make this easier, we provide sample backends in PHP   [l[PHP sample identity token](https://bitbucket.org/qiscus/qiscus-sdk-php/src/ff4f04a59100/?at=master)] You can use any other language or platform
+To make this easier, we provide sample backends in PHP   [[PHP sample identity token](https://bitbucket.org/qiscus/qiscus-sdk-php/src/ff4f04a59100/?at=master)] You can use any other language or platform
 
 * Step 2 : Start to get a **Nonce**
 
@@ -835,7 +835,7 @@ QiscusCore.shared.sendMessage(roomID: roomId, comment: message, onSuccess: { (co
 }
 ```
 
-For updating to be **Read** status you can find further in [Event handler section][link]
+For updating to be **Read** status you can find further in [Event handler section](#Event-Handler)
 
 
 ### Update message READ status
