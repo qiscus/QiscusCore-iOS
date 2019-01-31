@@ -15,7 +15,7 @@ Qiscus Chat SDK provides features such as:
 * Delete message
 * Offline message
 * Block user
-* Custom event
+* Custom realtime event
 * Server side integration with Server API and Webhook
 * Embed bot engine in your App
 * Enable Push notification
