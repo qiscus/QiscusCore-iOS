@@ -1410,5 +1410,5 @@ QiscusCore.enableDebugPrint = true
 Then, you can sent the inquiries in our support platform https://support.qiscus.com/hc/en-us/requests/new with information that you have.
 
 
-> Note: Enable debugger only in development environment
+> Note: Enable debugger only in development environment 
 
