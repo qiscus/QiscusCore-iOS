@@ -130,7 +130,7 @@ QiscusCore.shared.getRoom(withUser: withUserId, onSuccess: { (room, comments) in
 ### Step 6 : Send message
 
 You can send any type of data through Qiscus Chat SDK, in this section let's send a “Hi” **message**, 
-with type value is **text**. For further detail about message you can find at [Message section link]
+with type value is **text**. For further detail about message you can find at [Message](#Message)
 
 ```
 let message = CommentModel()
