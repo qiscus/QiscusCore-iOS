@@ -251,6 +251,9 @@ Where:
 * `avatarUrl` (string, optional): to display user's avatar, fallback to default avatar if not provided.
 * `extras [string:any]`: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer**.
 
+You can learn from the figure below to understand what really happened when calling setUser() function:
+<p align="center"><br/><img src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/docs/assets/docs-screenshot-android/docs_ss_set_user_client_auth.png" width="100%" /><br/></p>
+
 > **Note**
 Email addresses are a bad choice for user IDs because users may change their email address. It also unnecessarily exposes private information. We recommend to be *unique* for every user in your app, and *stable*, meaning that they can never change
 
@@ -258,7 +261,7 @@ Email addresses are a bad choice for user IDs because users may change their ema
 
 Server Authentication is another option, which allow you to authenticate using JSON Web Tokens [(JWT)](https://jwt.io/). JSON Web Tokens contains your app account details which typically consists of a single string which contains information of two parts, JOSE Header, JWT Claims Set.
 
-[image Server Authentication flow illustration]
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/docs-screenshot-android/docs_ss_jwt_authentication.png" width="100%" /><br/></p>
 
 The steps to authenticate with JWT goes like this:
 
