@@ -15,25 +15,25 @@ Qiscus Chat SDK provides features such as:
 * Delete message
 * Offline message
 * Block user
-* Custom event
+* Custom realtime event
 * Server side integration with Server API and Webhook
 * Embed bot engine in your App
 * Enable Push notification
 * Export and import messages from your App
 
-### How Qiscus works 
+### How Qiscus Works 
 
 We recommend that you understand the concept before proceeding with the rest
 
 * Messaging
 
-The messaging flow is simple: a user register to Qiscus Server, a user open a room, send a message to a Chat Room, and then other participants will receive the message within the room. As long as user connect to Qiscus Server user will get events in event handler section [event handler section](#Event-Handler), such as **on receive message, read receipt**, and so on.  
+The messaging flow is simple: a user register to Qiscus Server, a user open a room, send a message to a Chat Room, and then other participants will receive the message within the room. As long as user connect to Qiscus Server user will get events in [event handler section](#Event-Handler), such as **on receive message, read receipt**, and so on.  
 
 * Application
 
 To start building your application using Qiscus Chat SDK you need a key called APP ID. This APP ID acts as identifier of your Application so that Qiscus Chat SDK can connect a user to other users. You can get your APP ID [here](https://www.qiscus.com/dashboard/register). You can find your APP ID on your Qiscus application dashboard. Here you can see the picture as a reference.
 
-<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/ss_qiscus_chat_dashboard_app_id_docs.png" width="100%" /><br/></p>
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/app_id_docs.png" width="100%" /><br/></p>
 
 > **Note**
 *All users within the same APP ID are able to communicate with each other, across all platforms. This means users using iOS, Android, Web clients, etc. can all chat with one another. However, users in different Qiscus applications cannot talk to each other.*
@@ -58,7 +58,7 @@ This sample use **sample APP ID**, means, you will share data with others, in ca
 
 This section help you to start building your integration, start with send your first message.
 
-### Step 1 : Get your APP ID
+### Step 1 : Get Your APP ID
 
 Firstly, you need to create your application in dashboard, by accessing this link [[dashboard link](https://www.qiscus.com/dashboard/login)]. You can create more than one APP ID, for further information you can refer to [How Qiscus works - Application Link]
 
@@ -90,7 +90,7 @@ QiscusCore.setup(WithAppID: "yourAppId")
 > **Note:  
 **The initialization should be called always . The best practise you can put in AppDelegate
 
-### Step 4 : Authentication to Qiscus 
+### Step 4 : Authentication To Qiscus 
 
 To use Qiscus Chat SDK features a user firstly need to authenticate to Qiscus Server, for further detail you might figure out [Authentication section link]. This authentication is done by calling `loginOrRegister`() function. This function will retrieve or create user credential based on the unique **User Id** ,for example:
 
@@ -107,11 +107,11 @@ QiscusCore.loginOrRegister(userID: userID, userKey: key, username: username) { (
 
 Where:
 
-* **userID**  (string, unique): A User identifier that will be used to identify a user and used whenever another user need to chat with this user. It can be anything, whether is is user's email, your user database index, etc. 
-* ***userKey*** (string): userKey for authentication purpose, so even if a stranger knows your user Id, he cannot access the user data.
-* ***username*** (string): Username for display name inside Chat Room purposes.
-* ***avatarUrl*** (string, optional): to display user's avatar, fallback to default avatar if not provided.
-* **extras [string:any]**: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer.**
+* `userID`  (string, unique): A User identifier that will be used to identify a user and used whenever another user need to chat with this user. It can be anything, whether is is user's email, your user database index, etc. 
+* `userKey`string): userKey for authentication purpose, so even if a stranger knows your user Id, he cannot access the user data.
+* `username`string): Username for display name inside Chat Room purposes.
+* `avatarUrl` (string, optional): to display user's avatar, fallback to default avatar if not provided.
+* `extras [string:any]`: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer.**
 
 ### Step 5 : Create Chat Room
 
@@ -127,7 +127,7 @@ QiscusCore.shared.getRoom(withUser: withUserId, onSuccess: { (room, comments) in
 
 > **Note:**  Make sure that your targeted user has been registered in Qiscus Chat SDK 
 
-### Step 6 : Send message
+### Step 6 : Send Message
 
 You can send any type of data through Qiscus Chat SDK, in this section let's send a “Hi” **message**, 
 with type value is **text**. For further detail about message you can find at [Message](#Message)
@@ -214,8 +214,8 @@ QiscusCore.setup(WithAppID: "your appID", server: customServer)
 
 Where:
 
-* **WithAppID** : your appID
-* **server** : your custom server host, with parameter url, realtimeURL, realtimePort
+* `WithAppID` : your appID
+* `server` : your custom server host, with parameter url, realtimeURL, realtimePort
 
 For further detail on premise information you can contact us link [contact.us@qiscus.com].
 
@@ -245,11 +245,11 @@ QiscusCore.loginOrRegister(userID: userID, userKey: key, username: username) { (
 
 Where:
 
-* ***userId*** (string, unique): A User identifier that will be used to identify a user and used whenever another user need to chat with this user. It can be anything, whether is is user's email, your user database index, etc. HiAs long as it is unique and a string.
-* ***userKey*** (string): userKey for authentication purpose, so even if a stranger knows your user Id, he cannot access the user data.
-* ***username*** (string): Username for display name inside Chat Room purposes.
-* ***avatarUrl*** (string, optional): to display user's avatar, fallback to default avatar if not provided.
-* **extras [string:any]**: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer**.
+* `userId` (string, unique): A User identifier that will be used to identify a user and used whenever another user need to chat with this user. It can be anything, whether is is user's email, your user database index, etc. HiAs long as it is unique and a string.
+* `userKey` (string): userKey for authentication purpose, so even if a stranger knows your user Id, he cannot access the user data.
+* `username` (string): Username for display name inside Chat Room purposes.
+* `avatarUrl` (string, optional): to display user's avatar, fallback to default avatar if not provided.
+* `extras [string:any]`: to give additional information (metadata) to user, which consist key-value, for example **key: position, **and** value: engineer**.
 
 > **Note**
 Email addresses are a bad choice for user IDs because users may change their email address. It also unnecessarily exposes private information. We recommend to be *unique* for every user in your app, and *stable*, meaning that they can never change
@@ -276,7 +276,7 @@ Do the following authentication tasks as described step above:
 
 When your backend returns a JWT after receiving Nonce from your App, the JWT will be caught by your App and will be forwarded to Qiscus Server. In this phase, Qiscus Server will verify the JWT before returning Qiscus Account for your user. To allow Qiscus Server successfully recognize the JWT, you need to setup JOSE Header and JWT Claim Set in your backend as follow :
 
-    * JOSE Header
+* JOSE Header
 
 ```
 {
@@ -286,7 +286,7 @@ When your backend returns a JWT after receiving Nonce from your App, the JWT wil
 }
 ```
 
-    * JWT Claim Set
+* JWT Claim Set
 
 ```
 {
@@ -301,7 +301,7 @@ When your backend returns a JWT after receiving Nonce from your App, the JWT wil
 }
 ```
 
-    * Signature
+* Signature
 
 JWT need to be signed using **Qiscus Secret Key**, the one you get in [dashboard](https://www.qiscus.com/dashboard/login). The signature is used to verify that the sender of the JWT is who it says it is. To create the signature part you have to take the encoded JOSE Header, the encoded JWT Claim Set, a Qiscus Secret Key, the algorithm specified in the header, and sign that.
 
@@ -351,7 +351,7 @@ QiscusCore.login(withIdentityToken: withuserIdentityToken, onSuccess: { (qUser) 
 
 ```
 
-### Clear User Data And disconnected 
+### Clear User Data And Disconnected 
 
 As mentioned in previous section, when you did setUser(), user's data will be stored locally. When you need to disconnect from Qiscus Server, you need to clear the user data that is related to Qiscus Chat SDK, such as token, profile, messages, rooms, etc, from local device, hence later you will not get any **message, or event**.  You can do this by calling this code:
 
@@ -362,7 +362,7 @@ QiscusCore.logout { (error) in
           }}
 ```
 
-## Term of User
+## Term Of User
 
 Qiscus Chat SDK has three term of user, Qiscus Account and Participant. Qiscus Account is user who success through authentication phase, hence this  user able to use Qiscus Chat SDK features. In other hand, Participant is user who in a Chat Room. At some case, you need add more user to your Chat Room, what you can do you can add participant, then your Chat Room increase the number of participant and decrease whenever you remove participant. To use add participant you can refer to this [add participant](#Add-Participant-in-CHAT-room)
 
@@ -384,11 +384,11 @@ Block user feature works only for 1-on-1 Chat Room
 
 ## Chat Room Type 
 
-### 1-on-1 chat room
+### 1-On-1 Chat Room
 
 Chat Room that consist of 1-on-1 chat between two users. This type of chat room allow you to have always same chat room between two users. Header of the room will be name of the pair. To create single chat, you will need to know the user Id of the opponent.
 
-### Group chat room
+### Group Chat Room
 
 When you want your many users to chat together in a single room, you need to create Group Chat Room. Basically Group Chat Room has the same concept as 1-on-1 Chat Room, but the different is that Group Chat Room will target array of user Id in a single method. The return of the function is `QiscusCore.shared.createGroup()`  you can store it in your persistent storage and then use it to enter the same room anytime you want. Maximum number of participant for now is : **100** participants
 
@@ -414,7 +414,7 @@ Channel is Chat Room which allow users to join without invitation. This will all
 
 This section contains user Qiscus Chat SDK behaviour, you can do **update user profile with additional metadata,** **block user**, **unblock user**, and **get list of blocked user.**
 
-### Update user Profile with METADATA
+### Update User Profile With Metadata
 
 You can update user's data, for example :
 
@@ -430,11 +430,11 @@ QiscusCore.shared.updateProfile(username : "yourName", avatarUrl: nil, extras: n
 
 Where:
 
-* **username**: username of its user, for display name purpose if in 1-on-1 Chat Room
-* **avatarUrl** : Url to display user's avatar, fallback to default avatar if not provided.
-* **extras** : metadata that can be as additional information to user, which consist key-value, for example **key: position, **and** value: engineer**.
+* `username`: username of its user, for display name purpose if in 1-on-1 Chat Room
+* `avatarUrl` : Url to display user's avatar, fallback to default avatar if not provided.
+* `extras` : metadata that can be as additional information to user, which consist key-value, for example **key: position, **and** value: engineer**.
 
-### Check is user Authenticated
+### Check Is User Authenticated
 
 You can check whether user is authenticated or not, and make sure that a user allow to use Qiscus Chat SDK features.
 When return **true** means user already authenticated, otherwise **false** means user not yet authenticate.
@@ -443,7 +443,7 @@ When return **true** means user already authenticated, otherwise **false** means
 QiscusCore.isLogined //boolean
 ```
 
-### Block user
+### Block User
 
 You can block a user with related **user Id** parameter, this block user only works in 1-on-1 Chat Room. When a user in same Group or Channel with blocked user, a user still receive message from blocked user, for further information you can see this [User - blocked](#Block-user). You can use this function by calling this method, for example: 
 
@@ -455,7 +455,7 @@ QiscusCore.shared.blockUser(email: user_email, onSuccess: { (memberUser) in
 }
 ```
 
-### Unblock user
+### Unblock User
 
 You can unblock a user with related `user Id` parameter. Unblocked user can send a message again into particular Chat Room, for example: 
 
@@ -467,7 +467,7 @@ QiscusCore.shared.unblockUser(email: user_email, onSuccess: { (memberUser) in
 }
 ```
 
-### GET blocked user LIST 
+### GET Blocked User LIST 
 
 You can get blocked user list with pagination, with `page`  parameter and you can set also the `limit` number of blocked users, for example: 
 
@@ -486,7 +486,7 @@ This section consist Chat Room Qiscus Chat SDK behaviour In Chat Room you can ad
 
 > **Note:** options consist string key-value pairs
 
-### Create 1-on-1 Chat Room with METADATA
+### Create 1-on-1 Chat Room With Metadata
 
 The ideal creating 1-on-1 Chat Room is for use cases that require 2 users, for further information you can see this [Chat Room-1-on-1 section](#1-on-1-chat-room). After success creating a 1-on-1 Chat room, room name is another userId.
 
@@ -503,7 +503,7 @@ Where:
 * `userId`:  A User identifier that will be used to identify a user and used whenever another user need to chat with this user. It can be anything, whether is is user's email, your user database index, etc. As long as it is unique and a string.
 * `options:` metadata that can be as additional information to Chat Room, which consist key-value, for example **key: background, **and** value: red.**
 
-### Create Group Chat Room with METADATA
+### Create Group Chat Room With Metadata
 
 When you want your many users to chat together in a 1-on-1 Chat Room, you need to create Group Chat Room. Basically Group Chat Room has the same concept as 1-on-1 Chat Room, but the different is that Group Chat Room will target array of user Id in a single method. 
 
@@ -530,7 +530,7 @@ if let room =  QiscusCore.database.room.find(id: roomId){
 }
 ```
 
-### Create or get channel with METADATA
+### Create Or Get Channel With MetaData
 
 The ideal creating Channel Chat Room is for use cases that requires a lot of number of participant. You need set `uniqueId` for identify a Channel Chat Room, If a Chat Room with predefined `unique id `is not exist then it create a new one with requester as the only one participant. Otherwise, if Chat Room with predefined unique id is already exist, it will return that room and add requester as a participant. 
 
@@ -552,7 +552,7 @@ if let room =  QiscusCore.database.room.find(uniqID: uniqID){
 }
 ```
 
-### Get chat room by Id (Enter existing Chat Room)
+### Get Chat Room By Id (Enter Existing Chat Room)
 
 You can enter existing Chat Room by using `roomId` and creating freely your own chat UI. The return as pair of a Chat Room and List of `Comments` that you can use to init data comment for the first time as reference you can see in sample [Sample github link] (https://github.com/qiscus/QiscusCore-Example). You can use to 1-on-1 Chat Room, Group Chat room or Channel, here's how to get a Chat Room by `roomId:`
 
@@ -564,7 +564,7 @@ QiscusCore.shared.getRoom(withID: roomId, onSuccess: { (roomModel,comments) in
 }        
 ```
 
-### Get Chat room* *opponent by *user_id*
+### Get Chat Room Opponent By UserId
 
 You can get a Chat Room by `userId`. This only works 1-on-1 Chat Room.
 
@@ -576,7 +576,7 @@ QiscusCore.shared.getRoom(withUser: withUserId, onSuccess: { (roomModel, comment
 }        
 ```
 
-### Get CHAT rooms information
+### Get Chat Rooms Information
 
 You can get more than one Chat Room, by passing list of `roomId`, for `uniqueIds` will deprecate soon, for now you can set same as `roomIds` . You can see participant for each room by set `showMembers` to **true**, or you can set **false **to hide participant in each room.
 
@@ -590,9 +590,9 @@ QiscusCore.shared.getRooms(withId: arrayRoomID, showParticipant: false, onSucces
 
 Where:
 
-* withID : array of room id
-* showParticipant: show participant in room, default is false (optional)
-* showRemoved : show room is removed, default is false (optional)
+* `withID` : array of room id
+* `showParticipant`: show participant in room, default is false (optional)
+* `showRemoved` : show room is removed, default is false (optional)
 
 You can get Chat Rooms from your local data, for example:
 
@@ -602,7 +602,7 @@ let rooms = QiscusCore.database.room.all()
 }
 ```
 
-### Get CHAT room list
+### Get Chat Room List
 
 Get Chat Room list is ideal case for retrieve all Chat Rooms that Qiscus Account has. Showing maximum 100 data per page. 
 
@@ -616,10 +616,10 @@ Get Chat Room list is ideal case for retrieve all Chat Rooms that Qiscus Account
 
 Where:
 
-* limit : by default is 20 (optional)
-* page : page (optional)
-* showRemoved : show room is removed, default is false (optional)
-* showEmpty : empty comment in room (optional)
+* `limit` : by default is 20 (optional)
+* `page` : page (optional)
+* `showRemoved` : show room is removed, default is false (optional)
+* `showEmpty` : empty comment in room (optional)
 
 You can get Chat Room List from your local data, for example:
 
@@ -629,7 +629,7 @@ let rooms = QiscusCore.database.room.all()
 }
 ```
 
-### Update CHAT room WITH METADATA
+### Update Chat Room With Metadata
 
 You can update your Chat Room metadata, you need `roomId`, your Chat Room `name`, your Chat Room `avatar Url`, and `options`, for example:
 
@@ -643,12 +643,12 @@ You can update your Chat Room metadata, you need `roomId`, your Chat Room `name`
 
 Where:
 
-* roomId : roomId
-* name : room name (optional)
-* avatarUrl : room avatar (optional)
-* options : options is [string:any] (optional)
+* `roomId` : roomId
+* `name` : room name (optional)
+* `avatarUrl` : room avatar (optional)
+* `options` : options is [string:any] (optional)
 
-### Get Participant LIST in Chat Room
+### Get Participant List In Chat Room
 
 You can get participant list in Chat Room, you can get from getRoom() directly, from your local data, or you can retrieve from Qiscus Server.
 
@@ -703,7 +703,7 @@ Where:
 > Note :
 Default return 100 participants
 
-### Add Participant in CHAT room
+### Add Participant in Chat Room
 
 You can add more than a participant in Chat Room by calling this method addParticipant() you can pass multiple `userId` . Once a participant success join the Chat Room, they get new Chat Room in their Chat Room list.
 
@@ -727,7 +727,7 @@ QiscusCore.shared.removeParticipant(userEmails: userEmails, roomId: roomID, onSu
 })
 ```
 
-### Get total unread count in Chat room
+### Get Total Unread Count In Chat Room
 
 You can get total unread count user have in every Chat Room, ideal this case is when you want to show badge icon, for example getting total unread count:
 
@@ -745,7 +745,7 @@ QiscusCore.shared.unreadCount { (count, error) in
 
 This section consist of Message Qiscus Chat SDK behaviour. In Message you can add metadata called **extras.** **extras** is automatically synchronized by each participant in the Chat Room. Qiscus Chat SDK has 3 statues, Sent, Delivered, and Read for a message. 
 
-### Send message 
+### Send Message 
 
 You can send a **text** message or **custom** message **type**. Ideal case for **custom** message is for creating custom UI message needs by sending structured data, such as you need to **send location** message, a **ticket concert** message, a **product** info, and others UI message that need to be customized. You need to create  CommentModel() object first before sending it, for example: 
 
@@ -773,10 +773,10 @@ message.payload = yourPayload
 
 Where:
 
-* **roomId**:  ChatRoom Identity (Id), you can get this Id in QiscusChatRoom object 
-* **text**: message text that you send to other participant
-* **type**: message type, that you can define freely, there are predefined rich messages **type, ** for example: text, file_attachment, account_linking, buttons, button_postback_response, replay, system_event, card, custom, location, contact_person, carousel.** These type have taken, if you use it you may face your structured data will not work, these type for bot API, hence you need define other type name.
-* **payload**: Payload for defining the structured message data, for example you want to create your own **file** message, you can fill the `content` using this example JSON :
+* `roomId`:  ChatRoom Identity (Id), you can get this Id in QiscusChatRoom object 
+* `text`: message text that you send to other participant
+* `type`: message type, that you can define freely, there are predefined rich messages **type, for example: text, file_attachment, account_linking, buttons, button_postback_response, replay, system_event, card, custom, location, contact_person, carousel.** These type have taken, if you use it you may face your structured data will not work, these type for bot API, hence you need define other type name.
+* `payload`: Payload for defining the structured message data, for example you want to create your own **file** message, you can fill the `content` using this example JSON :
 
 ```
 {
@@ -838,7 +838,7 @@ QiscusCore.shared.sendMessage(roomID: roomId, comment: message, onSuccess: { (co
 For updating to be **Read** status you can find further in [Event handler section](#Event-Handler)
 
 
-### Update message READ status
+### Update Message Read Status
 
 You can set your message status into **read**, the ideal case of this is to notify other participant that a message has **read.**
 You need to pass `roomId ` and lastCommentReadId.  When you have **10 messages**, and the latest message Id, let say is **10**, once you set read message status with the latest message, in this case is **10**, your previous messages will update into **read** as well. You can update message read status by calling updateCommentRead method, for example:
@@ -848,7 +848,7 @@ You need to pass `roomId ` and lastCommentReadId.  When you have **10 messages**
 QiscusCore.shared.updateCommentRead(roomId: roomId, lastCommentReadId: commentId)
 ```
 
-### Load message (with *limit* and *offset*)
+### Load Message (With *Limit* And *Offset*)
 
 You can get previous messages by calling loadComments method, by default you get 20 messages start from your `lastCommentId`, and also you can use this for load more the older messages, for example:
 
@@ -863,8 +863,8 @@ You can get previous messages by calling loadComments method, by default you get
 Where:
 
 
-* **roomId** : ChatRoom Id
-* **lastCommentId**: messageId that you can get from commentModel object 
+* `roomId` : ChatRoom Id
+* `lastCommentId`: messageId that you can get from commentModel object 
 
 You can a get from local data, you can set `limit` to get number of comments, for example:
 
@@ -880,7 +880,7 @@ You can a get from local data, you can set `limit` to get number of comments, fo
  QiscusCore.getDataStore().getComments(roomId, limit);
 ```
 
-### Viewing who has read, Delivered a MESSAGE
+### Viewing Who Has Read, Delivered A Message
 
 You can get information who has read your message by passing `commentId` in return you get participants who have **pending**, **delivered**, and **read** message status, for example: 
 
@@ -895,7 +895,7 @@ You can get information who has read your message by passing `commentId` in retu
         }
 ```
 
-### UPLOAD FILE
+### Upload File
 
 You can send a raw file into by passing `file` Qiscus Chat SDK, in return you will get `Uri`  and `progress listener`.
 
@@ -909,7 +909,7 @@ QiscusCore.shared.upload(data: data, filename: fileName, onSuccess: { (fileModel
 }
 ```
 
-### Download media (the *path *and % of process)
+### Download Media (The *Path *And % Of Process)
 
 You can download file by passing `url` and return you get progress listener. You can use this listener to create your own progress UI, for example:
 
@@ -922,7 +922,7 @@ QiscusCore.shared.download(url: url, onSuccess: { (urlFile) in
  
 ```
 
-### Delete message
+### Delete Message
 
 You can delete a message by calling this `deleteMessage()` method , and passing parameter array of comment uniqueIDs for example:
 
@@ -934,7 +934,7 @@ QiscusCore.shared.deleteMessage(uniqueIDs: uniqueIDs, onSuccess: { (comments) in
         }
 ```
 
-### Clear all messages 
+### Clear All Messages 
 
 You can clear all message by passing array of `roomId`  or `roomUniqueIds` this clear all messages only effect `QiscusAccount` side, other participants still remain. For example:
 
@@ -958,7 +958,7 @@ Qiscus Chat SDK provides a simple way to let applications publish and listen som
 
 Qiscus Chat SDK is using delegate for broadcasting event to entire application. What you need to do is registering the object which will receive event from delegate.
 
-### Event handler in Chat Room
+### Event Handler In Chat Room
 
 You need register delegate:
 
@@ -1045,7 +1045,7 @@ extension YourViewController : QiscusCoreRoomDelegate {
 
 > Note: don't forget to import QiscusCore
 
-### **Event handler in List Chat Room**
+### **Event Handler In List Chat Room**
 
 You need register delegate:
 
@@ -1156,7 +1156,7 @@ extension YourViewController : QiscusCoreDelegate {
 
 > Note: don't forget to import QiscusCore
 
-### START and STOP typing INDICATOR
+### Start And Stop Typing Indicator
 
 You can have typing indicator by publish the typing event. You need to pass `roomId` and `typing` status. Set **true** to indicate the `typing` event is active, set **false** to indicate the event is inactive. The ideal of this case is if you can put this to any class for example, you need to put in Homepage, to notify that there's an active user. for example:
 
@@ -1164,13 +1164,13 @@ You can have typing indicator by publish the typing event. You need to pass `roo
 QiscusCore.shared.isTyping(true, roomID: r.id)
 ```
 
-### SUBSCRIBE Room
+### Subscribe Room
 
 After you call func `QiscusCore.shared.getRoom()`, it's automatic subscribe room.
 
 > Note: no need subscribe manualy for subscribe room
 
-### Custom REALTIME Event
+### Custom Realtime Event
 
 You can publish and listen any events such as when **participant is listening music**, **writing document**, and many other case that you need to tell an event to other participant in a Chat Room. 
 
@@ -1226,10 +1226,10 @@ Do the following steps to setup push notifications:
 3. Export a p12 file and upload it to Qiscus Dashboard.
 4. Register a device token in Qiscus SDK and parse Qiscus APNS messages.
 
-### Step 1:  Create a Certificate Signing Request(CSR)
+### Step 1:  Create A Certificate Signing Request(CSR)
 
 Open **Keychain Access** on your Mac (Applications -> Utilities -> Keychain Access). Select **Request a Certificate From a Certificate Authority**.
-<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns1.png" width="100%" /><br/></p>
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns1.png" width="100%" /><br/></p>
 
 In the **Certificate Information** window, do the following:
 
@@ -1238,30 +1238,30 @@ In the **Certificate Information** window, do the following:
 * The **CA Email Address** field must be left empty.
 * In the **Request is** group, select the **Saved to disk** option.
 
-<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns2.png" width="100%" /><br/></p>
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns2.png" width="100%" /><br/></p>
 
-### STEP 2: Create a Push Notification SSL certificate in Apple Developer site.
+### STEP 2: Create A Push Notification SSL Certificate In Apple Developer Site.
 
 Log in to the [Apple Developer Member Center](https://developer.apple.com/) and find the **Certificates, Identifiers & Profiles** menu. Select **App IDs**, find your target application, and click the **Edit** button.
-<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns3.png" width="100%" /><br/></p>
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns3.png" width="100%" /><br/></p>
 
-<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns4.png" width="100%" /><br/></p>
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns4.png" width="100%" /><br/></p>
 
 Turn on **Push Notifications** and create a development or production certificate to fit your purpose. 
-<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns5.png" width="100%" /><br/></p>
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns5.png" width="100%" /><br/></p>
 Upload the **CSR file** that you created in section (1) to complete this process. After doing so, download a **SSL certificate**.
 Double-click the file and register it to your **login keychain.**
 
 
-### STEP 3: Export a p12 file and upload it to Qiscus Dashboard
+### STEP 3: Export A p12 File and Upload It To Qiscus Dashboard
 
 Under the Keychain Access, click the Certificates category from the left menu. Find the Push SSL certificate you just registered and right-click it without expanding the certificate. Then select Export to save the file to your disk.
 
-<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns6.png" width="100%" /><br/></p>
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns6.png" width="100%" /><br/></p>
 
-<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns7.png" width="100%" /><br/></p>
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns7.png" width="100%" /><br/></p>
 
-<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns8.png" width="100%" /><br/></p>
+<p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns8.png" width="100%" /><br/></p>
 
 Then, log in to the [dashboard](https://www.qiscus.com/dashboard/login) and upload your `.p12` file to the Push Notification section, under Settings.
 
@@ -1271,7 +1271,7 @@ klik add and fill the form upload certificates
 
 <p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns10.png" width="100%" /><br/></p>
 
-### STEP 4: Register a device token in Qiscus SDK and parse Qiscus APNS messages.   
+### STEP 4: Register A Device Token In Qiscus SDK And Parse Qiscus APNS Messages.   
 
 In your app's AppDelegate, store your device token as a variable.
 
@@ -1368,7 +1368,7 @@ QiscusCore.shared.remove(deviceToken: deviceToken, onSuccess: { (response) in
         }
 ```
 
-## Migration from previous version 
+## Migration From Previous Version 
 
 if you use Qiscus Chat SDK v2.8.xx to Qiscus Chat SDK v2.9.xx, you will migration data to new database. You need call method `QiscusCore.isLogined()`
 
@@ -1384,14 +1384,14 @@ if QiscusCore.isLogined {
 ```
 
 ## Change Log
-
+You can see the change log by clicking this link
 https://github.com/qiscus/QiscusCore-iOS/releases
 
 ## API Reference 
-
+You can see the Api Reference by clicking this link
 https://qiscuscoreios.firebaseapp.com/index.html
 
-## On premise 
+## On Premise 
 
 Qiscus Chat SDK is available to be deployed on premise option. For further information you might contact  at [contact.us@qiscus.com](mailto:contact.us@qiscus.com.)
 
