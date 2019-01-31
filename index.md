@@ -33,7 +33,7 @@ The messaging flow is simple: a user register to Qiscus Server, a user open a ro
 
 To start building your application using Qiscus Chat SDK you need a key called APP ID. This APP ID acts as identifier of your Application so that Qiscus Chat SDK can connect a user to other users. You can get your APP ID [here](https://www.qiscus.com/dashboard/register). You can find your APP ID on your Qiscus application dashboard. Here you can see the picture as a reference.
 
-<img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/ss_qiscus_chat_dashboard_app_id_docs.png" width="80%" />
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/ss_qiscus_chat_dashboard_app_id_docs.png" width="100%" /><br/></p>
 
 > **Note**
 *All users within the same APP ID are able to communicate with each other, across all platforms. This means users using iOS, Android, Web clients, etc. can all chat with one another. However, users in different Qiscus applications cannot talk to each other.*
@@ -1229,32 +1229,47 @@ Do the following steps to setup push notifications:
 ### Step 1:  Create a Certificate Signing Request(CSR)
 
 Open **Keychain Access** on your Mac (Applications -> Utilities -> Keychain Access). Select **Request a Certificate From a Certificate Authority**.
-[Image: Screen Shot 2019-01-25 at 13.39.08.png]In the **Certificate Information** window, do the following:
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns1.png" width="100%" /><br/></p>
+
+In the **Certificate Information** window, do the following:
 
 * In the **User Email Address** field, enter your email address.
 * In the **Common Name** field, create a name for your private key (for example, John Doe Dev Key).
 * The **CA Email Address** field must be left empty.
 * In the **Request is** group, select the **Saved to disk** option.
 
-[Image: Screen Shot 2019-01-25 at 13.40.35.png]
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns2.png" width="100%" /><br/></p>
 
 ### STEP 2: Create a Push Notification SSL certificate in Apple Developer site.
 
 Log in to the [Apple Developer Member Center](https://developer.apple.com/) and find the **Certificates, Identifiers & Profiles** menu. Select **App IDs**, find your target application, and click the **Edit** button.
-[Image: Screen Shot 2019-01-25 at 13.47.07.png][Image: Screen Shot 2019-01-25 at 13.47.20.png]
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns3.png" width="100%" /><br/></p>
+
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns4.png" width="100%" /><br/></p>
+
 Turn on **Push Notifications** and create a development or production certificate to fit your purpose. 
-[Image: apns_4.png]Upload the **CSR file** that you created in section (1) to complete this process. After doing so, download a **SSL certificate**.
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns5.png" width="100%" /><br/></p>
+Upload the **CSR file** that you created in section (1) to complete this process. After doing so, download a **SSL certificate**.
 Double-click the file and register it to your **login keychain.**
 
 
 ### STEP 3: Export a p12 file and upload it to Qiscus Dashboard
 
 Under the Keychain Access, click the Certificates category from the left menu. Find the Push SSL certificate you just registered and right-click it without expanding the certificate. Then select Export to save the file to your disk.
-[Image: Screen Shot 2019-01-25 at 14.25.31.png][Image: Screen Shot 2019-01-25 at 14.30.21.png][Image: Screen Shot 2019-01-25 at 14.21.08.png]
+
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns6.png" width="100%" /><br/></p>
+
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns7.png" width="100%" /><br/></p>
+
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns8.png" width="100%" /><br/></p>
+
 Then, log in to the [dashboard](https://www.qiscus.com/dashboard/login) and upload your `.p12` file to the Push Notification section, under Settings.
-[Image: Screen Shot 2019-01-25 at 14.34.13.png]
+
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns9.png" width="100%" /><br/></p>
+
 klik add and fill the form upload certificates
-[Image: Screen Shot 2019-01-25 at 14.35.34.png]
+
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns10.png" width="100%" /><br/></p>
 
 ### STEP 4: Register a device token in Qiscus SDK and parse Qiscus APNS messages.   
 
@@ -1341,7 +1356,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 
 Don't forget set **Remote notifications and Background fetch** in menu **Capabilities**
 
-[Image: Screen Shot 2019-01-25 at 14.47.05.png]
+<p align="center"><br/><img src="https://github.com/qiscus/QiscusCore-iOS/blob/develop/screenshots/apns11.png" width="100%" /><br/></p>
 
 ### turning off push notification 
 
