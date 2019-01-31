@@ -27,7 +27,7 @@ We recommend that you understand the concept before proceeding with the rest
 
 * Messaging
 
-The messaging flow is simple: a user register to Qiscus Server, a user open a room, send a message to a Chat Room, and then other participants will receive the message within the room. As long as user connect to Qiscus Server user will get events in event handler section [link event handler section], such as **on receive message, read receipt**, and so on.  
+The messaging flow is simple: a user register to Qiscus Server, a user open a room, send a message to a Chat Room, and then other participants will receive the message within the room. As long as user connect to Qiscus Server user will get events in event handler section [event handler section](#Event-Handler), such as **on receive message, read receipt**, and so on.  
 
 * Application
 
@@ -115,7 +115,7 @@ Where:
 
 ### Step 5 : Create Chat Room
 
-There are three Chat Room types, 1-on-1, group, and channel, for further detail you can see [link Chat Room type] for this section let's use 1-on-1. We assume that you already know a targeted user you want to chat with. To start a conversation with your targeted user, it can be done with `getRoom(withUser)`method. Qiscus Chat SDK, then, will serve you a new Chat Room, asynchronously. When the room is successfully created, Qiscus Chat SDK will return a Chat Room and comment package through `onSuccess()` 
+There are three Chat Room types, 1-on-1, group, and channel, for further detail you can see [Chat Room type](#Chat-Room -ype) for this section let's use 1-on-1. We assume that you already know a targeted user you want to chat with. To start a conversation with your targeted user, it can be done with `getRoom(withUser)`method. Qiscus Chat SDK, then, will serve you a new Chat Room, asynchronously. When the room is successfully created, Qiscus Chat SDK will return a Chat Room and comment package through `onSuccess()` 
 
 ```
 QiscusCore.shared.getRoom(withUser: withUserId, onSuccess: { (room, comments) in
@@ -364,7 +364,7 @@ QiscusCore.logout { (error) in
 
 ## Term of User
 
-Qiscus Chat SDK has three term of user, Qiscus Account and Participant. Qiscus Account is user who success through authentication phase, hence this  user able to use Qiscus Chat SDK features. In other hand, Participant is user who in a Chat Room. At some case, you need add more user to your Chat Room, what you can do you can add participant, then your Chat Room increase the number of participant and decrease whenever you remove participant. To use add participant you can refer to this link [add participant link section]
+Qiscus Chat SDK has three term of user, Qiscus Account and Participant. Qiscus Account is user who success through authentication phase, hence this  user able to use Qiscus Chat SDK features. In other hand, Participant is user who in a Chat Room. At some case, you need add more user to your Chat Room, what you can do you can add participant, then your Chat Room increase the number of participant and decrease whenever you remove participant. To use add participant you can refer to this [add participant](#Add-Participant-in-CHAT-room)
 
 Term of user Table:
 
@@ -445,7 +445,7 @@ QiscusCore.isLogined //boolean
 
 ### Block user
 
-You can block a user with related **user Id** parameter, this block user only works in 1-on-1 Chat Room. When a user in same Group or Channel with blocked user, a user still receive message from blocked user, for further information you can see this link [User - blocked user section]. You can use this function by calling this method, for example: 
+You can block a user with related **user Id** parameter, this block user only works in 1-on-1 Chat Room. When a user in same Group or Channel with blocked user, a user still receive message from blocked user, for further information you can see this [User - blocked](#Block-user). You can use this function by calling this method, for example: 
 
 ```
 QiscusCore.shared.blockUser(email: user_email, onSuccess: { (memberUser) in
@@ -488,7 +488,7 @@ This section consist Chat Room Qiscus Chat SDK behaviour In Chat Room you can ad
 
 ### Create 1-on-1 Chat Room with METADATA
 
-The ideal creating 1-on-1 Chat Room is for use cases that require 2 users, for further information you can see this [link Chat Room-1-on-1 section]. After success creating a 1-on-1 Chat room, room name is another userId.
+The ideal creating 1-on-1 Chat Room is for use cases that require 2 users, for further information you can see this [Chat Room-1-on-1 section](#1-on-1-chat-room). After success creating a 1-on-1 Chat room, room name is another userId.
 
 ```
 QiscusCore.shared.getRoom(withUser: withUserId,options: options, onSuccess: { (roomModel, _) in
@@ -554,7 +554,7 @@ if let room =  QiscusCore.database.room.find(uniqID: uniqID){
 
 ### Get chat room by Id (Enter existing Chat Room)
 
-You can enter existing Chat Room by using `roomId` and creating freely your own chat UI. The return as pair of a Chat Room and List of `Comments` that you can use to init data comment for the first time as reference you can see in sample [link sample github]. You can use to 1-on-1 Chat Room, Group Chat room or Channel, here's how to get a Chat Room by `roomId:`
+You can enter existing Chat Room by using `roomId` and creating freely your own chat UI. The return as pair of a Chat Room and List of `Comments` that you can use to init data comment for the first time as reference you can see in sample [Sample github link] (https://github.com/qiscus/QiscusCore-Example). You can use to 1-on-1 Chat Room, Group Chat room or Channel, here's how to get a Chat Room by `roomId:`
 
 ```
 QiscusCore.shared.getRoom(withID: roomId, onSuccess: { (roomModel,comments) in
@@ -576,7 +576,7 @@ QiscusCore.shared.getRoom(withUser: withUserId, onSuccess: { (roomModel, comment
 }        
 ```
 
-### Get CHAT rooms infoRMATION
+### Get CHAT rooms information
 
 You can get more than one Chat Room, by passing list of `roomId`, for `uniqueIds` will deprecate soon, for now you can set same as `roomIds` . You can see participant for each room by set `showMembers` to **true**, or you can set **false **to hide participant in each room.
 
@@ -1383,7 +1383,7 @@ if QiscusCore.isLogined {
  }
 ```
 
-## Change Log (Link to github release note)
+## Change Log
 
 https://github.com/qiscus/QiscusCore-iOS/releases
 
