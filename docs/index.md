@@ -64,8 +64,7 @@ Firstly, you need to create your application in dashboard, by accessing this lin
 
 ### Step 2 : Install Qiscus Chat SDK
 
-Qiscus Chat SDK requires minimum IOS  SDK 9
-To integrate your app with Qiscus, it can be done in 2 steps. Firstly, you need to add dependency QiscusCore in your Podfile,
+Qiscus Chat SDK requires minimum IOS  SDK 9, To integrate your app with Qiscus, it can be done in 2 steps. Firstly, you need to add dependency QiscusCore in your Podfile,
 
 ```
 pod 'QiscusCore'
@@ -95,7 +94,6 @@ QiscusCore.setup(WithAppID: "yourAppId")
 To use Qiscus Chat SDK features a user firstly need to authenticate to Qiscus Server, for further detail you might figure out [Authentication section link]. This authentication is done by calling `loginOrRegister`() function. This function will retrieve or create user credential based on the unique **User Id** ,for example:
 
 ```
-/// SDK Connect with userId and passkey. The handler to be called once the request has finished.
 QiscusCore.loginOrRegister(userID: userID, userKey: key, username: username) { (result, error) in
                         if result != nil {
                             print("success")
@@ -838,8 +836,6 @@ QiscusCore.shared.sendMessage(roomID: roomId, comment: message, onSuccess: { (co
 }
 ```
 
-For updating to be **Read** status you can find further in [Event handler section](#event-handler)
-
 
 ### Update Message Read Status
 
@@ -1158,6 +1154,32 @@ extension YourViewController : QiscusCoreDelegate {
 ```
 
 > Note: don't forget to import QiscusCore
+
+Here's Event Delegate In Chat Room Table:
+
+|Method |When to call   |
+|---  |---  |
+|gotNewComment(comment: CommentModel) |when you get new comment |
+|didComment(comment: CommentModel, changeStatus status: CommentStatus)  |when you get comment change, like status read, delivered, sent, and pending  |
+|didDelete(Comment comment: CommentModel) |when you get  comment delete  from other user or self  |
+|onRoom(thisParticipant user: MemberModel, isTyping typing: Bool) |when other user is typing  |
+|onChangeUser(_ user: MemberModel, onlineStatus status: Bool, whenTime time: Date)  |when other user is online  |
+|onRoom(update room: RoomModel) |when any update room from self or from other user  |
+
+Here's Event Delegate In List Chat Room Table:
+
+|Method |When to call   |
+|---  |---  |
+|onRoom(_ room: RoomModel, gotNewComment comment: CommentModel) |when you get new comment |
+|onRoom(_ room: RoomModel, didChangeComment comment: CommentModel, changeStatus status: CommentStatus)  |when you get comment change, like status read, delivered, sent, and pending  |
+|onRoom(_ room: RoomModel, didDeleteComment comment: CommentModel)  |when you get  comment delete  from other user or self  |
+|onRoom(_ room: RoomModel, thisParticipant user: MemberModel, isTyping typing: Bool)  |when other user is typing  |
+|onRoom(update room: RoomModel) |when you get any update room from self or from other user  |
+|onRoom(deleted room: RoomModel)  |when you get a delete room |
+|onChange(user: MemberModel, isOnline online: Bool, at time: Date)  |when other user is online  |
+|gotNew(room: RoomModel)  |when you get new room  |
+|remove(room: RoomModel)  |when you get a delete room |
+
 
 ### Start And Stop Typing Indicator
 
