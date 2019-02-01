@@ -1156,6 +1156,7 @@ extension YourViewController : QiscusCoreDelegate {
 > Note: don't forget to import QiscusCore
 
 
+
 Here's Event Delegate In Chat Room Table:
 
 |Method |When to call   |
