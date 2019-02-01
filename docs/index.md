@@ -1155,6 +1155,7 @@ extension YourViewController : QiscusCoreDelegate {
 
 > Note: don't forget to import QiscusCore
 
+
 Here's Event Delegate In Chat Room Table:
 
 |Method |When to call   |
@@ -1384,6 +1385,8 @@ Don't forget set **Remote notifications and Background fetch** in menu **Capabil
 <p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns11.png" width="100%" /><br/></p>
 
 ### Turning Off Push Notification 
+
+You can turning off your push notification, for example:
 
 ```
 QiscusCore.shared.remove(deviceToken: deviceToken, onSuccess: { (response) in
