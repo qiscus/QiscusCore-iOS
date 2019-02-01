@@ -40,7 +40,7 @@ To start building your application using Qiscus Chat SDK you need a key called A
 
 * Stage (Sandbox) or Production environment
 
-You can create both sandbox or production app in [Qiscus dashboard](link dashboard) by adding new APP ID. You may set your sandbox as paid or as a trail. Once your APP ID trail is expired we may disable your APP ID from accessing Qiscus Chat SDK. Given that you can upgrade plan to continue your apps accessing Qiscus Chat SDK.
+You can create both sandbox or production app in [Qiscus dashboard](https://dashboard.qiscus.com/dashboard/login) by adding new APP ID. You may set your sandbox as paid or as a trail. Once your APP ID trail is expired we may disable your APP ID from accessing Qiscus Chat SDK. Given that you can upgrade plan to continue your apps accessing Qiscus Chat SDK.
 
 
 ## Try Sample App 
