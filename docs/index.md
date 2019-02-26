@@ -1183,6 +1183,27 @@ Here's Event Delegate In List Chat Room Table:
 |remove(room: RoomModel)  |when you get a delete room |
 
 
+### Subscribe Typing in outside Chat Room
+You can subscribe typing manualy, example like this 
+```
+for room in rooms {
+  DispatchQueue.global(qos: .background).asyncAfter(deadline: .now()+1, execute: {
+    QiscusCore.shared.subscribeTyping(roomID: room.id) { (roomTyping) in
+       if let room = QiscusCore.database.room.find(id: roomTyping.roomID){
+         //update you tableView cell
+       }
+    }
+  })
+}
+```
+
+### UnSubscribe Typing
+You can unsubscribe typing using this method
+```
+  QiscusCore.shared.unsubscribeTyping(roomID: roomID)
+```
+
+
 ### Start And Stop Typing Indicator
 
 You can have typing indicator by publish the typing event. You need to pass `roomId` and `typing` status. Set **true** to indicate the `typing` event is active, set **false** to indicate the event is inactive. The ideal of this case is if you can put this to any class for example, you need to put in Homepage, to notify that there's an active user. for example:
@@ -1193,9 +1214,48 @@ QiscusCore.shared.isTyping(true, roomID: r.id)
 
 ### Subscribe Room
 
-After you call func `QiscusCore.shared.getRoom()`, it's automatic subscribe room.
+```
+var chatRoomDelegate : QiscusCoreRoomDelegate? = nil
 
-> Note: no need subscribe manualy for subscribe room
+// set delegate in viewDidLoad or viewWillappear
+override func viewDidLoad() {
+        super.viewDidLoad()
+        chatRoomDelegate = self
+    }
+
+override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        chatRoomDelegate = nil
+    }
+
+// MARK: Core Delegate
+extension YourViewController : QiscusCoreRoomDelegate {
+    func didDelete(Comment comment: CommentModel) {
+       //
+    }
+    
+    func onRoom(update room: RoomModel) {
+        // 
+    }
+    
+    func gotNewComment(comment: CommentModel) {
+        // 2check comment already in ui?
+    }
+    
+    func didComment(comment: CommentModel, changeStatus status: CommentStatus) {
+        // check comment already exist in view
+    }
+    
+    func onRoom(thisParticipant user: MemberModel, isTyping typing: Bool) {
+       //
+    }
+    
+    func onChangeUser(_ user: MemberModel, onlineStatus status: Bool, whenTime time: Date) {
+        //
+    }
+}
+
+```
 
 ### Custom Realtime Event
 
