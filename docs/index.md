@@ -1388,8 +1388,8 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         
         var tokenString: String = ""
-        for i in 0..<token.count {
-            tokenString += String(format: "%02.2hhx", token[i] as CVarArg)
+        for i in 0..<deviceToken.count {
+            tokenString += String(format: "%02.2hhx", deviceToken[i] as CVarArg)
         }
         print("token = \(tokenString)")
         QiscusCore.shared.register(deviceToken: tokenString, onSuccess: { (response) in
