@@ -725,9 +725,9 @@ You can remove more than a participant in Chat Room by calling this method `remo
 
 ```
 QiscusCore.shared.removeParticipant(userEmails: userEmails, roomId: roomID, onSuccess: { (success) in
-                  
+    print("sucess")                 
 }, onError: { (error) in
-                    
+   print("error =\(error.message)")                     
 })
 ```
 
@@ -1217,6 +1217,7 @@ QiscusCore.shared.isTyping(true, roomID: r.id)
 
 ### Subscribe Room
 
+
 ```
 var chatRoomDelegate : QiscusCoreRoomDelegate? = nil
 
@@ -1270,7 +1271,7 @@ Firstly you need passing `roomId` which ChatRoom you want to set, and the struct
 {
   "sender": "John Doe",
   "event": "writing document...",
-  **"active": "true"**
+  "active": "true"
 }
 ```
 
@@ -1286,7 +1287,7 @@ If you need to stop telling other participant that event is ended, you can send 
 {
   "sender": "John Doe",
   "event": "writing document...",
-  **"active": "false"**
+  "active": "false"
 }
 ```
 
@@ -1330,7 +1331,7 @@ In the **Certificate Information** window, do the following:
 
 <p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns2.png" width="100%" /><br/></p>
 
-### STEP 2: Create A Push Notification SSL Certificate In Apple Developer Site.
+### Step 2: Create A Push Notification SSL Certificate In Apple Developer Site.
 
 Log in to the [Apple Developer Member Center](https://developer.apple.com/) and find the **Certificates, Identifiers & Profiles** menu. Select **App IDs**, find your target application, and click the **Edit** button.
 <p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns3.png" width="100%" /><br/></p>
@@ -1343,7 +1344,7 @@ Upload the **CSR file** that you created in section (1) to complete this process
 Double-click the file and register it to your **login keychain.**
 
 
-### STEP 3: Export A p12 File and Upload It To Qiscus Dashboard
+### Step 3: Export A p12 File and Upload It To Qiscus Dashboard
 
 Under the Keychain Access, click the Certificates category from the left menu. Find the Push SSL certificate you just registered and right-click it without expanding the certificate. Then select Export to save the file to your disk.
 
@@ -1361,7 +1362,7 @@ klik add and fill the form upload certificates
 
 <p align="center"><br/><img src="https://d3p8ijl4igpb16.cloudfront.net/docs/assets/apns10.png" width="100%" /><br/></p>
 
-### STEP 4: Register A Device Token In Qiscus SDK And Parse Qiscus APNS Messages.   
+### Step 4: Register A Device Token In Qiscus SDK And Parse Qiscus APNS Messages.   
 
 In your app's AppDelegate, store your device token as a variable.
 
