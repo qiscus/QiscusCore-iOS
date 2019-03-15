@@ -45,14 +45,14 @@ You can create both sandbox or production app in [Qiscus dashboard](https://dash
 
 ## Try Sample App 
 
-In order to help you to get to know with our chat SDK, we have provided a sample app. This sample app is built with full functionalities so that you can figure out the flow and main activities using Qiscus Chat SDK. And you can freely customize your own UI, for further detail you can download [[Sample github link]](https://github.com/qiscus/QiscusCore-Example) . You can also build your own app on top of our sample app
+In order to help you to get to know with our chat SDK, we have provided a sample app. This sample app is built with full functionalities so that you can figure out the flow and main activities using Qiscus Chat SDK. And you can freely customize your own UI, for further detail you can download [Sample](https://github.com/qiscus/qiscus-chat-sdk-ios-sample). You can also build your own app on top of our sample app.
 
 ```
-git clone https://github.com/qiscus/QiscusCore-Example.git
+git clone https://github.com/qiscus/qiscus-chat-sdk-ios-sample.git
 ```
 
 
-This sample use **sample APP ID**, means, you will share data with others, in case you want to try by your own you can change the APP ID into your own APP ID, you can find your APP ID in your dashboard. [[dashboard link](https://www.qiscus.com/dashboard/login)] 
+This sample use **sample APP ID**, means, you will share data with others, in case you want to try by your own you can change the APP ID into your own APP ID, you can find your APP ID in your [dashboard](https://www.qiscus.com/dashboard/login). 
 
 ## Getting Started
 
@@ -60,7 +60,7 @@ This section help you to start building your integration, start with send your f
 
 ### Step 1 : Get Your APP ID
 
-Firstly, you need to create your application in dashboard, by accessing this link [[dashboard link](https://www.qiscus.com/dashboard/login)]. You can create more than one APP ID, for further information you can refer to [in Aplication section](#Application)
+Firstly, you need to create your application in dashboard, by accessing this link [dashboard](https://www.qiscus.com/dashboard/login). You can create more than one APP ID, for further information you can refer to [in Aplication section](#Application)
 
 ### Step 2 : Install Qiscus Chat SDK
 
