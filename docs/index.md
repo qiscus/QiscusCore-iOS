@@ -73,7 +73,7 @@ pod 'QiscusCore'
 Secondly, you need to pod install from terminal
 
 ```
-pod intall
+pod install
 ```
 
 ### Step 3 : Initialization Qiscus Chat SDK
@@ -884,14 +884,14 @@ You can a get from local data, you can set `limit` to get number of comments, fo
 
 ### Viewing Who Has Read, Delivered A Message
 
-You can get information who has read your message by passing `commentId` in return you get participants who have **pending**, **delivered**, and **read** message status, for example: 
+You can get information who has read your message by passing `commentId` in return you get participants who have **sent**, **delivered**, and **read** message status, for example: 
 
 ```
  QiscusCore.shared.readReceiptStatus(commentId: commentId, onSuccess: { (commentInfo) in
             let comment = commentInfo.comment
             let deliveredUser = commentInfo.deliveredUser
             let readUser = commentInfo.readUser
-            let pendingUser = commentInfo.pendingUser
+            let sentUser = commentInfo.sentUser
         }) { (error) in
             print("error =\(error.message)")
         }
@@ -1187,7 +1187,8 @@ Here's Event Delegate In List Chat Room Table:
 
 
 ### Subscribe Typing in outside Chat Room
-You can subscribe typing manualy, example like this 
+You can subscribe typing manualy, example like this, this will trigger `onRoom(_ room: RoomModel, thisParticipant user: MemberModel, isTyping typing: Bool)` event handler 
+
 ```
 for room in rooms {
   DispatchQueue.global(qos: .background).asyncAfter(deadline: .now()+1, execute: {
@@ -1201,7 +1202,7 @@ for room in rooms {
 ```
 
 ### UnSubscribe Typing
-You can unsubscribe typing using this method
+You can unsubscribe typing using this method, it will stop getting typing event on Chat Room List.
 ```
   QiscusCore.shared.unsubscribeTyping(roomID: roomID)
 ```
@@ -1209,56 +1210,10 @@ You can unsubscribe typing using this method
 
 ### Start And Stop Typing Indicator
 
-You can have typing indicator by publish the typing event. You need to pass `roomId` and `typing` status. Set **true** to indicate the `typing` event is active, set **false** to indicate the event is inactive. The ideal of this case is if you can put this to any class for example, you need to put in Homepage, to notify that there's an active user. for example:
+You can have typing indicator by publish the typing event in Chat Room. You need to pass `roomId` and `typing` status. Set **true** to indicate the `typing` event is active, set **false** to indicate the event is inactive. The ideal of this case is if you can put this to any class for example, you need to put in Homepage, to notify that there's an active user. for example:
 
 ```
 QiscusCore.shared.isTyping(true, roomID: r.id)
-```
-
-### Subscribe Room
-
-
-```
-var chatRoomDelegate : QiscusCoreRoomDelegate? = nil
-
-// set delegate in viewDidLoad or viewWillappear
-override func viewDidLoad() {
-        super.viewDidLoad()
-        chatRoomDelegate = self
-    }
-
-override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        chatRoomDelegate = nil
-    }
-
-// MARK: Core Delegate
-extension YourViewController : QiscusCoreRoomDelegate {
-    func didDelete(Comment comment: CommentModel) {
-       //
-    }
-    
-    func onRoom(update room: RoomModel) {
-        // 
-    }
-    
-    func gotNewComment(comment: CommentModel) {
-        // 2check comment already in ui?
-    }
-    
-    func didComment(comment: CommentModel, changeStatus status: CommentStatus) {
-        // check comment already exist in view
-    }
-    
-    func onRoom(thisParticipant user: MemberModel, isTyping typing: Bool) {
-       //
-    }
-    
-    func onChangeUser(_ user: MemberModel, onlineStatus status: Bool, whenTime time: Date) {
-        //
-    }
-}
-
 ```
 
 ### Custom Realtime Event
