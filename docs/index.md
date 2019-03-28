@@ -876,12 +876,6 @@ if let comments = QiscusCore.database.comment.find(id: "roomId"){
 }
 ```
 
-You can a get from local data, you can set `limit` to get number of comments, for example:
-
-```
- QiscusCore.getDataStore().getComments(roomId, limit);
-```
-
 ### Viewing Who Has Read, Delivered A Message
 
 You can get information who has read your message by passing `commentId` in return you get participants who have **sent**, **delivered**, and **read** message status, for example: 
