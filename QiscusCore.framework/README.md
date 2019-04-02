@@ -231,11 +231,11 @@ QiscusCore.shared.download(url: URL(string: url)!, onSuccess: { (localPath) in
 
 ### Example
 
-You can download example how to use QiscusCore with advance usage from [QiscusCore Example](https://github.com/qiscus/QiscusCore-Example.git).
+You can download example how to use QiscusCore with advance usage from [Qiscus Chat SDK IOS Sample](https://github.com/qiscus/qiscus-chat-sdk-ios-sample.git).
 
 ### Security Disclosure
 
-If you believe you have identified a security vulnerability with QiscusCore, you should report it as soon as possible via email to contact.us@qiscus.com. Please do not post it to a public issue.
+If you believe you have identified a security vulnerability with QiscusCore, you should report it as soon as possible via email to juang@qiscus.co. Please do not post it to a public issue.
 
 
 ## FAQ

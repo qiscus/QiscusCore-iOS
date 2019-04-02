@@ -163,6 +163,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 # define SWIFT_DEPRECATED_OBJC(Msg) SWIFT_DEPRECATED_MSG(Msg)
 #endif
 #if __has_feature(modules)
+@import CoreData;
 @import Foundation;
 @import ObjectiveC;
 @import UIKit;
@@ -183,6 +184,31 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 # pragma pop_macro("any")
 #endif
 
+@class NSEntityDescription;
+@class NSManagedObjectContext;
+
+SWIFT_CLASS("_TtC10QiscusCore6Member")
+@interface Member : NSManagedObject
+- (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class Room;
+@class NSSet;
+
+@interface Member (SWIFT_EXTENSION(QiscusCore))
+- (void)addRoomsObject:(Room * _Nonnull)value;
+- (void)removeRoomsObject:(Room * _Nonnull)value;
+- (void)addRooms:(NSSet * _Nonnull)values;
+- (void)removeRooms:(NSSet * _Nonnull)values;
+@end
+
+
+
+
+@interface Member (SWIFT_EXTENSION(QiscusCore))
+@property (nonatomic, strong) NSSet * _Nullable rooms;
+@end
+
 
 
 
@@ -194,6 +220,27 @@ SWIFT_CLASS("_TtC10QiscusCore10QiscusCore")
 
 
 
+
+
+SWIFT_CLASS("_TtC10QiscusCore4Room")
+@interface Room : NSManagedObject
+- (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+@interface Room (SWIFT_EXTENSION(QiscusCore))
+- (void)addMembersObject:(Member * _Nonnull)value;
+- (void)removeMembersObject:(Member * _Nonnull)value;
+- (void)addMembers:(NSSet * _Nonnull)values;
+- (void)removeMembers:(NSSet * _Nonnull)values;
+@end
+
+
+
+
+@interface Room (SWIFT_EXTENSION(QiscusCore))
+@property (nonatomic, strong) NSSet * _Nullable members;
+@end
 
 
 
