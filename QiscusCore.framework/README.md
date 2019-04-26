@@ -231,7 +231,7 @@ QiscusCore.shared.download(url: URL(string: url)!, onSuccess: { (localPath) in
 
 ### Example
 
-You can download example how to use QiscusCore with advance usage from [Qiscus Chat SDK IOS Sample](https://github.com/qiscus/qiscus-chat-sdk-ios-sample.git).
+You can download example how to use QiscusCore with advance usage from [QiscusUI Example](https://github.com/qiscus/QiscusUI-iOS).
 
 ### Security Disclosure
 
