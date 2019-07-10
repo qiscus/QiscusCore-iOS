@@ -12,6 +12,6 @@ s.source       = { :git => "https://github.com/qiscus/QiscusCore-iOS.git", :tag 
 s.platform      = :ios, "9.0"
 s.ios.vendored_frameworks = 'QiscusCore.framework'
 s.ios.frameworks = ["UIKit", "QuartzCore", "CFNetwork", "Security", "Foundation", "MobileCoreServices", "CoreData"]
-s.dependency 'QiscusRealtime', '~> 0.3.0'
+s.dependency 'QiscusRealtime', '0.4.0-beta1'
 s.dependency 'SwiftyJSON'
 end
