@@ -18,7 +18,7 @@
 
 ## Features
 
-- [x] Create Chat Room, 1 on 1, group, and channel
+- [x] Create Chat Room, 1 on 1, group
 - [x] List Chat Room
 - [x] Receive Message
 - [x] Debuger true or false
@@ -28,15 +28,6 @@
 - [x] Register DeviceToken Apns nor Pushkit
 - [x] Receive Realtime Event(new message, message status, etc)
 - [x] [API Reference](https://qiscuscoreios.firebaseapp.com/Classes/QiscusCore.html)
-
-## Component Libraries
-
-In order to keep QiscusCore focused specifically on core messaging implementation, additional libraries have beed create by the [Qiscus IOS] (https://qiscus.com).
-
-* [QiscusRaltime](https://github.com/qiscus) - An realtime messaging library. Already handle realtime event like user typing, online status, etc.
-* [QiscusUI](https://github.com/qiscus) - An chat component library, make it easy to custom your chat UI.
-* [Qiscus](https://github.com/qiscus) - An chat sdk with complete feature, simple, easy to integrate.
-
 
 ## Installation
 
@@ -231,17 +222,10 @@ QiscusCore.shared.download(url: URL(string: url)!, onSuccess: { (localPath) in
 
 ### Example
 
-You can download example how to use QiscusCore with advance usage from [QiscusUI Example](https://github.com/qiscus/QiscusUI-iOS).
+You can download example how to use QiscusCore with advance usage from [QiscusCore Example](https://github.com/qiscus/qiscus-chat-sdk-ios-sample/tree/master).
 
 ### Security Disclosure
 
-If you believe you have identified a security vulnerability with QiscusCore, you should report it as soon as possible via email to juang@qiscus.co. Please do not post it to a public issue.
-
-
-## FAQ
-
-### When we use QiscusCore intead Qiscus?
-
-QiscusCore is lite version chat sdk, if you wan't to build your own chat ui best option is use QiscusCore. But, if you need in App chat quickly use Qiscus Chat SDK(build in UI and simple configuration). please visit [Qiscus](https://github.com/qiscus/qiscus-sdk-ios) to use qiscus chat sdk.
+If you believe you have identified a security vulnerability with QiscusCore, you should report it as soon as possible via email to contact.us@qiscus.com. Please do not post it to a public issue.
 
 
