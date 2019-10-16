@@ -230,6 +230,8 @@ SWIFT_CLASS("_TtC10QiscusCore6Member")
 
 
 
+
+
 SWIFT_CLASS("_TtC10QiscusCore10QiscusCore")
 @interface QiscusCore : NSObject
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
