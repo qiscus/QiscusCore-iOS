@@ -203,6 +203,47 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #endif
 
 
+SWIFT_CLASS("_TtC10QiscusCore13ConfigManager")
+@interface ConfigManager : NSObject
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+
+
+
+
+
+
+SWIFT_CLASS("_TtC10QiscusCore14NetworkManager")
+@interface NetworkManager : NSObject
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+@class NSURLSession;
+@class NSURLSessionDownloadTask;
+@class NSURLSessionTask;
+
+@interface NetworkManager (SWIFT_EXTENSION(QiscusCore)) <NSURLSessionDownloadDelegate>
+- (void)URLSession:(NSURLSession * _Nonnull)session downloadTask:(NSURLSessionDownloadTask * _Nonnull)downloadTask didFinishDownloadingToURL:(NSURL * _Nonnull)location;
+- (void)URLSession:(NSURLSession * _Nonnull)session downloadTask:(NSURLSessionDownloadTask * _Nonnull)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite;
+- (void)URLSession:(NSURLSession * _Nonnull)session task:(NSURLSessionTask * _Nonnull)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend;
+@end
+
+
+
+
+
+
+
+
+SWIFT_CLASS("_TtC10QiscusCore13NewQiscusCore")
+@interface NewQiscusCore : NSObject
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
 
 
 
@@ -238,8 +279,10 @@ SWIFT_CLASS("_TtC10QiscusCore10QiscusCore")
 @end
 
 
-
-
+SWIFT_CLASS("_TtC10QiscusCore12QiscusLogger")
+@interface QiscusLogger : NSObject
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
 
 
 SWIFT_CLASS("_TtC10QiscusCore4Room")
