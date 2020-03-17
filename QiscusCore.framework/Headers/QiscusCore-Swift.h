@@ -273,6 +273,13 @@ SWIFT_CLASS("_TtC10QiscusCore11Participant")
 @end
 
 
+SWIFT_CLASS("_TtC10QiscusCore14QiscusChannels")
+@interface QiscusChannels : NSObject
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
 SWIFT_CLASS("_TtC10QiscusCore10QiscusCore")
 @interface QiscusCore : NSObject
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
