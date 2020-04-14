@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/QiscusCore-Swift.h</key>
 		<data>
-		hog8ZFNFUsmHAt60li9IBrbHH0Y=
+		ihDy4A1z/QqZnghUu4TwJ2fImi8=
 		</data>
 		<key>Headers/QiscusCore.h</key>
 		<data>
@@ -22,7 +22,7 @@
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftmodule</key>
 		<data>
-		cIE89s862xx2tGb7RR7LcWeQeuU=
+		XLfRIryxmlgn25DCV+mSIfDlTpg=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		b9vcT4KoqKxgdub6sepxZBT1Orw=
+		CmRV8XTtrZHkGbtfIVGE49ENsos=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>QiscusCore.podspec</key>
 		<data>
-		8Rv8I8ITyZ4uFTu9M0F1w92s0L8=
+		/CX0DT3dZHMdxZsGD/DeDz9kuI8=
 		</data>
 		<key>README.md</key>
 		<data>
@@ -63,11 +63,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			hog8ZFNFUsmHAt60li9IBrbHH0Y=
+			ihDy4A1z/QqZnghUu4TwJ2fImi8=
 			</data>
 			<key>hash2</key>
 			<data>
-			NRjdn5hmXegKulzPA6kz41MvS+E729MnZZz0+RhAb6A=
+			a448P2XmRGW3ied5m6RI/P80TLvXevEjC1LEqna/ngY=
 			</data>
 		</dict>
 		<key>Headers/QiscusCore.h</key>
@@ -96,11 +96,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			cIE89s862xx2tGb7RR7LcWeQeuU=
+			XLfRIryxmlgn25DCV+mSIfDlTpg=
 			</data>
 			<key>hash2</key>
 			<data>
-			C3eTQAcNhYmDtm3oRZWUtu0g2fWwEyyd8IZd7BVpwPE=
+			aZ5TwrR4wmsNz9GK4OvG5SbbjokmSGn/Ib1VGDsYYN4=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
@@ -118,11 +118,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			b9vcT4KoqKxgdub6sepxZBT1Orw=
+			CmRV8XTtrZHkGbtfIVGE49ENsos=
 			</data>
 			<key>hash2</key>
 			<data>
-			6ulSBF3XgUYRJaxBp+a/JZohr0LY8KcP+zDCjN5SYYI=
+			OCdomwIBN283BTBEGKLHiJAg7VkJ7fEEKN3ZN1SMKpM=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -173,11 +173,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			8Rv8I8ITyZ4uFTu9M0F1w92s0L8=
+			/CX0DT3dZHMdxZsGD/DeDz9kuI8=
 			</data>
 			<key>hash2</key>
 			<data>
-			OVKQMbtNc2rPLGR+5WODV6IMEOHJtpgOk33WNcP4dng=
+			GrJpfS+IYm3j7ZdRf3btnP8OOmGryNzbxaheFb4Xgng=
 			</data>
 		</dict>
 		<key>README.md</key>
