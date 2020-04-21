@@ -18,19 +18,19 @@
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftdoc</key>
 		<data>
-		Te05u76pET7sZsBKB2FR7TnPKGo=
+		dsBnL/JbzHvgkGlD5Z4WmXl+aMM=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftmodule</key>
 		<data>
-		fmJ/+tC7xJZIr5rTxb+BBtrBMyE=
+		xeZ0rr9hSAnuHbH7Db5rZVu1MUo=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		5ghyNwB3sIw47xKdEx9Tj/3wgss=
+		On4/qkDMhx3eyekWkpztBKRqKiI=
 		</data>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		J0bPDh7NXXctztQ3GZYBx9qFHTw=
+		a4RTONnBIVtFsmiWRaH1UkXmla4=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>QiscusCore.podspec</key>
 		<data>
-		7Mg3DWUeqV5ZklWo7pmeIySBYeY=
+		SM7qwfo7UB60HQ6Wba12TCJPyUM=
 		</data>
 		<key>README.md</key>
 		<data>
@@ -85,44 +85,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Te05u76pET7sZsBKB2FR7TnPKGo=
+			dsBnL/JbzHvgkGlD5Z4WmXl+aMM=
 			</data>
 			<key>hash2</key>
 			<data>
-			wJ76+r1y48avhXX8vt6yJK20e1/fFYI/K59wSdSzl1Y=
+			r7xTIRWJrwiThaW9E5Yb9aZzZM1pB/lJ6Tho6Tj2S78=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			fmJ/+tC7xJZIr5rTxb+BBtrBMyE=
+			xeZ0rr9hSAnuHbH7Db5rZVu1MUo=
 			</data>
 			<key>hash2</key>
 			<data>
-			g1PCujR0R5LCzX+rruMnjKgGuMEc3SIU3x7/ZLuPTJM=
+			DOxt6lwgfZCSgDvdkeDIpVUn0CQ0PzHrbO8w0vF9RWw=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			5ghyNwB3sIw47xKdEx9Tj/3wgss=
+			On4/qkDMhx3eyekWkpztBKRqKiI=
 			</data>
 			<key>hash2</key>
 			<data>
-			cMWseioKLcNkCE3U5rTdcy38IWQ9YshXodYR2nQmMgw=
+			JMrkPgRko+CZWiAFIg5kXnqxlKrlpPG5Yh/gBJZ8Bjo=
 			</data>
 		</dict>
 		<key>Modules/QiscusCore.swiftmodule/arm64.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			J0bPDh7NXXctztQ3GZYBx9qFHTw=
+			a4RTONnBIVtFsmiWRaH1UkXmla4=
 			</data>
 			<key>hash2</key>
 			<data>
-			aHMEJxHW0lfOsRZwkMI8/1Tfb7S2GunATvO4wcpmpB0=
+			OD88AN+6FLRQduBDKRZajlTfxq9ZRiyTYegHYknS7LI=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -173,11 +173,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			7Mg3DWUeqV5ZklWo7pmeIySBYeY=
+			SM7qwfo7UB60HQ6Wba12TCJPyUM=
 			</data>
 			<key>hash2</key>
 			<data>
-			wmTLpWtc6/u/fKuPEDu5dAtCcM3mlFG/5snilcR7vQo=
+			sRfRkb0xQajgx97POb0IiDU2TGrxUe2ad/BD5PqyoTQ=
 			</data>
 		</dict>
 		<key>README.md</key>
