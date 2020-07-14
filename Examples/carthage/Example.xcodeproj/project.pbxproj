@@ -13,7 +13,38 @@
 		3D5E861C24BDC3E10061D7E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D5E861A24BDC3E10061D7E4 /* Main.storyboard */; };
 		3D5E861E24BDC3E50061D7E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D5E861D24BDC3E50061D7E4 /* Assets.xcassets */; };
 		3D5E862124BDC3E50061D7E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D5E861F24BDC3E50061D7E4 /* LaunchScreen.storyboard */; };
+		3D5E866124BDF6FC0061D7E4 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */; };
+		3D5E866224BDF6FC0061D7E4 /* Starscream.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D5E866324BDF6FC0061D7E4 /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */; };
+		3D5E866424BDF6FC0061D7E4 /* QiscusCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D5E866524BDF6FC0061D7E4 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */; };
+		3D5E866624BDF6FC0061D7E4 /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D5E866724BDF6FC0061D7E4 /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */; };
+		3D5E866824BDF6FC0061D7E4 /* CocoaMQTT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D5E866924BDF6FD0061D7E4 /* QiscusRealtime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */; };
+		3D5E866A24BDF6FD0061D7E4 /* QiscusRealtime.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D5E866B24BDF6FD0061D7E4 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */; };
+		3D5E866C24BDF6FD0061D7E4 /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3D5E866D24BDF6FD0061D7E4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3D5E866C24BDF6FD0061D7E4 /* CocoaAsyncSocket.framework in Embed Frameworks */,
+				3D5E866224BDF6FC0061D7E4 /* Starscream.framework in Embed Frameworks */,
+				3D5E866424BDF6FC0061D7E4 /* QiscusCore.framework in Embed Frameworks */,
+				3D5E866824BDF6FC0061D7E4 /* CocoaMQTT.framework in Embed Frameworks */,
+				3D5E866624BDF6FC0061D7E4 /* SwiftyJSON.framework in Embed Frameworks */,
+				3D5E866A24BDF6FD0061D7E4 /* QiscusRealtime.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3D5E861124BDC3E10061D7E4 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -24,6 +55,12 @@
 		3D5E861D24BDC3E50061D7E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D5E862024BDC3E50061D7E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D5E862224BDC3E50061D7E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
+		3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QiscusCore.framework; path = Carthage/Build/iOS/QiscusCore.framework; sourceTree = "<group>"; };
+		3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaMQTT.framework; path = Carthage/Build/iOS/CocoaMQTT.framework; sourceTree = "<group>"; };
+		3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QiscusRealtime.framework; path = Carthage/Build/iOS/QiscusRealtime.framework; sourceTree = "<group>"; };
+		3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +68,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D5E866B24BDF6FD0061D7E4 /* CocoaAsyncSocket.framework in Frameworks */,
+				3D5E866124BDF6FC0061D7E4 /* Starscream.framework in Frameworks */,
+				3D5E866324BDF6FC0061D7E4 /* QiscusCore.framework in Frameworks */,
+				3D5E866724BDF6FC0061D7E4 /* CocoaMQTT.framework in Frameworks */,
+				3D5E866524BDF6FC0061D7E4 /* SwiftyJSON.framework in Frameworks */,
+				3D5E866924BDF6FD0061D7E4 /* QiscusRealtime.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +85,7 @@
 			children = (
 				3D5E861324BDC3E10061D7E4 /* Example */,
 				3D5E861224BDC3E10061D7E4 /* Products */,
+				3D5E865A24BDF6FC0061D7E4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +111,19 @@
 			path = Example;
 			sourceTree = "<group>";
 		};
+		3D5E865A24BDF6FC0061D7E4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */,
+				3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */,
+				3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */,
+				3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */,
+				3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */,
+				3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -77,6 +134,8 @@
 				3D5E860D24BDC3E10061D7E4 /* Sources */,
 				3D5E860E24BDC3E10061D7E4 /* Frameworks */,
 				3D5E860F24BDC3E10061D7E4 /* Resources */,
+				3D5E866D24BDF6FD0061D7E4 /* Embed Frameworks */,
+				3D5E866E24BDF70E0061D7E4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -132,6 +191,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3D5E866E24BDF70E0061D7E4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/QiscusCore.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3D5E860D24BDC3E10061D7E4 /* Sources */ = {
@@ -286,6 +366,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QG8KA4P8TE;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -304,6 +388,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QG8KA4P8TE;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
