@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "0940"
+   version = "1.7">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3DE204A52158A0C300E3DF96"
+               BuildableName = "QiscusRealtime.framework"
+               BlueprintName = "QiscusRealtime"
+               ReferencedContainer = "container:QiscusRealtime.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Release"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "3DE204A52158A0C300E3DF96"
+            BuildableName = "QiscusRealtime.framework"
+            BlueprintName = "QiscusRealtime"
+            ReferencedContainer = "container:QiscusRealtime.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3DE204AE2158A0C300E3DF96"
+               BuildableName = "QiscusRealtimeTests.xctest"
+               BlueprintName = "QiscusRealtimeTests"
+               ReferencedContainer = "container:QiscusRealtime.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Release"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "3DE204A52158A0C300E3DF96"
+            BuildableName = "QiscusRealtime.framework"
+            BlueprintName = "QiscusRealtime"
+            ReferencedContainer = "container:QiscusRealtime.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "3DE204A52158A0C300E3DF96"
+            BuildableName = "QiscusRealtime.framework"
+            BlueprintName = "QiscusRealtime"
+            ReferencedContainer = "container:QiscusRealtime.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Release">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "exec &gt; /tmp/${PROJECT_NAME}_archive.log 2&gt;&amp;1&#10;&#10;PUBLISH=Cocoapods&#10;UNIVERSAL_OUTPUTFOLDER=${PROJECT_DIR}/${PUBLISH}&#10;FRAMEWORK_NAME_WITH_EXT=${TARGET_NAME}.framework&#10;DSYM_NAME_WITH_EXT=$FRAMEWORK_NAME_WITH_EXT.dSYM&#10;DSYM_PATH=$DSYM_NAME_WITH_EXT/Contents/Resources/DWARF/$FRAMEWORK&#10;&#10;if [ &quot;true&quot; == ${ALREADYINVOKED:-false} ]&#10;then&#10;echo &quot;RECURSION: Detected, stopping&quot;&#10;else&#10;export ALREADYINVOKED=&quot;true&quot;&#10;&#10;# make sure the output directory exists&#10;mkdir -p &quot;${UNIVERSAL_OUTPUTFOLDER}&quot;&#10;#mkdir -p &quot;${UNIVERSAL_OUTPUTFOLDER}/${FRAMEWORK_NAME_WITH_EXT}&quot; &#10;&#10;echo &quot;Building for iPhoneSimulator&quot;&#10;say -v veena Building for iPhoneSimulator&#10;xcodebuild -workspace &quot;${WORKSPACE_PATH}&quot; -scheme &quot;${TARGET_NAME}&quot; -configuration ${CONFIGURATION} -sdk iphonesimulator -destination &apos;platform=iOS Simulator,name=iPhone XS&apos; ONLY_ACTIVE_ARCH=NO ARCHS=&apos;i386 x86_64&apos; BUILD_DIR=&quot;${BUILD_DIR}&quot; BUILD_ROOT=&quot;${BUILD_ROOT}&quot; ENABLE_BITCODE=YES OTHER_CFLAGS=&quot;-fembed-bitcode&quot; BITCODE_GENERATION_MODE=bitcode clean build&#10;&#10;# Step 1. Copy the framework structure (from iphoneos build) to the universal folder&#10;echo &quot;Copying to output folder&quot;&#10;say -v veena Copying to output folder&#10;cp -R &quot;${ARCHIVE_PRODUCTS_PATH}${INSTALL_PATH}/&quot; &quot;${UNIVERSAL_OUTPUTFOLDER}&quot;&#10;cp -R &quot;${ARCHIVE_PRODUCTS_PATH}${INSTALL_PATH}/dSYMs/${DSYM_NAME_WITH_EXT}&quot; &quot;${UNIVERSAL_OUTPUTFOLDER}/${DSYM_NAME_WITH_EXT}&quot;&#10;&#10;# Step 2. Copy Swift modules from iphonesimulator build (if it exists) to the copied framework directory&#10;say -v veena Copy Swift modules&#10;SIMULATOR_SWIFT_MODULES_DIR=&quot;${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${TARGET_NAME}.framework/Modules/${TARGET_NAME}.swiftmodule/.&quot;&#10;if [ -d &quot;${SIMULATOR_SWIFT_MODULES_DIR}&quot; ]; then&#10;cp -R &quot;${SIMULATOR_SWIFT_MODULES_DIR}&quot; &quot;${UNIVERSAL_OUTPUTFOLDER}/${TARGET_NAME}.framework/Modules/${TARGET_NAME}.swiftmodule&quot;&#10;fi&#10;&#10;# Step 3. Create universal binary file using lipo and place the combined executable in the copied framework directory&#10;echo &quot;Combining executables&quot;&#10;say -v veena Combining executables&#10;lipo -create -output &quot;${UNIVERSAL_OUTPUTFOLDER}/${EXECUTABLE_PATH}&quot; &quot;${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${EXECUTABLE_PATH}&quot; &quot;${ARCHIVE_PRODUCTS_PATH}${INSTALL_PATH}/${EXECUTABLE_PATH}&quot;&#10;&#10;echo &quot;Combining executables end&quot; &#10;# Step 4. Create universal binaries for embedded frameworks&#10;for SUB_FRAMEWORK in $( ls &quot;${UNIVERSAL_OUTPUTFOLDER}/${TARGET_NAME}.framework/Frameworks&quot; ); do&#10;BINARY_NAME=&quot;${SUB_FRAMEWORK%.*}&quot;&#10;echo &quot;${ARCHIVE_PRODUCTS_PATH}${INSTALL_PATH}/${TARGET_NAME}.framework/Frameworks/${SUB_FRAMEWORK}/${BINARY_NAME}&quot;&#10;lipo -create -output &quot;${UNIVERSAL_OUTPUTFOLDER}/${TARGET_NAME}.framework/Frameworks/${SUB_FRAMEWORK}/${BINARY_NAME}&quot; &quot;${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${SUB_FRAMEWORK}/${BINARY_NAME}&quot; &quot;${ARCHIVE_PRODUCTS_PATH}${INSTALL_PATH}/${TARGET_NAME}.framework/Frameworks/${SUB_FRAMEWORK}/${BINARY_NAME}&quot;&#10;done&#10;&#10;# Step 5. Convenience step to copy the framework to the project&apos;s directory&#10;echo &quot;Copying to project dir&quot;&#10;say -v veena Copying to project dir&#10;yes | cp -Rf &quot;${UNIVERSAL_OUTPUTFOLDER}/${FULL_PRODUCT_NAME}&quot; &quot;${PROJECT_DIR}/$PUBLISH&quot;&#10;&#10;open &quot;${PROJECT_DIR}&quot;&#10;&#10;fi&#10;&#10;say -v veena Alhamdulillah. See you next build - Ashari&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "3DE204A52158A0C300E3DF96"
+                     BuildableName = "QiscusRealtime.framework"
+                     BlueprintName = "QiscusRealtime"
+                     ReferencedContainer = "container:QiscusRealtime.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
+   </ArchiveAction>
+</Scheme>

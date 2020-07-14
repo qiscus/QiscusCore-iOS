@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>QiscusRealtimeDelegate Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/QiscusRealtimeDelegate" class="dashAnchor"></a>
+    <a title="QiscusRealtimeDelegate Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">QiscusRealtime Docs</a> (19% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">QiscusRealtime Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        QiscusRealtimeDelegate Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/QiscusRealtime.html">QiscusRealtime</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/MessageStatus.html">MessageStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/QiscusRealtimeConnectionState.html">QiscusRealtimeConnectionState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RealtimePublishEndpoint.html">RealtimePublishEndpoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RealtimeSubscribeEndpoint.html">RealtimeSubscribeEndpoint</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/QiscusRealtimeDelegate.html">QiscusRealtimeDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/QiscusRealtimeConfig.html">QiscusRealtimeConfig</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>QiscusRealtimeDelegate</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">QiscusRealtimeDelegate</span></code></pre>
+
+                </div>
+              </div>
+            <p>Undocumented</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14QiscusRealtime0aB8DelegateP15connectionStateyAA0ab10ConnectionE0O6change_tF"></a>
+                    <a name="//apple_ref/swift/Method/connectionState(change:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14QiscusRealtime0aB8DelegateP15connectionStateyAA0ab10ConnectionE0O6change_tF">connectionState(change:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Qiscus Realtime Server connection state</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">connectionState</span><span class="p">(</span><span class="n">change</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Enums/QiscusRealtimeConnectionState.html">QiscusRealtimeConnectionState</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>state</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>can be connection, connected, or disconnect</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14QiscusRealtime0aB8DelegateP14didReceiveUserySS9userEmail_Sb8isOnlineSS9timestamptF"></a>
+                    <a name="//apple_ref/swift/Method/didReceiveUser(userEmail:isOnline:timestamp:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14QiscusRealtime0aB8DelegateP14didReceiveUserySS9userEmail_Sb8isOnlineSS9timestamptF">didReceiveUser(userEmail:isOnline:timestamp:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>You will receive from qiscus realtime about user status</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">didReceiveUser</span><span class="p">(</span><span class="nv">userEmail</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">isOnline</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">timestamp</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userEmail</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>qiscus email</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>timestamp</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>timestampt in UTC</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/TODO%20minor%20feature,%20waiting%20core%20can%20delete,%20parsing%20payload%20to%20complicated"></a>
+                <a name="//apple_ref/swift/Section/TODO minor feature, waiting core can delete, parsing payload to complicated" class="dashAnchor"></a>
+                <a href="#/TODO%20minor%20feature,%20waiting%20core%20can%20delete,%20parsing%20payload%20to%20complicated">
+                  <h3 class="section-name">TODO minor feature, waiting core can delete, parsing payload to complicated</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14QiscusRealtime0aB8DelegateP17didReceiveMessageySS4data_tF"></a>
+                    <a name="//apple_ref/swift/Method/didReceiveMessage(data:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14QiscusRealtime0aB8DelegateP17didReceiveMessageySS4data_tF">didReceiveMessage(data:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>You will receive message from qiscus realtime about comment like new comment, user left room, remove member and other</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">didReceiveMessage</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>message as string JSON</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14QiscusRealtime0aB8DelegateP23didReceiveMessageStatusySS6roomId_SS07commentI0SS0j6UniqueI0AA0fG0O0G0tF"></a>
+                    <a name="//apple_ref/swift/Method/didReceiveMessageStatus(roomId:commentId:commentUniqueId:Status:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14QiscusRealtime0aB8DelegateP23didReceiveMessageStatusySS6roomId_SS07commentI0SS0j6UniqueI0AA0fG0O0G0tF">didReceiveMessageStatus(roomId:commentId:commentUniqueId:Status:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>you will receive Message comment status</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">didReceiveMessageStatus</span><span class="p">(</span><span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">commentId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">commentUniqueId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="kt">Status</span><span class="p">:</span> <span class="kt"><a href="../Enums/MessageStatus.html">MessageStatus</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>roomId</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>commentId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>commentId</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>Status</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>status read or deliver</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14QiscusRealtime0aB8DelegateP14didReceiveUserySb6typing_SS6roomIdSS9userEmailtF"></a>
+                    <a name="//apple_ref/swift/Method/didReceiveUser(typing:roomId:userEmail:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14QiscusRealtime0aB8DelegateP14didReceiveUserySb6typing_SS6roomIdSS9userEmailtF">didReceiveUser(typing:roomId:userEmail:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>You will receive message from qiscus realtime about user typing</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">didReceiveUser</span><span class="p">(</span><span class="nv">typing</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">userEmail</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>roomId (String)</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userEmail</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>userEmail (String)</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://qiscus.com" target="_blank" rel="external">Qiscus</a>. All rights reserved. (Last updated: 2018-09-24)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

@@ -1,0 +1,6 @@
+github "amsibsam/CocoaMQTT" "b0b5519684789a037dea7397d857acd76e1e5b83"
+github "daltoniam/Starscream" "3.0.2"
+github "daltoniam/common-crypto-spm" "1.1.0"
+github "daltoniam/zlib-spm" "1.1.0"
+github "qiscus/QiscusRealtime-iOS" "31d58415616359eff600438f2d1be65e79ad4af4"
+github "robbiehanson/CocoaAsyncSocket" "7.6.3"

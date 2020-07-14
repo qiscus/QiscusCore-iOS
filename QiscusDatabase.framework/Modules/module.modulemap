@@ -1,0 +1,11 @@
+framework module QiscusDatabase {
+  umbrella header "QiscusDatabase.h"
+
+  export *
+  module * { export * }
+}
+
+module QiscusDatabase.Swift {
+    header "QiscusDatabase-Swift.h"
+    requires objc
+}

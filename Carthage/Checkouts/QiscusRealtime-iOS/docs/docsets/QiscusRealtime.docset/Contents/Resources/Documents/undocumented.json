@@ -1,0 +1,236 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/Protocol.swift",
+      "line": 11,
+      "symbol": "QiscusRealtimeConnectionState",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/Protocol.swift",
+      "line": 12,
+      "symbol": "QiscusRealtimeConnectionState.initial",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/Protocol.swift",
+      "line": 13,
+      "symbol": "QiscusRealtimeConnectionState.connecting",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/Protocol.swift",
+      "line": 14,
+      "symbol": "QiscusRealtimeConnectionState.connected",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/Protocol.swift",
+      "line": 15,
+      "symbol": "QiscusRealtimeConnectionState.disconnected",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/Protocol.swift",
+      "line": 18,
+      "symbol": "QiscusRealtimeDelegate",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtime.swift",
+      "line": 11,
+      "symbol": "QiscusRealtime",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtime.swift",
+      "line": 13,
+      "symbol": "QiscusRealtime.enableDebugPrint",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtime.swift",
+      "line": 14,
+      "symbol": "QiscusRealtime.isConnect",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtime.swift",
+      "line": 48,
+      "symbol": "QiscusRealtime.subscribe(endpoint:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtime.swift",
+      "line": 52,
+      "symbol": "QiscusRealtime.publish(endpoint:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtimeManager.swift",
+      "line": 11,
+      "symbol": "RealtimeSubscribeEndpoint",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtimeManager.swift",
+      "line": 12,
+      "symbol": "RealtimeSubscribeEndpoint.comment",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtimeManager.swift",
+      "line": 14,
+      "symbol": "RealtimeSubscribeEndpoint.onlineStatus",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtimeManager.swift",
+      "line": 16,
+      "symbol": "RealtimeSubscribeEndpoint.typing",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtimeManager.swift",
+      "line": 18,
+      "symbol": "RealtimeSubscribeEndpoint.delivery",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtimeManager.swift",
+      "line": 20,
+      "symbol": "RealtimeSubscribeEndpoint.read",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtimeManager.swift",
+      "line": 21,
+      "symbol": "RealtimeSubscribeEndpoint.notification",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtimeManager.swift",
+      "line": 23,
+      "symbol": "RealtimePublishEndpoint",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtimeManager.swift",
+      "line": 25,
+      "symbol": "RealtimePublishEndpoint.onlineStatus",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/QiscusRealtimeManager.swift",
+      "line": 27,
+      "symbol": "RealtimePublishEndpoint.isTyping",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 10,
+      "symbol": "MessageStatus",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 11,
+      "symbol": "MessageStatus.read",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 12,
+      "symbol": "MessageStatus.delivered",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 13,
+      "symbol": "MessageStatus.deleted",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 22,
+      "symbol": "QiscusRealtimeConfig",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 23,
+      "symbol": "QiscusRealtimeConfig.appName",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 24,
+      "symbol": "QiscusRealtimeConfig.clientID",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 25,
+      "symbol": "QiscusRealtimeConfig.hostRealtimeServer",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 26,
+      "symbol": "QiscusRealtimeConfig.port",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 27,
+      "symbol": "QiscusRealtimeConfig.QiscusClientRealtimeSSL",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 29,
+      "symbol": "QiscusRealtimeConfig.init(appName:clientID:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusRealtime/QiscusRealtime/RealtimeConfig.swift",
+      "line": 34,
+      "symbol": "QiscusRealtimeConfig.init(appName:clientID:host:port:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/qiscus/iOS/SDK/QiscusRealtime"
+}

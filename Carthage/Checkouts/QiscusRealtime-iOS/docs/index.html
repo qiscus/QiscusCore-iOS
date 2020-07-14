@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>QiscusRealtime  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="QiscusRealtime  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">QiscusRealtime Docs</a> (19% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">QiscusRealtime Reference</a>
+        <img id="carat" src="img/carat.png" />
+        QiscusRealtime  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/QiscusRealtime.html">QiscusRealtime</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/MessageStatus.html">MessageStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/QiscusRealtimeConnectionState.html">QiscusRealtimeConnectionState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/RealtimePublishEndpoint.html">RealtimePublishEndpoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/RealtimeSubscribeEndpoint.html">RealtimeSubscribeEndpoint</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/QiscusRealtimeDelegate.html">QiscusRealtimeDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/QiscusRealtimeConfig.html">QiscusRealtimeConfig</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <h1 id='a-href-https-github-com-qiscus-qiscusrealtime-ios-qiscusrealtime-a-messaging-and-chat-core-api-for-ios' class='heading'><a href="https://github.com/qiscus/QiscusRealtime-iOS">QiscusRealtime</a> - Messaging and Chat Core API for iOS</h1>
+
+<p><a href="https://qiscus.com">Qiscus</a> Enable custom in-app messaging in your Mobile App and Web using Qiscus Chat SDK and Messaging API</p>
+
+<p><a href="https://github.com/qiscus/QiscusRealtime-iOS"><img src="https://img.shields.io/badge/platform-iOS-orange.svg" alt="Platform"></a>
+<a href="https://github.com/qiscus"><img src="https://img.shields.io/badge/language-Objective--C%20%7C%20Swift-orange.svg" alt="Languages"></a>
+<a href="https://github.com/qiscus/QiscusRealtime-iOS"><img src="https://img.shields.io/badge/pod-v3.0.109-green.svg" alt="CocoaPods"></a></p>
+<h2 id='features' class='heading'>Features</h2>
+
+<ul>
+<li>[x] Config Realtime Server.</li>
+<li>[x] Connect with username and qiscus token.</li>
+<li>[x] Publish typing and online status.</li>
+<li>[x] Subscribe(receive) new comment, online status, typing, deliverd and read comment.</li>
+<li>[x] <a href="https://qiscusrealtime.firebaseapp.com">Complete Documentation</a></li>
+</ul>
+<h2 id='component-libraries' class='heading'>Component Libraries</h2>
+
+<p>In order to keep QiscusRealtime focused specifically on realtime event implementation, additional libraries have been create by the <a href="https://qiscus.com">Qiscus IOS</a>.</p>
+
+<ul>
+<li><a href="https://github.com/qiscus">QiscusCore</a> - Chat Core API, All chat functionality already on there.</li>
+<li><a href="https://github.com/qiscus">QiscusUI</a> - An chat component library, make it easy to custom your chat UI.</li>
+<li><a href="https://github.com/qiscus">Qiscus</a> - An chat sdk with complete feature, simple, easy to integrate.</li>
+</ul>
+<h2 id='installation' class='heading'>Installation</h2>
+
+<p><a href="https://cocoapods.org">CocoaPods</a> is a dependency manager for Cocoa projects. You can install it with the following command:</p>
+<pre class="highlight shell"><code><span class="gp">$ </span>gem install cocoapods
+</code></pre>
+
+<p>To integrate QiscusRealtime into your Xcode project using CocoaPods, specify it in your <code>Podfile</code>:</p>
+<pre class="highlight ruby"><code><span class="n">source</span> <span class="s1">'https://github.com/CocoaPods/Specs.git'</span>
+<span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'10.0'</span>
+<span class="n">use_frameworks!</span>
+
+<span class="n">target</span> <span class="s1">'&lt;Your Target Name&gt;'</span> <span class="k">do</span>
+    <span class="n">pod</span> <span class="s1">'QiscusRealtime'</span><span class="p">,</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>Then, run the following command:</p>
+<pre class="highlight shell"><code><span class="gp">$ </span>pod install
+</code></pre>
+<h3 id='security-disclosure' class='heading'>Security Disclosure</h3>
+
+<p>If you believe you have identified a security vulnerability with QiscusRealtime, you should report it as soon as possible via email to <a href="mailto:juang@qiscus.co">juang@qiscus.co</a>. Please do not post it to a public issue.</p>
+<h2 id='faq' class='heading'>FAQ</h2>
+<h3 id='when-we-use-qiscus' class='heading'>When we use Qiscus</h3>
+
+<p>intead Qiscus?</p>
+
+<p>QiscusCore is lite version chat sdk, if you wan&rsquo;t to build your own chat ui best option is use QiscusCore. But, if you need in App chat quickly use Qiscus Chat SDK(build in UI and simple configuration). please visit <a href="https://github.com/qiscus/qiscus-sdk-ios">Qiscus</a> to use qiscus chat sdk.</p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://qiscus.com" target="_blank" rel="external">Qiscus</a>. All rights reserved. (Last updated: 2018-09-24)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
