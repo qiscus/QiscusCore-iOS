@@ -24,11 +24,26 @@ internal enum APIRoom {
     case getParticipant(roomId: String, page:Int?, limit: Int?, offset: Int?, sorting : SortType?)
     case getRoomById(roomId: String)
     case usersPresence(userIds : [String])
+
 }
 
 extension APIRoom : EndPoint {
     var baseURL: URL {
-        return BASEURL
+        get {
+            return BASEURL
+        }
+        set {
+            BASEURL = newValue
+        }
+    }
+    
+    var header: HTTPHeaders? {
+        get {
+            return HEADERS
+        }
+        set {
+            HEADERS = newValue!
+        }
     }
     
     var path: String {
@@ -63,6 +78,7 @@ extension APIRoom : EndPoint {
             return "channels/leave"
         case .usersPresence( _):
             return "users/status"
+            
         }
     }
     
@@ -73,10 +89,6 @@ extension APIRoom : EndPoint {
         case .roomInfo, .createNewRoom, .updateRoom, .roomWithTarget, .channelWithUniqueId, .addParticipant, .removeParticipant, .getChannelsInfo, .joinChannels, .leaveChannels, .usersPresence:
             return .post
         }
-    }
-    
-    var header: HTTPHeaders? {
-        return HEADERS
     }
     
     var task: HTTPTask {
@@ -231,18 +243,19 @@ extension APIRoom : EndPoint {
                 "unique_ids"  : uniqueId
                 ] as [String : Any]
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
-       
+            
         case .leaveChannels(let uniqueId):
             let params = [
                 "unique_ids"  : uniqueId
                 ] as [String : Any]
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
-        
+
         case .usersPresence(let userIds):
             let params = [
                 "user_ids"  : userIds
                 ] as [String : Any]
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
+
         }
     }
 }

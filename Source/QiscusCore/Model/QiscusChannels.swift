@@ -1,10 +1,11 @@
 //
-//  RoomListModel.swift
+//  QiscusChannels.swift
 //  QiscusCore
 //
-//  Created by Qiscus on 26/07/18.
-//  Copyright © 2018 Qiscus. All rights reserved.
+//  Created by Qiscus on 12/03/20.
+//  Copyright © 2020 Qiscus. All rights reserved.
 //
+
 import Foundation
 import SwiftyJSON
 
@@ -28,5 +29,3 @@ open class QiscusChannels : NSObject {
         self.createdAt      = json["created_at"].stringValue
     }
 }
-
-

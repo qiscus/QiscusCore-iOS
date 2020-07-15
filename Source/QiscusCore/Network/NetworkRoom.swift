@@ -6,7 +6,6 @@
 //
 
 // MARK: Room
-import SwiftyJSON
 extension NetworkManager {
     /// get room chat room list
     ///
@@ -18,7 +17,7 @@ extension NetworkManager {
     ///   - showRemoved: Bool (true = include room that has been removed, false = exclude room that has been removed)
     ///   - showEmpty: Bool (true = it will show all rooms that have been created event there are no messages, default is false where only room that have at least one message will be shown)
     ///   - completion: @escaping when success get room list returning Optional([RoomModel]), Optional(Meta) contain page, total_room per page, Optional(String error message)
-    func getRoomList(showParticipant: Bool = true, limit: Int? = 20, page: Int? = 1, roomType: RoomType? = nil, showRemoved: Bool = false, showEmpty: Bool = false, completion: @escaping([RoomModel]?, Meta?, String?) -> Void) {
+    func getRoomList(showParticipant: Bool = true, limit: Int? = 20, page: Int? = 1, roomType: RoomType? = nil, showRemoved: Bool = false, showEmpty: Bool = false, completion: @escaping([QChatRoom]?, Meta?, String?) -> Void) {
         roomRouter.request(.roomList(showParticipants: showParticipant, limit: limit, page: page, roomType: roomType, showRemoved: showRemoved, showEmpty: showEmpty)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, error?.localizedDescription ?? "Please check your network connection.")
@@ -38,7 +37,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -58,7 +57,7 @@ extension NetworkManager {
     ///   - showRemoved: Bool (true = include room that has been removed, false = exclude room that has been removed)
     ///   - showEmpty: Bool (true = it will show all rooms that have been created event there are no messages, default is false where only room that have at least one message will be shown)
     ///   - completion: @escaping when success get room list returning Optional([RoomModel]), Optional(Meta) contain page, total_room per page, Optional(String error message)
-    func getRoomInfo(roomIds: [String]? = [], roomUniqueIds: [String]? = [], showParticipant: Bool = false, showRemoved: Bool = false, completion: @escaping ([RoomModel]?, QError?) -> Void) {
+    func getRoomInfo(roomIds: [String]? = [], roomUniqueIds: [String]? = [], showParticipant: Bool = false, showRemoved: Bool = false, completion: @escaping ([QChatRoom]?, QError?) -> Void) {
         roomRouter.request(.roomInfo(roomId: roomIds, roomUniqueId: roomUniqueIds, showParticipants: showParticipant, showRemoved: showRemoved)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -77,7 +76,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -97,7 +96,7 @@ extension NetworkManager {
     ///   - avatarUrl: room avatar url
     ///   - options : JsonString
     ///   - completion: @escaping when success create room, return created Optional(RoomModel), Optional(String error message)
-    func createRoom(name: String, participants: [String], avatarUrl: URL? = nil, options: String? = nil, completion: @escaping (RoomModel?, String?) -> Void) {
+    func createRoom(name: String, participants: [String], avatarUrl: URL? = nil, options: String? = nil, completion: @escaping (QChatRoom?, String?) -> Void) {
         roomRouter.request(.createNewRoom(name: name, participants: participants, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
             if error != nil {
                 completion(nil, error?.localizedDescription ?? "Please check your network connection.")
@@ -116,7 +115,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -135,7 +134,7 @@ extension NetworkManager {
     ///   - avatarUrl: new room avatar
     ///   - options: new room options
     ///   - completion: @escaping when success update room, return created Optional(RoomModel), Optional(String error message)
-    func updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?, completion: @escaping (RoomModel?, QError?) -> Void) {
+    func updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?, completion: @escaping (QChatRoom?, QError?) -> Void) {
         roomRouter.request(.updateRoom(roomId: roomId, roomName: roomName, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -154,7 +153,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -175,7 +174,7 @@ extension NetworkManager {
     ///   - options: room options (string json)
     ///   - completion: @escaping when success update room, return created Optional(RoomModel), Optional([CommentModel]), Optional(String error message)
     @available(*, deprecated, message: "will soon become unavailable.")
-    func getOrCreateRoomWithTarget(targetSdkEmail: String, options: String? = nil, onSuccess: @escaping (RoomModel,[CommentModel]?) -> Void, onError: @escaping (QError) -> Void) {
+    func getOrCreateRoomWithTarget(targetSdkEmail: String, options: String? = nil, onSuccess: @escaping (QChatRoom,[QMessage]?) -> Void, onError: @escaping (QError) -> Void) {
         roomRouter.request(.roomWithTarget(email: [targetSdkEmail], options: options)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -193,9 +192,17 @@ extension NetworkManager {
                     let comments    = CommentApiResponse.comments(from: response)
                     onSuccess(room,comments)
                 case .failure(let errorMessage):
+                    guard let responseData = data else {
+                        onError(QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
+                        let responseError    = ApiResponse.decodeError(from: responseData)
+                        
+                        onError(QError(message: responseError))
+                        return
                     } catch {
                         
                     }
@@ -212,7 +219,7 @@ extension NetworkManager {
     ///   - avatarUrl: room avatar url
     ///   - extras: room options (string json)
     ///   - completion: @escaping when success update room, return created Optional(RoomModel), Optional([CommentModel]), Optional(String error message)
-    func chatUser(userId: String, extras: String? = nil, onSuccess: @escaping (RoomModel,[CommentModel]?) -> Void, onError: @escaping (QError) -> Void) {
+    func chatUser(userId: String, extras: String? = nil, onSuccess: @escaping (QChatRoom,[QMessage]?) -> Void, onError: @escaping (QError) -> Void) {
         roomRouter.request(.roomWithTarget(email: [userId], options: extras)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -230,9 +237,17 @@ extension NetworkManager {
                     let comments    = CommentApiResponse.comments(from: response)
                     onSuccess(room,comments)
                 case .failure(let errorMessage):
+                   guard let responseData = data else {
+                        onError(QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
+                        let responseError    = ApiResponse.decodeError(from: responseData)
+                        
+                        onError(QError(message: responseError))
+                        return
                     } catch {
                         
                     }
@@ -251,7 +266,7 @@ extension NetworkManager {
     ///   - avatarUrl: channel avatar
     ///   - options: channel options
     ///   - completion: @escaping when success get or create channel, return Optional(RoomModel), Optional([CommentModel]), Optional(String error)
-    func getOrCreateChannel(uniqueId: String, name: String? = nil, avatarUrl: URL? = nil, options: String? = nil, completion: @escaping (RoomModel?, [CommentModel]?, String?) -> Void) {
+    func getOrCreateChannel(uniqueId: String, name: String? = nil, avatarUrl: URL? = nil, options: String? = nil, completion: @escaping (QChatRoom?, [QMessage]?, String?) -> Void) {
         roomRouter.request(.channelWithUniqueId(uniqueId: uniqueId, name: name, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, error?.localizedDescription ?? "Please check your network connection.")
@@ -271,7 +286,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -290,7 +305,7 @@ extension NetworkManager {
     ///   - avatarURL: channel avatar
     ///   - extras: channel extras as jsonString
     ///   - completion: @escaping when success get or create channel, return Optional(RoomModel), Optional([CommentModel]), Optional(String error)
-    func createChannel(uniqueId: String, name: String? = nil, avatarURL: URL? = nil, extras: String? = nil, completion: @escaping (RoomModel?, [CommentModel]?, String?) -> Void) {
+    func createChannel(uniqueId: String, name: String? = nil, avatarURL: URL? = nil, extras: String? = nil, completion: @escaping (QChatRoom?, [QMessage]?, String?) -> Void) {
         roomRouter.request(.channelWithUniqueId(uniqueId: uniqueId, name: name, avatarUrl: avatarURL, options: extras)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, error?.localizedDescription ?? "Please check your network connection.")
@@ -310,7 +325,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -326,7 +341,7 @@ extension NetworkManager {
     /// - Parameters:
     ///   - uniqueId: channel uniqueId
     ///   - completion: @escaping when success get or create channel, return Optional(RoomModel), Optional([CommentModel]), Optional(String error)
-    func getChannel(uniqueId: String, completion: @escaping (RoomModel?, [CommentModel]?, String?) -> Void) {
+    func getChannel(uniqueId: String, completion: @escaping (QChatRoom?, [QMessage]?, String?) -> Void) {
         roomRouter.request(.channelWithUniqueId(uniqueId: uniqueId, name: nil, avatarUrl: nil, options: nil)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, error?.localizedDescription ?? "Please check your network connection.")
@@ -346,7 +361,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -379,7 +394,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -413,7 +428,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -423,6 +438,7 @@ extension NetworkManager {
             }
         }
     }
+    
     
     /// joinChannels
     /// - Parameters:
@@ -447,7 +463,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -481,7 +497,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -492,13 +508,15 @@ extension NetworkManager {
         }
     }
     
+
+    
     
     /// get chat room by id
     ///
     /// - Parameters:
     ///   - roomId: room id
     ///   - completion: @escaping when success get room, return Optional(RoomModel), Optional([CommentModel]), Optional(String error message)
-    func getRoomById(roomId: String, onSuccess: @escaping (RoomModel, [CommentModel]?) -> Void, onError: @escaping (QError) -> Void) {
+    func getRoomById(roomId: String, onSuccess: @escaping (QChatRoom, [QMessage]?) -> Void, onError: @escaping (QError) -> Void) {
         roomRouter.request(.getRoomById(roomId: roomId)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -519,7 +537,7 @@ extension NetworkManager {
                     if let data = data{
                         do {
                             let jsondata = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
-                            QiscusLogger.errorPrint("json: \(jsondata)")
+                            self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                         } catch {
                             
                         }
@@ -539,7 +557,7 @@ extension NetworkManager {
     ///   - offset : default is 0
     ///   - sorting : default is asc
     ///   - completion: @escaping when success add participant to room, return added participants Optional([MemberModel]), Optional(String error message)
-    func getParticipants(roomUniqeId id: String, page : Int? = 1, limit : Int? = 100, offset: Int? = 0, sorting: SortType? = nil, completion: @escaping ([MemberModel]?, MetaRoomParticipant?, QError?) -> Void) {
+    func getParticipants(roomUniqeId id: String, page : Int? = 1, limit : Int? = 100, offset: Int? = 0, sorting: SortType? = nil, completion: @escaping ([QParticipant]?, MetaRoomParticipant?, QError?) -> Void) {
         roomRouter.request(.getParticipant(roomId: id, page: page, limit : limit, offset: offset, sorting: sorting)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -559,7 +577,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -576,7 +594,7 @@ extension NetworkManager {
     ///   - roomId: chat room id
     ///   - userSdkEmail: array of user's sdk email
     ///   - completion: @escaping when success add participant to room, return added participants Optional([MemberModel]), Optional(String error message)
-    func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([MemberModel]?, QError?) -> Void) {
+    func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([QParticipant]?, QError?) -> Void) {
         roomRouter.request(.addParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -596,7 +614,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -630,7 +648,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -640,6 +658,7 @@ extension NetworkManager {
             }
         }
     }
+    
     
     /// getUserPresence
     /// - Parameters:
@@ -664,7 +683,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -674,4 +693,5 @@ extension NetworkManager {
             }
         }
     }
+
 }

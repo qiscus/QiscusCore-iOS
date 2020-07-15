@@ -7,8 +7,9 @@
 
 import Foundation
 
-class QiscusFileManager {
-    static var shared : QiscusFileManager = QiscusFileManager()
+public class QiscusFileManager {
+    var qiscusCore : QiscusCore? = nil
+    //static var shared : QiscusFileManager = QiscusFileManager()
     // Get local file path: download task stores tune here; AV player plays it.
     private let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     private let qiscusDocumentsPath = "Qiscus"
@@ -21,7 +22,7 @@ class QiscusFileManager {
         guard createDir(name: self.qiscusDocumentsPath) != nil else { return false }
         
         let destinationURL = localFilePath(for: sourceURL)
-        QiscusLogger.debugPrint(destinationURL.absoluteString)
+        self.qiscusCore?.qiscusLogger.debugPrint(destinationURL.absoluteString)
         // 3
         let fileManager = FileManager.default
         try? fileManager.removeItem(at: destinationURL)
@@ -29,7 +30,7 @@ class QiscusFileManager {
             try fileManager.copyItem(at: location, to: destinationURL)
             return true
         } catch let error {
-            QiscusLogger.errorPrint("Could not copy file to disk: \(error.localizedDescription)")
+            self.qiscusCore?.qiscusLogger.errorPrint("Could not copy file to disk: \(error.localizedDescription)")
             return false
         }
     }
@@ -53,7 +54,7 @@ class QiscusFileManager {
             do {
                 try fileManager.createDirectory(atPath: dir.path, withIntermediateDirectories: true, attributes: nil)
             }catch {
-                QiscusLogger.errorPrint("Could not create dir: \(error.localizedDescription)")
+                self.qiscusCore?.qiscusLogger.errorPrint("Could not create dir: \(error.localizedDescription)")
                 return nil
             }
         }

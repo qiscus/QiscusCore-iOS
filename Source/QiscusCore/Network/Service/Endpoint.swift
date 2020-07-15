@@ -7,35 +7,45 @@
 //
 
 import Foundation
-import UIKit
 
 protocol EndPoint {
-    var baseURL     : URL { get }
+    var baseURL     : URL { get set}
     var path        : String { get }
     var httpMethod  : HTTPMethod { get }
-    var header      : HTTPHeaders? { get }
+    var header      : HTTPHeaders? { get set}
     var task        : HTTPTask { get }
 }
 
 // MARK: TODO Manage This
 var AUTHTOKEN : String {
     get {
-        if let user = ConfigManager.shared.user {
-            return user.token
-        }else {
-            return ""
-        }
+//        if let user = ConfigManager.shared.user {
+//            return user.token
+//        }else {
+//            return ""
+//        }
+        
+        return ""
         
     }
 }
 
+var newDataBaseURL : URL = URL.init(string: "https://api.qiscus.com/api/v2/mobile")!
+var newDataHeader : HTTPHeaders = [
+    "QISCUS-SDK-PLATFORM": "iOS",
+    "QISCUS-SDK-DEVICE-BRAND": "Apple",
+    "QISCUS-SDK-VERSION": QiscusCore.qiscusCoreVersionNumber,
+    "QISCUS-SDK-DEVICE-MODEL" : UIDevice.modelName,
+    "QISCUS-SDK-DEVICE-OS-VERSION" : UIDevice.current.systemVersion
+]
+
 var BASEURL : URL {
     get {
-        if let server = ConfigManager.shared.server {
-            return server.url
-        }else {
-            return URL.init(string: "https://api.qiscus.com/api/v2/mobile")!
-        }
+        return newDataBaseURL
+    }
+    
+    set {
+        newDataBaseURL = newValue
     }
 }
 
@@ -48,27 +58,12 @@ var HEADERS : [String: String] {
             "QISCUS-SDK-DEVICE-MODEL" : UIDevice.modelName,
             "QISCUS-SDK-DEVICE-OS-VERSION" : UIDevice.current.systemVersion
             ]
-        if let appID = ConfigManager.shared.appID {
-            headers["QISCUS-SDK-APP-ID"] = appID
-        }
         
-        if let user = ConfigManager.shared.user {
-            if let appid = ConfigManager.shared.appID {
-                headers["QISCUS-SDK-APP-ID"] = appid
-            }
-            if !user.token.isEmpty {
-                headers["QISCUS-SDK-TOKEN"] = user.token
-            }
-            if !user.email.isEmpty {
-                headers["QISCUS-SDK-USER-ID"] = user.email
-            }
-        }
-        
-        if let customHeader = ConfigManager.shared.customHeader {
-            headers.merge(customHeader as! [String : String]){(_, new) in new}
-        }
-        
-        return headers
+        return newDataHeader
+    }
+    
+    set {
+        newDataHeader = newValue
     }
 }
 /////
@@ -94,7 +89,21 @@ internal enum APIClient {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 extension APIClient : EndPoint {
     var baseURL: URL {
-       return BASEURL
+        get {
+            return BASEURL
+        }
+        set {
+            BASEURL = newValue
+        }
+    }
+    
+    var header: HTTPHeaders? {
+        get {
+            return HEADERS
+        }
+        set {
+            HEADERS = newValue!
+        }
     }
     
     var path: String {
@@ -139,10 +148,6 @@ extension APIClient : EndPoint {
         case .updateMyProfile :
             return .patch
         }
-    }
-    
-    var header: HTTPHeaders? {
-        return HEADERS
     }
     
     var task: HTTPTask {

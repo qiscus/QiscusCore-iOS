@@ -6,13 +6,13 @@
 //
 
 import Foundation
-import UIKit
 
-class QiscusWorkerManager {
+public class QiscusWorkerManager {
+    var qiscusCore : QiscusCore? = nil
     var isBackground : Bool = false
     func resume() {
         // MARK : Improve realtime state acurate disconnected
-        if QiscusCore.isLogined {
+        if self.qiscusCore?.isLogined ?? false {
             self.sync()
             self.pending()
             DispatchQueue.main.sync {
@@ -21,15 +21,15 @@ class QiscusWorkerManager {
                 DispatchQueue.global(qos: .background).sync {
                     if state == .active {
                         // foreground
-                        if QiscusCore.realtime.state == .connected {
-                            QiscusCore.shared.publishOnlinePresence(isOnline: true)
+                        if self.qiscusCore?.realtime.state == .connected {
+                            self.qiscusCore?.shared.publishOnlinePresence(isOnline: true)
                             isBackground = false
                         }
                     }else{
                         if isBackground == false {
                             isBackground = true
-                            if QiscusCore.realtime.state == .connected {
-                                QiscusCore.shared.publishOnlinePresence(isOnline: false)
+                            if self.qiscusCore?.realtime.state == .connected {
+                                self.qiscusCore?.shared.publishOnlinePresence(isOnline: false)
                             }
                         }
                     }
@@ -40,17 +40,20 @@ class QiscusWorkerManager {
     
     func resumeSyncEvent() {
            // MARK : Improve realtime state acurate disconnected
-           if QiscusCore.isLogined {
+        if self.qiscusCore?.isLogined ?? false {
                self.syncAuto()
            }
        }
     
     private func syncEvent() {
         //sync event
-        let id = ConfigManager.shared.syncEventId
-        QiscusCore.network.synchronizeEvent(lastEventId: id, onSuccess: { (events) in
+        var id = self.qiscusCore?.config.syncEventId
+        if id!.isEmpty{
+            id = self.qiscusCore?.config.user?.lastSyncEventId ?? "0"
+        }
+        self.qiscusCore?.network.synchronizeEvent(lastEventId: id ?? "0", onSuccess: { (events) in
             if !events.isEmpty{
-                ConfigManager.shared.syncEventId = events.first!.id
+                self.qiscusCore?.config.syncEventId = events.first!.id
             }
             
             events.forEach({ (event) in
@@ -61,19 +64,19 @@ class QiscusWorkerManager {
                     case .deletedMessage :
                         let ids = event.getDeletedMessageUniqId()
                         ids.forEach({ (id) in
-                            if let comment = QiscusCore.database.comment.find(uniqueId: id) {
-                                _ = QiscusCore.database.comment.delete(comment)
+                            if let comment = self.qiscusCore?.database.message.find(uniqueId: id) {
+                                _ = self.qiscusCore?.database.message.delete(comment)
                             }
                         })
-                        ConfigManager.shared.syncEventId = event.id
+                        self.qiscusCore?.config.syncEventId = event.id
                     case .clearRoom:
                         let ids = event.getClearRoomUniqId()
                         ids.forEach({ (id) in
-                            if let room = QiscusCore.database.room.find(uniqID: id) {
-                                _ = QiscusCore.database.comment.clear(inRoom: room.id, timestamp: event.timestamp)
+                            if let room = self.qiscusCore?.database.room.find(uniqID: id) {
+                                _ = self.qiscusCore?.database.message.clear(inRoom: room.id, timestamp: event.timestamp)
                             }
                         })
-                        ConfigManager.shared.syncEventId = event.id
+                        self.qiscusCore?.config.syncEventId = event.id
                         
                     case .noActionTopic:
                         break
@@ -91,31 +94,31 @@ class QiscusWorkerManager {
                
             })
         }) { (error) in
-            QiscusLogger.errorPrint("sync error, \(error.message)")
+            self.qiscusCore?.qiscusLogger.errorPrint("sync event error, \(error.message)")
         }
     }
     
-    private func sync() {
+   private func sync() {
         DispatchQueue.global(qos: .background).sync {
-            if ConfigManager.shared.isConnectedMqtt == false {
-                var id = ConfigManager.shared.syncId
-                let latestComment = ConfigManager.shared.lastCommentId
+            if self.qiscusCore?.config.isConnectedMqtt == false {
+                var id = self.qiscusCore?.config.syncId
+                let latestComment = self.qiscusCore?.config.lastCommentId
                 
                 if latestComment != "" && id != "" {
-                    if id.contains(latestComment) == true {
+                    if id == latestComment {
                         //id same
                     }else{
                         id = latestComment
                     }
                 }
                 
-                QiscusCore.shared.synchronize(lastMessageId: id, onSuccess: { (comments) in
+                self.qiscusCore?.synchronize(lastMessageId: id!, onSuccess: { (comments) in
                     self.syncEvent()
                     if let c = comments.first {
-                        ConfigManager.shared.syncId = c.id
+                        self.qiscusCore?.config.syncId = c.id
                     }
                 }, onError: { (error) in
-                    QiscusLogger.errorPrint("sync error, \(error.message)")
+                    self.qiscusCore?.qiscusLogger.errorPrint("sync error, \(error.message)")
                 })
             }
         }
@@ -124,40 +127,40 @@ class QiscusWorkerManager {
     
     //default is 30s
     private func syncAuto() {
-        DispatchQueue.global(qos: .background).async {
-            if ConfigManager.shared.isConnectedMqtt == true {
-                var id = ConfigManager.shared.syncId
-                let latestComment = ConfigManager.shared.lastCommentId
+        DispatchQueue.global(qos: .background).sync {
+            if self.qiscusCore?.config.isConnectedMqtt == true {
+                var id = self.qiscusCore?.config.syncId
+                let latestComment = self.qiscusCore?.config.lastCommentId
                 
                 if latestComment != "" && id != "" {
-                    if id.contains(latestComment) == true {
+                    if id == latestComment {
                         //id same
                     }else{
                         id = latestComment
                     }
                 }
-                
-                QiscusCore.shared.synchronize(lastMessageId: id, onSuccess: { (comments) in
+
+                self.qiscusCore?.synchronize(lastMessageId: id!, onSuccess: { (comments) in
                     self.syncEvent()
                     if let c = comments.first {
-                        ConfigManager.shared.syncId = c.id
+                        self.qiscusCore?.config.syncId = c.id
                     }
                 }, onError: { (error) in
-                    QiscusLogger.errorPrint("sync error, \(error.message)")
+                    self.qiscusCore?.qiscusLogger.errorPrint("sync auto error, \(error.message)")
                 })
             }
         }
     }
     
     private func pending() {
-        guard let comments = QiscusCore.database.comment.find(status: .pending) else { return }
+        guard let comments = self.qiscusCore?.database.message.find(status: .pending) else { return }
         comments.reversed().forEach { (c) in
             // validation comment prevent id
-            if c.uniqId.isEmpty { QiscusCore.database.comment.evaluate(); return }
-            QiscusCore.shared.sendMessage(message: c, onSuccess: { (response) in
-                 QiscusLogger.debugPrint("success send pending message \(response.uniqId)")
+            if c.uniqueId.isEmpty { self.qiscusCore?.database.message.evaluate(); return }
+            self.qiscusCore?.shared.sendMessage(message: c, onSuccess: { (response) in
+                self.qiscusCore?.qiscusLogger.debugPrint("success send pending message \(response.uniqueId)")
             }, onError: { (error) in
-                QiscusLogger.errorPrint("failed send pending message \(c.uniqId)")
+                self.qiscusCore?.qiscusLogger.errorPrint("failed send pending message \(c.uniqueId)")
             })
         }
     }

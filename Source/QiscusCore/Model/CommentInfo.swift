@@ -8,10 +8,10 @@
 import Foundation
 
 public struct CommentInfo {
-    public var comment = CommentModel()
-    public var deliveredUser = [MemberModel]()
-    public var readUser = [MemberModel]()
-    public var sentUser = [MemberModel]()
+    public var comment = QMessage()
+    public var deliveredUser = [QParticipant]()
+    public var readUser = [QParticipant]()
+    public var sentUser = [QParticipant]()
     
 }
 

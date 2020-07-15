@@ -2,33 +2,46 @@
 //  QiscusLogger.swift
 //  QiscusCore
 //
-//  Created by Rahardyan Bisma on 24/07/18.
+//  Created by Arief Nur Putranto on 24/07/18.
 //  Copyright © 2018 Qiscus. All rights reserved.
 //
 
 import Foundation
 
-class QiscusLogger {
-    static func debugPrint(_ text: String) {
-        if QiscusCore.enableDebugPrint {
-            print("[QiscusCore] \(text)")
+public class QiscusLogger: NSObject {
+    var qiscusCore : QiscusCore? = nil
+    func debugPrint(_ text: String) {
+        if self.qiscusCore?.enableDebugPrint ?? false{
+            if let appId = qiscusCore?.appID{
+                 print("[QiscusCore || \(appId)] \(text)")
+            }else{
+                 print("[QiscusCore] \(text)")
+            }
         }
     }
     
-    static func debugDBPrint(_ text: String) {
-        if QiscusCore.enableDebugPrint {
-            print("[QiscusCoreDB] \(text)")
+    func debugDBPrint(_ text: String) {
+        if self.qiscusCore?.enableDebugPrint ?? false {
+            if let appId = qiscusCore?.appID{
+                 print("[QiscusCoreDB || \(appId)] \(text)")
+            }else{
+                 print("[QiscusCoreDB] \(text)")
+            }
         }
     }
     
-    static func errorPrint(_ text: String) {
-        if QiscusCore.enableDebugPrint {
-            print("[QiscusCore] Error: \(text)")
+    func errorPrint(_ text: String) {
+        if self.qiscusCore?.enableDebugPrint ?? false {
+            if let appId = qiscusCore?.appID{
+                 print("[QiscusCore || \(appId)] Error: \(text)")
+            }else{
+                 print("[QiscusCore] Error: \(text)")
+            }
         }
     }
     
-    static func networkLogger(request: URLRequest) {
-        if !QiscusCore.enableDebugPrint {
+    func networkLogger(request: URLRequest) {
+        if self.qiscusCore?.enableDebugPrint ?? false == false {
             return
         }
         
@@ -58,8 +71,8 @@ class QiscusLogger {
         print(logOutput)
     }
     
-    static func networkLogger(request: URLRequest, response: Data?) {
-        if !QiscusCore.enableDebugPrint {
+    func networkLogger(request: URLRequest, response: Data?) {
+        if self.qiscusCore?.enableDebugPrint ?? false == false {
             return
         }
         
@@ -71,10 +84,19 @@ class QiscusLogger {
         if let responseData = response {
             responseMessage = responseData.toJsonString()
         }
-        let logOutput = """
-        URL: \(urlAsString) \n
-        Response: \(responseMessage)
-        """
+        
+        var logOutput = """
+               URL: \(urlAsString) \n
+               Response: \(responseMessage)
+               """
+        
+        if let appId = qiscusCore?.appID{
+            logOutput = """
+                    URL with AppID = \(appId): \(urlAsString) \n
+                    Response with AppID = \(appId): \(responseMessage)
+                    """
+        }
+        
         print(logOutput)
     }
 }

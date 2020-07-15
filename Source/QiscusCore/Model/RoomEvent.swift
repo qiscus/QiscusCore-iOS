@@ -15,7 +15,7 @@ public struct RoomEvent {
 
 public struct RoomTyping {
     public let roomID  : String
-    public let user    : MemberModel
+    public let user    : QParticipant
     public let typing  : Bool
 }
 
@@ -33,13 +33,15 @@ struct SyncEvent {
     let timestamp   : Int64
     let actionTopic : SyncEventTopic
     let payload     : [String:Any]
+    var qiscusCore : QiscusCore
     
-    init(json: JSON) {
+    init(json: JSON, qiscusCore: QiscusCore) {
         let id = json["id"].int64 ?? 0
         self.id = "\(id)"
         self.timestamp  = json["timestamp"].int64 ?? 0
         self.actionTopic  = SyncEventTopic(rawValue: json["action_topic"].string ?? "") ?? .noActionTopic
         self.payload    = json["payload"].dictionaryObject ?? [:]
+        self.qiscusCore = qiscusCore
     }
 }
 
@@ -89,13 +91,13 @@ extension SyncEvent {
         let jsonPayload = JSON(arrayLiteral: data)[0]
         let commentId = jsonPayload["comment_id"].stringValue
         let email = jsonPayload["email"].stringValue
-        guard let commentDB = QiscusCore.database.comment.find(id: commentId) else {
+        guard let commentDB = self.qiscusCore.database.message.find(id: commentId) else {
             return
         }
         if actionTopic == .delivered {
-            RealtimeManager.shared.updateMessageStatus(roomId: commentDB.roomId, commentId: commentDB.id, commentUniqueId: commentDB.uniqId, Status: .delivered, userEmail: email, sourceMqtt: false)
+            self.qiscusCore.realtime.updateMessageStatus(roomId: commentDB.chatRoomId, commentId: commentDB.id, commentUniqueId: commentDB.uniqueId, Status: .delivered, userEmail: email, sourceMqtt: false)
         }else if actionTopic == .read {
-            RealtimeManager.shared.updateMessageStatus(roomId: commentDB.roomId, commentId: commentDB.id, commentUniqueId: commentDB.uniqId, Status: .read, userEmail: email, sourceMqtt: false)
+            self.qiscusCore.realtime.updateMessageStatus(roomId: commentDB.chatRoomId, commentId: commentDB.id, commentUniqueId: commentDB.uniqueId, Status: .read, userEmail: email, sourceMqtt: false)
         }
     }
 }

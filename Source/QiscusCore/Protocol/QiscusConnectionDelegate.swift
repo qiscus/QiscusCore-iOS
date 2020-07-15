@@ -30,12 +30,12 @@ public protocol QiscusCoreDelegate {
     /// - Parameters:
     ///   - room: room where event happen
     ///   - comment: new comment object
-    func onRoomMessageReceived(_ room: RoomModel, message: CommentModel)
+    func onRoomMessageReceived(_ room: QChatRoom, message: QMessage)
     
     /// Deleted Comment
     ///
     /// - Parameter comment: comment deleted
-     func onRoomMessageDeleted(room: RoomModel, message: CommentModel)
+     func onRoomMessageDeleted(room: QChatRoom, message: QMessage)
     
     /// comment status change
     ///
@@ -44,33 +44,33 @@ public protocol QiscusCoreDelegate {
     ///   - status: comment status, exp: deliverd, receipt, or read.
     ///     special case for read, for example we have message 1,2,3,4,5 then you got status change for message 5 it's mean message 1-4 has been read
     @available(*, deprecated, message: "will soon become unavailable.")
-    func onRoomDidChangeComment(comment: CommentModel, changeStatus status: CommentStatus)
+    func onRoomDidChangeComment(comment: QMessage, changeStatus status: QMessageStatus)
     
     /// comment status change to Delivered
     ///
     /// - Parameters:
     ///   - comment: new comment where status is change, you can compare from local data
-    func onRoomMessageDelivered(message : CommentModel)
+    func onRoomMessageDelivered(message : QMessage)
     
     /// comment status change to Read
     ///
     /// - Parameters:
     ///   - comment: new comment where status is change, you can compare from local data
-    func onRoomMessageRead(message : CommentModel)
+    func onRoomMessageRead(message : QMessage)
     
     /// Room update
     ///
     /// - Parameter room: new room object
     @available(*, deprecated, message: "will soon become unavailable.")
-    func onRoom(update room: RoomModel)
+    func onRoom(update room: QChatRoom)
     
     /// Deleted room
     ///
     /// - Parameter room: object room
     @available(*, deprecated, message: "will soon become unavailable.")
-    func onRoom(deleted room: RoomModel)
+    func onRoom(deleted room: QChatRoom)
     
-    func gotNew(room: RoomModel)
+    func gotNew(room: QChatRoom)
     
     func onChatRoomCleared(roomId : String)
 }
@@ -82,7 +82,7 @@ public protocol QiscusCoreRoomDelegate {
     ///
     /// - Parameters:
     ///   - comment: new comment object
-    func onMessageReceived(message: CommentModel)
+    func onMessageReceived(message: QMessage)
     
     /// comment status change
     ///
@@ -91,25 +91,25 @@ public protocol QiscusCoreRoomDelegate {
     ///   - status: comment status, exp: deliverd, receipt, or read.
     ///     special case for read, for example we have message 1,2,3,4,5 then you got status change for message 5 it's mean message 1-4 has been read
     @available(*, deprecated, message: "will soon become unavailable.")
-    func didComment(comment: CommentModel, changeStatus status: CommentStatus)
+    func didComment(comment: QMessage, changeStatus status: QMessageStatus)
     
     /// comment status change to Delivered
     ///
     /// - Parameters:
     ///   - comment: new comment where status is change, you can compare from local data
-    func onMessageDelivered(message : CommentModel)
+    func onMessageDelivered(message : QMessage)
     
     /// comment status change to Read
     ///
     /// - Parameters:
     ///   - comment: new comment where status is change, you can compare from local data
-    func onMessageRead(message : CommentModel)
+    func onMessageRead(message : QMessage)
     
     /// Deleted Comment
     ///
     /// - Parameter comment: comment deleted
     
-    func onMessageDeleted(message: CommentModel)
+    func onMessageDeleted(message: QMessage)
     
     /// User Typing Indicator
     ///
@@ -130,5 +130,5 @@ public protocol QiscusCoreRoomDelegate {
     ///
     /// - Parameter room: new room object
     @available(*, deprecated, message: "will soon become unavailable.")
-    func onRoom(update room: RoomModel)
+    func onRoom(update room: QChatRoom)
 }

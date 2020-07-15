@@ -12,64 +12,78 @@ import CoreData
 
 
 public class Room: NSManagedObject {
-
+    var qiscusCore : QiscusCore? = nil
+    var qiscusDatabase : QiscusDatabase{
+        get{
+            //return QiscusDatabase.init(qiscusCore: self.qiscusCore!)
+            return (qiscusCore?.initDB)!
+        }
+    }
 }
 
 extension Room {
     // create behaviour like active record
-     static func all() -> [Room] {
+    func all() -> [Room] {
         let fetchRequest:NSFetchRequest<Room> = Room.fetchRequest()
         var results = [Room]()
         var resultsNullData = [Room]()
         
         do {
-            results = try PresistentStore.context.fetch(fetchRequest)
-            //check null data
-            resultsNullData = results.filter{ $0.id == nil ||  $0.id == ""}
-             
-             if resultsNullData.count != 0{
-                 for i in resultsNullData{
-                     //remove null data from sqlite
-                     i.remove()
-                 }
-             }
-             
-             results = results.filter{ $0.id != nil }
-
+            results = try qiscusDatabase.persistenStore.context.fetch(fetchRequest)
+            
+           //check null data
+            resultsNullData = results.filter{ $0.id == nil }
+            
+            if resultsNullData.count != 0{
+                for i in resultsNullData{
+                    //remove null data from sqlite
+                    i.qiscusCore = self.qiscusCore
+                    i.remove()
+                }
+            }
+            
+            results = results.filter{ $0.id != nil }
+            
         } catch  {
             //
         }
         return results
     }
     
-     static func generate() -> Room {
+    func generate() -> Room {
         if #available(iOS 10.0, *) {
-            return Room(context: QiscusDatabase.context)
+            let room = Room(context: qiscusDatabase.persistenStore.context)
+            room.qiscusCore = self.qiscusCore
+            return room
         } else {
             // Fallback on earlier versions
-            let context = QiscusDatabase.context
+            let context = qiscusDatabase.persistenStore.context
             let description = NSEntityDescription.entity(forEntityName: "Room", in: context)
-            return Room(entity: description!, insertInto: context)
+            let room = Room(entity: description!, insertInto: context)
+            room.qiscusCore = self.qiscusCore
+            return room
         }
+//        self.qiscusCore!._roomPersistens = nil
+//        return self.qiscusCore!.roomPersistens
     }
     
-     static func find(predicate: NSPredicate) -> [Room]? {
+    func find(predicate: NSPredicate) -> [Room]? {
         let fetchRequest:NSFetchRequest<Room> = Room.fetchRequest()
         fetchRequest.predicate = predicate
         do {
-            return try  QiscusDatabase.context.fetch(fetchRequest)
+            return try  self.qiscusDatabase.persistenStore.context.fetch(fetchRequest)
         } catch  {
             return nil
         }
     }
     
     /// Clear all member data
-     static func clear() {
-        QiscusDatabase.context.perform({
+    func clear() {
+        qiscusDatabase.persistenStore.context.perform({
             let fetchRequest:NSFetchRequest<Room> = Room.fetchRequest()
             do {
                 let delete = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-                try  QiscusDatabase.context.execute(delete)
+                try  self.qiscusDatabase.persistenStore.context.execute(delete)
             } catch {
                 // failed to clear data
             }
@@ -87,7 +101,7 @@ extension Room {
     
     // non static
      func remove() {
-        QiscusDatabase.context.delete(self)
+        qiscusDatabase.persistenStore.context.delete(self)
         self.save()
     }
     
@@ -96,6 +110,6 @@ extension Room {
     }
     
      func save() {
-        QiscusDatabase.save()
+        qiscusDatabase.save()
     }
 }

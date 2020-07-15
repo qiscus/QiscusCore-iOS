@@ -9,20 +9,38 @@
 import Foundation
 
 class QiscusDatabase {
+    var qiscusCore : QiscusCore? = nil
     class var bundle:Bundle{
         get{
             return QiscusCore.bundle
         }
     }
     
-    static let context = PresistentStore.context
+    init(qiscusCore : QiscusCore){
+        self.qiscusCore = qiscusCore
+    }
+    
+    var persistenStore : PresistentStore{
+        get{
+            let persistent = PresistentStore.init(qiscusCore: self.qiscusCore!)
+            return persistent
+        }
+       
+    }
+//
+//    var context: ManagedObjectContext {
+//        get{
+//            return self.persistenStore.context
+//        }
+//
+//    }
    
-    static func save() {
-        PresistentStore.saveContext()
+    func save() {
+        persistenStore.saveContext()
     }
     
     /// Remove all data from db
-    static func clear() {
-        PresistentStore.clear()
+    func clear() {
+        persistenStore.clear()
     }
 }

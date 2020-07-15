@@ -11,22 +11,80 @@ import Foundation
 internal typealias NetworkRouterCompletion = (_ data: Data?,_ response: URLResponse?,_ error: Error?)->()
 
 protocol NetworkRouter: class {
-    associatedtype endPoint: EndPoint
+    associatedtype  endPoint: EndPoint
     func request(_ route: endPoint, completion: @escaping NetworkRouterCompletion)
     func cancel()
 }
 
 class Router<endpoint: EndPoint>: NetworkRouter {
+    var qiscusCore : QiscusCore? = nil
     private let session = URLSession(configuration: .default)
     private var task: URLSessionTask?
+    
+    var AUTHTOKEN : String {
+        get {
+            if let user = self.qiscusCore?.config.user {
+                return user.token
+            }else {
+                return ""
+            }
+            
+        }
+    }
+
+    var BASEURL : URL {
+        get {
+            if let server = self.qiscusCore?.config.server {
+                return server.url
+            }else {
+                return URL.init(string: "https://api.qiscus.com/api/v2/mobile")!
+            }
+        }
+    }
+
+    var HEADERS : [String: String] {
+        get {
+            var headers = [
+                "QISCUS-SDK-PLATFORM": "iOS",
+                "QISCUS-SDK-DEVICE-BRAND": "Apple",
+                "QISCUS-SDK-VERSION": QiscusCore.qiscusCoreVersionNumber,
+                "QISCUS-SDK-DEVICE-MODEL" : UIDevice.modelName,
+                "QISCUS-SDK-DEVICE-OS-VERSION" : UIDevice.current.systemVersion
+                ]
+            if let appID = self.qiscusCore?.config.appID {
+                headers["QISCUS-SDK-APP-ID"] = appID
+            }
+            
+            if let user = self.qiscusCore?.config.user {
+                if let appid = self.qiscusCore?.config.appID {
+                    headers["QISCUS-SDK-APP-ID"] = appid
+                }
+                if !user.token.isEmpty {
+                    headers["QISCUS-SDK-TOKEN"] = user.token
+                }
+                if !user.id.isEmpty {
+                    headers["QISCUS-SDK-USER-ID"] = user.id
+                }
+            }
+            
+            if let customHeader = self.qiscusCore?.config.customHeader {
+                headers.merge(customHeader as! [String : String]){(_, new) in new}
+            }
+            
+            return headers
+        }
+    }
     
     func request(_ route: endpoint, completion: @escaping NetworkRouterCompletion) {
         DispatchQueue.global(qos: .background).sync {
             do {
+                var newRoute = route
+                newRoute.baseURL = self.BASEURL
+                newRoute.header  = self.HEADERS
                 let request = try self.buildRequest(from: route)
-                QiscusLogger.networkLogger(request: request)
+                qiscusCore?.qiscusLogger.networkLogger(request: request)
                 self.task = self.session.dataTask(with: request, completionHandler: { data, response, error in
-                    QiscusLogger.networkLogger(request: request, response: data)
+                    self.qiscusCore?.qiscusLogger.networkLogger(request: request, response: data)
                     DispatchQueue.main.sync { completion(data, response, error) }
                 })
             }catch {

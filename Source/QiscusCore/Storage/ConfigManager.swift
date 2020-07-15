@@ -7,19 +7,24 @@
 
 import Foundation
 
-class ConfigManager : NSObject {
-    static let shared = ConfigManager()
-    private let prefix = "qcu_"
-    fileprivate var userCache : UserModel? = nil
+public class ConfigManager : NSObject {
+    var qiscusCore : QiscusCore? = nil
+    //static let shared = ConfigManager()
+    var prefix : String {
+        get{
+            return "qcu_\(qiscusCore?.appID)"
+        }
+    }
+    fileprivate var userCache : QAccount? = nil
     var appID   : String? {
         get {
             let storage = UserDefaults.standard
-            return storage.string(forKey: "qiscuskey") ?? nil
+            return storage.string(forKey: prefix) ?? nil
         }
         set {
             guard let id = newValue else { return }
             let storage = UserDefaults.standard
-            storage.set(id, forKey: "qiscuskey")
+            storage.set(id, forKey: prefix)
         }
     }
     
@@ -43,13 +48,9 @@ class ConfigManager : NSObject {
         }
     }
     
-    var user    : UserModel? {
+    var user    : QAccount? {
         get {
-            if let user = userCache {
-                return user
-            }else {
-                return loadUser()
-            }
+           return loadUser()
         }
         set {
             if let value = newValue {
@@ -83,6 +84,19 @@ class ConfigManager : NSObject {
         }
     }
     
+    private func setLastCommentId(_ id: String) {
+        // save in file
+        let defaults = UserDefaults.standard
+        let current = self.getSyncEventId()
+        defaults.set(id, forKey: filename("lastMessageId"))
+    }
+    
+    private func getLastCommentId() -> String {
+        // save in file
+        let defaults = UserDefaults.standard
+        return defaults.string(forKey: filename("lastMessageId")) ?? ""
+    }
+
     
     var isConnectedMqtt : Bool {
         get {
@@ -93,42 +107,91 @@ class ConfigManager : NSObject {
         }
     }
     
-    var server      : QiscusServer?     = nil
+    var server    : QiscusServer? {
+           get {
+                return loadQiscusServer()
+           }
+           set {
+               if let value = newValue {
+                   saveQiscusServer(value)
+               }
+           }
+       }
     var syncInterval : TimeInterval     = 5
+    
+    fileprivate func fileNameQiscusServer(_ name: String) -> String {
+        return prefix + name + "qiscusServer"
+    }
+    
+    private func saveQiscusServer(_ data: QiscusServer) {
+        // save in file
+        let defaults = UserDefaults.standard
+        defaults.set(data.brokerLBUrl, forKey: fileNameQiscusServer("brokerLBUrl"))
+        defaults.set(data.realtimePort, forKey: fileNameQiscusServer("realtimePort"))
+        defaults.set(data.realtimeURL, forKey: fileNameQiscusServer("realtimeURL"))
+        defaults.set(data.url.absoluteString, forKey: fileNameQiscusServer("url"))
+    }
+    
+    private func loadQiscusServer() -> QiscusServer? {
+        
+        // load from cache
+        let storage = UserDefaults.standard
+        
+        
+        let defaultBrokerURL = ""
+        let defaultRealtimePort = 1885
+        let defaultRealtimeURL = ""
+        let defaultUrl = "https://"
+        
+        let realtimePort :Int  = storage.integer(forKey: fileNameQiscusServer("realtimePort")) ?? defaultRealtimePort
+        let urlString : String =  storage.string(forKey: fileNameQiscusServer("url")) ?? defaultUrl
+        
+            
+        
+        let qiscusServer : QiscusServer = QiscusServer.init(url: URL(string: urlString)!, realtimeURL: storage.string(forKey: fileNameQiscusServer("realtimeURL")) ?? defaultRealtimeURL, realtimePort: UInt16(realtimePort), brokerLBUrl: storage.string(forKey: fileNameQiscusServer("brokerLBUrl")) ?? defaultBrokerURL)
+        
+        if qiscusServer.url == nil{
+            return nil
+        }else{
+           return qiscusServer
+        }
+        
+        
+    }
+    
     
     fileprivate func filename(_ name: String) -> String {
         return prefix + name + "userdata"
     }
     
-    private func saveUser(_ data: UserModel) {
+    private func saveUser(_ data: QAccount) {
         // save in file
         let defaults = UserDefaults.standard
-        defaults.set(data.id, forKey: filename("id"))
-        defaults.set(data.username, forKey: filename("username"))
-        defaults.set(data.email, forKey: filename("email"))
+        defaults.set(data.id, forKey: filename("email"))
+        defaults.set(data.name, forKey: filename("username"))
         defaults.set(data.token, forKey: filename("token"))
         defaults.set(data.rtKey, forKey: filename("rtKey"))
 //        defaults.set(data.pnIosConfigured, forKey: filename("pnIosConfigured"))
-//        defaults.set(data.lastSyncEventId, forKey: filename("lastSyncEventId"))
-//        defaults.set(data.lastCommentId, forKey: filename("lastCommentId"))
+        defaults.set(data.lastSyncEventId, forKey: filename("lastSyncEventId"))
+        defaults.set(data.lastMessageId, forKey: filename("lastMessageId"))
         defaults.set(data.avatarUrl, forKey: filename("avatarUrl"))
         defaults.set(data.extras, forKey: filename("extras"))
     }
     
-    private func loadUser() -> UserModel? {
+    private func loadUser() -> QAccount? {
         // save in cache
         let storage = UserDefaults.standard
         if let token = storage.string(forKey: filename("token")) {
             if token.isEmpty { return nil }
-            var user = UserModel()
-            user.token      = token
-            user.id         = storage.string(forKey: filename("id")) ?? ""
-            user.email      = storage.string(forKey: filename("email")) ?? ""
-            user.username   = storage.string(forKey: filename("username")) ?? ""
-            user.extras     = storage.string(forKey: filename("extras")) ?? ""
-            user.avatarUrl  = storage.url(forKey: filename("avatarUrl")) ?? URL(string: "http://")!
-//            user.lastSyncEventId    = Int64(storage.integer(forKey: filename("username")))
-            self.userCache  = user
+            var user = QAccount()
+            user.token              = token
+            user.id                 = storage.string(forKey: filename("email")) ?? ""
+            user.name               = storage.string(forKey: filename("username")) ?? ""
+            user.extras             = storage.dictionary(forKey: filename("extras")) ?? nil
+            user.avatarUrl          = storage.url(forKey: filename("avatarUrl")) ?? URL(string: "http://")!
+            user.lastSyncEventId    = storage.string(forKey: filename("lastSyncEventId")) ?? ""
+            user.lastMessageId      = storage.string(forKey: filename("lastMessageId")) ?? ""
+            self.userCache          = user
             return user
         }else {
             return nil
@@ -150,13 +213,13 @@ class ConfigManager : NSObject {
     private func setCustomHeader(_ value: [String:Any]) {
         // save in file
         let defaults = UserDefaults.standard
-        defaults.set(value, forKey: filename("customHeader"))
+        defaults.set(value, forKey: fileNameQiscusServer("customHeader"))
     }
     
     private func getCustomHeader() -> [String:Any]? {
         // save in file
         let defaults = UserDefaults.standard
-        return defaults.dictionary(forKey: filename("customHeader")) ?? nil
+        return defaults.dictionary(forKey: fileNameQiscusServer("customHeader")) ?? nil
     }
     
     private func setDeviceToken(_ value: String) {
@@ -168,7 +231,7 @@ class ConfigManager : NSObject {
     private func getDeviceToken() -> String? {
         // save in file
         let defaults = UserDefaults.standard
-        return defaults.string(forKey: "deviceToken") ?? nil
+        return defaults.string(forKey: filename("deviceToken")) ?? nil
     }
     
     private func setSyncEventId(_ id: String) {
@@ -182,19 +245,6 @@ class ConfigManager : NSObject {
         // save in file
         let defaults = UserDefaults.standard
         return defaults.string(forKey: filename("syncEventId")) ?? "0"
-    }
-    
-    private func setLastCommentId(_ id: String) {
-        // save in file
-        let defaults = UserDefaults.standard
-        let current = self.getSyncEventId()
-        defaults.set(id, forKey: filename("lastCommentId"))
-    }
-    
-    private func getLastCommentId() -> String {
-        // save in file
-        let defaults = UserDefaults.standard
-        return defaults.string(forKey: filename("lastCommentId")) ?? ""
     }
     
     private func setIsConnectedMQTT(_ value: Bool) {
@@ -224,7 +274,8 @@ class ConfigManager : NSObject {
         storage.removeObject(forKey: filename("extras"))
         storage.removeObject(forKey: filename("customHeader"))
         storage.removeObject(forKey: filename("deviceToken"))
-        storage.removeObject(forKey: filename("lastCommentId"))
+        storage.removeObject(forKey: filename("lastMessageId"))
+
         self.userCache = nil
     }
 }

@@ -5,12 +5,8 @@
 //  Created by Qiscus on 05/09/18.
 //
 
-import SwiftyJSON
-import UIKit
-import Foundation
-
 class NetworkUpload {
-
+    var qiscusCore : QiscusCore? = nil
     func createRequest(route: EndPoint, data: Data, filename: String) throws -> URLRequest {
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = URLRequest(url: route.baseURL.appendingPathComponent(route.path))
@@ -19,7 +15,7 @@ class NetworkUpload {
         if let header = route.header {
             self.addAdditionalHeaders(header, request: &request)
         }
-        guard let user = ConfigManager.shared.user else { return request }
+        guard let user = qiscusCore?.config.user else { return request }
         request.httpBody = NetworkUpload().createBody(
                                       boundary: boundary,
                                       data: data,

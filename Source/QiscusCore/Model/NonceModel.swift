@@ -2,7 +2,7 @@
 //  NonceModel.swift
 //  QiscusCore
 //
-//  Created by Rahardyan Bisma on 24/07/18.
+//  Created by Arief Nur Putranto on 24/07/18.
 //  Copyright © 2018 Qiscus. All rights reserved.
 //
 

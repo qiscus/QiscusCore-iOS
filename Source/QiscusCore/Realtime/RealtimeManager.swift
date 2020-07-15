@@ -11,36 +11,37 @@ import QiscusRealtime
 typealias _roomEvent = (RoomEvent) -> Void
 typealias _roomTyping = (RoomTyping) -> Void
  
-class RealtimeManager {
-    static var shared : RealtimeManager = RealtimeManager()
-    private var client : QiscusRealtime? = nil
+public class RealtimeManager {
+    var qiscusCore : QiscusCore? = nil
+   // static var shared : RealtimeManager = RealtimeManager()
+   
     private var pendingSubscribeTopic : [RealtimeSubscribeEndpoint] = [RealtimeSubscribeEndpoint]()
     var state : QiscusRealtimeConnectionState = QiscusRealtimeConnectionState.disconnected
     private var roomEvents : [String : _roomEvent] = [String : _roomEvent]()
     
     private var roomTypings : [String : _roomTyping] = [String : _roomTyping]()
     func setup(appName: String) {
-        // make sure realtime client still single object
-       // if client != nil { return }
+        // make sure realtime self.qiscusCore?.client still single object
+       // if self.qiscusCore?.client != nil { return }
         let bundle = Bundle.main.infoDictionary![kCFBundleNameKey as String] as! String
         var deviceID = "00000000"
         if let vendorIdentifier = UIDevice.current.identifierForVendor {
             deviceID = vendorIdentifier.uuidString
         }
-        let clientID = "iosMQTT-\(bundle)-\(deviceID)"
+        let clientID = "iosMQTT-\(bundle)-\(qiscusCore?.appID)-\(deviceID)"
         var config = QiscusRealtimeConfig(appName: appName, clientID: clientID)
-        if let customServer = ConfigManager.shared.server?.realtimeURL {
+        if let customServer = self.qiscusCore?.config.server?.realtimeURL {
             config.hostRealtimeServer = customServer
         }
-        if let customPort = ConfigManager.shared.server?.realtimePort {
+        if let customPort = self.qiscusCore?.config.server?.realtimePort {
             config.port = customPort
         }
-        client = QiscusRealtime.init(withConfig: config)
-        QiscusRealtime.enableDebugPrint = QiscusCore.enableDebugPrint
+        self.qiscusCore?.client = QiscusRealtime.init(withConfig: config)
+        QiscusRealtime.enableDebugPrint = self.qiscusCore?.enableDebugPrint ?? false
     }
     
     func disconnect() {
-        guard let c = client else {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         c.disconnect()
@@ -48,7 +49,7 @@ class RealtimeManager {
     }
     
     func connect(username: String, password: String) {
-        guard let c = client else {
+        guard let c = self.qiscusCore?.client else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 self.connect(username: username, password: password)
                 return
@@ -58,11 +59,12 @@ class RealtimeManager {
         self.pendingSubscribeTopic.append(.comment(token: password))
         self.pendingSubscribeTopic.append(.notification(token: password))
         
-        if QiscusCore.enableRealtime == true {
+        if self.qiscusCore?.enableRealtime == true {
             c.connect(username: username, password: password, delegate: self)
         } else {
-            ConfigManager.shared.isConnectedMqtt = false
+            self.qiscusCore?.config.isConnectedMqtt = false
         }
+
         
     }
     
@@ -70,38 +72,38 @@ class RealtimeManager {
     ///
     /// - Parameter rooms: array of rooms
     // MARK: TODO optimize, check already subscribe?
-    func subscribeRooms(rooms: [RoomModel]) {
-        guard let c = client else {
+    func subscribeRooms(rooms: [QChatRoom]) {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         for room in rooms {
             if room.type == .channel{
-                if let appId = ConfigManager.shared.appID {
+                if let appId = self.qiscusCore?.config.appID {
                     if !c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)){
                          self.pendingSubscribeTopic.append(.roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
-                         QiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
+                         self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
                     }
                 }
             }else{
                 // subscribe comment deliverd receipt
                 if !c.subscribe(endpoint: .delivery(roomID: room.id)){
                     self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
-                    QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
+                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
                 }
                 // subscribe comment read
                 if !c.subscribe(endpoint: .read(roomID: room.id)) {
                     self.pendingSubscribeTopic.append(.read(roomID: room.id))
-                    QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
+                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
                 }
                 if !c.subscribe(endpoint: .typing(roomID: room.id)) {
                     self.pendingSubscribeTopic.append(.typing(roomID: room.id))
-                    QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
+                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
                 }
                 guard let participants = room.participants else { return }
                 for u in participants {
-                    if !c.subscribe(endpoint: .onlineStatus(user: u.email)) {
-                        self.pendingSubscribeTopic.append(.onlineStatus(user: u.email))
-                        QiscusLogger.errorPrint("failed to subscribe online status user \(u.email), then queue in pending")
+                    if !c.subscribe(endpoint: .onlineStatus(user: u.id)) {
+                        self.pendingSubscribeTopic.append(.onlineStatus(user: u.id))
+                        self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe online status user \(u.id), then queue in pending")
                     }
                 }
             }
@@ -116,13 +118,13 @@ class RealtimeManager {
     ///
     /// - Parameter userId: userId
     func subscribeUserOnlinePresence(userId : String){
-        guard let c = client else {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         
         if !c.subscribe(endpoint: .onlineStatus(user: userId)) {
             self.pendingSubscribeTopic.append(.onlineStatus(user: userId))
-            QiscusLogger.errorPrint("failed to subscribe online status user \(userId), then queue in pending")
+            self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe online status user \(userId), then queue in pending")
         }
     }
     
@@ -130,20 +132,20 @@ class RealtimeManager {
     ///
     /// - Parameter userIds: array of userIds
     func subscribeUserOnlinePresence(userIds : [String]){
-        guard let c = client else {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         
         for userId in userIds {
             if !c.subscribe(endpoint: .onlineStatus(user: userId)) {
                 self.pendingSubscribeTopic.append(.onlineStatus(user: userId))
-                QiscusLogger.errorPrint("failed to subscribe online status user \(userId), then queue in pending")
+                self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe online status user \(userId), then queue in pending")
             }
         }
     }
     
     func unsubscribeUserOnlinePresence(userId : String){
-        guard let c = client else {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         
@@ -151,7 +153,7 @@ class RealtimeManager {
     }
     
     func unsubscribeUserOnlinePresence(userIds : [String]){
-        guard let c = client else {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         
@@ -164,32 +166,32 @@ class RealtimeManager {
     ///
     /// - Parameter rooms: array of rooms
     // MARK: TODO optimize, check already subscribe?
-    func subscribeRoomsWithoutOnlineStatus(rooms: [RoomModel]) {
-        guard let c = client else {
+    func subscribeRoomsWithoutOnlineStatus(rooms: [QChatRoom]) {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         for room in rooms {
             if room.type == .channel{
-                if let appId = ConfigManager.shared.appID {
+                if let appId = self.qiscusCore?.config.appID {
                     if !c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)){
                         self.pendingSubscribeTopic.append(.roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
-                        QiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
+                        self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
                     }
                 }
             }else{
                 // subscribe comment deliverd receipt
                 if !c.subscribe(endpoint: .delivery(roomID: room.id)){
                     self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
-                    QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
+                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
                 }
                 // subscribe comment read
                 if !c.subscribe(endpoint: .read(roomID: room.id)) {
                     self.pendingSubscribeTopic.append(.read(roomID: room.id))
-                    QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
+                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
                 }
                 if !c.subscribe(endpoint: .typing(roomID: room.id)) {
                     self.pendingSubscribeTopic.append(.typing(roomID: room.id))
-                    QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
+                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
                 }
             }
         }
@@ -197,14 +199,14 @@ class RealtimeManager {
         self.resumePendingSubscribeTopic()
     }
     
-    func unsubscribeRooms(rooms: [RoomModel]) {
-        guard let c = client else {
+    func unsubscribeRooms(rooms: [QChatRoom]) {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         
         for room in rooms {
             if room.type == .channel {
-                if let appId = ConfigManager.shared.appID {
+                if let appId = self.qiscusCore?.config.appID {
                     c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
                 }
             }else{
@@ -214,21 +216,21 @@ class RealtimeManager {
                 c.unsubscribe(endpoint: .typing(roomID: room.id))
                 guard let participants = room.participants else { return }
                 for u in participants {
-                    c.unsubscribe(endpoint: .onlineStatus(user: u.email))
+                    c.unsubscribe(endpoint: .onlineStatus(user: u.id))
                 }
             }
         }
         
     }
     
-    func unsubscribeRoomsWithoutOnlineStatus(rooms: [RoomModel]) {
-        guard let c = client else {
+    func unsubscribeRoomsWithoutOnlineStatus(rooms: [QChatRoom]) {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         
         for room in rooms {
             if room.type == .channel {
-                if let appId = ConfigManager.shared.appID {
+                if let appId = self.qiscusCore?.config.appID {
                     c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
                 }
             }else{
@@ -244,28 +246,28 @@ class RealtimeManager {
     
 
     func isTyping(_ value: Bool, roomID: String){
-        guard let c = client else {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         if !c.publish(endpoint: .isTyping(value: value, roomID: roomID)) {
-            QiscusLogger.errorPrint("failed to send typing to roomID \(roomID)")
+            self.qiscusCore?.qiscusLogger.errorPrint("failed to send typing to roomID \(roomID)")
         }
     }
     
     func isOnline(_ value: Bool) {
-        guard let c = client else {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         if !c.publish(endpoint: .onlineStatus(value: value)) {
-            QiscusLogger.errorPrint("failed to send Online status")
+            self.qiscusCore?.qiscusLogger.errorPrint("failed to send Online status")
         }
     }
     
     func resumePendingSubscribeTopic() {
-        guard let client = client else {
+        guard let client = self.qiscusCore?.client else {
             return
         }
-        QiscusLogger.debugPrint("Resume pending subscribe")
+        self.qiscusCore?.qiscusLogger.debugPrint("Resume pending subscribe")
         // resume pending subscribe
         if !pendingSubscribeTopic.isEmpty {
             for (i,t) in pendingSubscribeTopic.enumerated().reversed() {
@@ -277,17 +279,17 @@ class RealtimeManager {
             }
         }
         
-        QiscusLogger.debugPrint("pendingSubscribeTopic count = \(pendingSubscribeTopic.count)")
+        self.qiscusCore?.qiscusLogger.debugPrint("pendingSubscribeTopic count = \(pendingSubscribeTopic.count)")
     }
     
     // MARK : Typing event
     func subscribeTyping(roomID: String, onTyping: @escaping (RoomTyping) -> Void) {
-        guard let c = client else { return }
+        guard let c = self.qiscusCore?.client else { return }
         
         if c.isConnect{
             if !c.subscribe(endpoint: .typing(roomID: roomID)) {
                 self.pendingSubscribeTopic.append(.typing(roomID: roomID))
-                QiscusLogger.errorPrint("failed to subscribe event typing from room \(roomID), then queue in pending")
+                self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event typing from room \(roomID), then queue in pending")
             }else{
                 self.roomTypings[roomID] = onTyping
             }
@@ -303,7 +305,7 @@ class RealtimeManager {
     
     func unsubscribeTyping(roomID: String) {
         roomTypings.removeValue(forKey: roomID)
-        guard let c = client else {
+        guard let c = self.qiscusCore?.client else {
             return
         }
         // unsubcribe room event
@@ -312,7 +314,7 @@ class RealtimeManager {
     
     // MARK : Custom Event
     func subscribeEvent(roomID: String, onEvent: @escaping (RoomEvent) -> Void) {
-        guard let c = client else {
+        guard let c = self.qiscusCore?.client else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 self.subscribeEvent(roomID: roomID, onEvent: onEvent)
                 return
@@ -324,7 +326,7 @@ class RealtimeManager {
             // subcribe user token to get new comment
             if !c.subscribe(endpoint: .roomEvent(roomID: roomID)) {
                 self.pendingSubscribeTopic.append(.roomEvent(roomID: roomID))
-                QiscusLogger.errorPrint("failed to subscribe room Event, then queue in pending")
+                self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe room Event, then queue in pending")
             }else {
                 self.roomEvents[roomID] = onEvent
             }
@@ -343,7 +345,7 @@ class RealtimeManager {
                 return
             }
             
-            guard let c = self.client else {
+            guard let c = self.self.qiscusCore?.client else {
                 return
             }
             
@@ -355,7 +357,7 @@ class RealtimeManager {
     }
     
     func publishEvent(roomID: String, payload: [String : Any]) -> Bool {
-        guard let c = client else {
+        guard let c = self.qiscusCore?.client else {
             return false
         }
         
@@ -380,31 +382,31 @@ class RealtimeManager {
 }
 
  extension RealtimeManager: QiscusRealtimeDelegate {
-    func didReceiveRoomEvent(roomID: String, data: String) {
+    public func didReceiveRoomEvent(roomID: String, data: String) {
         guard let payload = toDictionary(text: data) else { return }
         guard let postEvent = roomEvents[roomID] else { return }
         let event = RoomEvent(sender: payload["sender"] as? String ?? "", data: payload["data"] as? [String : Any] ?? ["":""])
         postEvent(event)
     }
     
-    func didReceiveUser(userEmail: String, isOnline: Bool, timestamp: String) {
-        QiscusEventManager.shared.gotEvent(email: userEmail, isOnline: isOnline, timestamp: timestamp)
+    public func didReceiveUser(userEmail: String, isOnline: Bool, timestamp: String) {
+        qiscusCore?.eventManager.gotEvent(email: userEmail, isOnline: isOnline, timestamp: timestamp)
     }
 
-    func didReceiveMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus, userEmail: String) {
+    public func didReceiveMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus, userEmail: String) {
         self.updateMessageStatus(roomId: roomId, commentId: commentId, commentUniqueId: commentUniqueId, Status: Status, userEmail: userEmail, sourceMqtt: true)
     }
     
     func updateMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus, userEmail: String, sourceMqtt: Bool = true) {
-        guard let _comment = QiscusCore.database.comment.find(uniqueId: commentUniqueId) else { return }
-        var _status : CommentStatus? = nil
+        guard let _comment = self.qiscusCore?.database.message.find(uniqueId: commentUniqueId) else { return }
+        var _status : QMessageStatus? = nil
         switch Status {
         case .deleted:
             _status  = .deleted
             // delete from local
             _comment.status = .deleted
             _comment.isDeleted  = true
-            _ = QiscusCore.database.comment.delete(_comment)
+            _ = self.qiscusCore?.database.message.delete(_comment)
             break
         case .delivered:
             _status  = .delivered
@@ -416,19 +418,19 @@ class RealtimeManager {
         // check convert status
         guard let status = _status else { return }
         if status == .deleted { return }
-        if let room = QiscusCore.database.room.find(id: roomId) {
+        if let room = self.qiscusCore?.database.room.find(id: roomId) {
             // very tricky, need to review v3, calculating comment status in backend for group rooms
-            if let comments = QiscusCore.database.comment.find(roomId: roomId) {
-                guard let user = QiscusCore.getProfile() else {
+            if let comments = self.qiscusCore?.database.message.find(roomId: roomId) {
+                guard let user = self.qiscusCore?.getProfile() else {
                     return
                 }
                 
-                guard let comment = QiscusCore.database.comment.find(id: commentId) else{
+                guard let comment = self.qiscusCore?.database.message.find(id: commentId) else{
                     return
                 }
                 
                 if room.type == .single {
-                    if user.email.lowercased() == userEmail.lowercased(){
+                    if user.id.lowercased() == userEmail.lowercased(){
                         return
                     }
                     // compare current status
@@ -440,27 +442,27 @@ class RealtimeManager {
                                 let new = c
                                 // update comment
                                 new.status = status
-                                QiscusCore.database.comment.save([new])
-                                QiscusCore.eventManager.gotMessageStatus(comment: new) // patch hard update
+                                self.qiscusCore?.database.message.save([new])
+                                self.qiscusCore?.eventManager.gotMessageStatus(comment: new) // patch hard update
                             }
                             
                         }
                     }
                 }else if room.type == .group {
                     guard let participants = room.participants else {
-                        QiscusCore.network.getRoomById(roomId: room.id, onSuccess: { (room, comments) in
+                        self.qiscusCore?.network.getRoomById(roomId: room.id, onSuccess: { (room, comments) in
                             // save room
                             if let comments = comments {
                                 room.lastComment = comments.first
                             }
                             
-                            QiscusCore.database.room.save([room])
+                            self.qiscusCore?.database.room.save([room])
                             
                             // save comments
-                            var c = [CommentModel]()
+                            var c = [QMessage]()
                             if let _comments = comments {
                                 // save comments
-                                QiscusCore.database.comment.save(_comments)
+                                self.qiscusCore?.database.message.save(_comments)
                                 c = _comments
                             }
                             
@@ -475,18 +477,18 @@ class RealtimeManager {
                     switch Status {
                     case .delivered:
                         if let commentID = Int(commentId){
-                            if userEmail != user.email {
+                            if userEmail != user.id {
                                 // check if userEmail not me, update all
                                 for participant in participants{
-                                    participant.lastCommentReceivedId = commentID
-                                    QiscusCore.database.member.save([participant], roomID: roomId)
+                                    participant.lastMessageDeliveredId = commentID
+                                    self.qiscusCore?.database.participant.save([participant], roomID: roomId)
                                 }
                             }else{
                                 // else userEmail is me, just update participant me
                                 for participant in participants{
-                                    if participant.email == user.email {
-                                        participant.lastCommentReceivedId = commentID
-                                        QiscusCore.database.member.save([participant], roomID: roomId)
+                                    if participant.id == user.id {
+                                        participant.lastMessageDeliveredId = commentID
+                                        self.qiscusCore?.database.participant.save([participant], roomID: roomId)
                                     }
                                 }
                             }
@@ -495,20 +497,20 @@ class RealtimeManager {
                     case .read:
                         if let commentID = Int(commentId){
                             if sourceMqtt == true {
-                                if userEmail != user.email {
+                                if userEmail != user.id {
                                     // check if userEmail not me, update all
                                     for participant in participants{
-                                        participant.lastCommentReadId = commentID
-                                        participant.lastCommentReceivedId = commentID
-                                        QiscusCore.database.member.save([participant], roomID: roomId)
+                                        participant.lastMessageReadId = commentID
+                                        participant.lastMessageDeliveredId = commentID
+                                        self.qiscusCore?.database.participant.save([participant], roomID: roomId)
                                     }
                                 }else{
                                    // else userEmail is me, just update participant me
                                     for participant in participants{
-                                        if participant.email == user.email {
-                                            participant.lastCommentReadId = commentID
-                                            participant.lastCommentReceivedId = commentID
-                                            QiscusCore.database.member.save([participant], roomID: roomId)
+                                        if participant.id == user.id {
+                                            participant.lastMessageReadId = commentID
+                                            participant.lastMessageDeliveredId = commentID
+                                            self.qiscusCore?.database.participant.save([participant], roomID: roomId)
                                         }
                                     }
                                 }
@@ -516,26 +518,26 @@ class RealtimeManager {
                                 if userEmail != comment.userEmail {
                                     // check if userEmail not same with sender
                                     for participant in participants{
-                                        participant.lastCommentReadId = commentID
-                                        participant.lastCommentReceivedId = commentID
-                                        QiscusCore.database.member.save([participant], roomID: roomId)
+                                        participant.lastMessageReadId = commentID
+                                        participant.lastMessageDeliveredId = commentID
+                                        self.qiscusCore?.database.participant.save([participant], roomID: roomId)
                                     }
 
-                                }else if user.email == comment.userEmail {
+                                }else if user.id == comment.userEmail {
                                     // check if sender is me
                                     for participant in participants{
-                                        if participant.email == userEmail {
-                                            participant.lastCommentReadId = commentID
-                                            participant.lastCommentReceivedId = commentID
-                                            QiscusCore.database.member.save([participant], roomID: roomId)
+                                        if participant.id == userEmail {
+                                            participant.lastMessageReadId = commentID
+                                            participant.lastMessageDeliveredId = commentID
+                                            self.qiscusCore?.database.participant.save([participant], roomID: roomId)
                                         }
                                     }
                                 } else if userEmail != comment.userEmail {
                                     //check if userEmail not same with comment sender
                                     for participant in participants{
-                                        participant.lastCommentReadId = commentID
-                                        participant.lastCommentReceivedId = commentID
-                                        QiscusCore.database.member.save([participant], roomID: roomId)
+                                        participant.lastMessageReadId = commentID
+                                        participant.lastMessageDeliveredId = commentID
+                                        self.qiscusCore?.database.participant.save([participant], roomID: roomId)
                                     }
                                 }
                             }
@@ -545,16 +547,16 @@ class RealtimeManager {
                         break
                     }
                     
-                    var readUser = [MemberModel]()
-                    var deliveredUser = [MemberModel]()
-                    var sentUser = [MemberModel]()
+                    var readUser = [QParticipant]()
+                    var deliveredUser = [QParticipant]()
+                    var sentUser = [QParticipant]()
                     
-                    if let room = QiscusCore.database.room.find(id: roomId){
+                    if let room = self.qiscusCore?.database.room.find(id: roomId){
                         for participant in room.participants!{
                             if let commentID = Int(commentId){
-                                if participant.lastCommentReadId == commentID{
+                                if participant.lastMessageReadId == commentID{
                                     readUser.append(participant)
-                                }else if (participant.lastCommentReceivedId == commentID){
+                                }else if (participant.lastMessageDeliveredId == commentID){
                                     deliveredUser.append(participant)
                                 }else{
                                     sentUser.append(participant)
@@ -572,15 +574,15 @@ class RealtimeManager {
                                         let new = c
                                         // update comment
                                         new.status = .read
-                                        QiscusCore.database.comment.save([new])
-                                        QiscusCore.eventManager.gotMessageStatus(comment: new)
+                                        self.qiscusCore?.database.message.save([new])
+                                        self.qiscusCore?.eventManager.gotMessageStatus(comment: new)
                                     }
                                     
                                 }
                             }
 
                         }else{
-                            if comment.status.intValue < status.intValue && userEmail.lowercased() !=  user.email.lowercased(){
+                            if comment.status.intValue < status.intValue && userEmail.lowercased() !=  user.id.lowercased(){
                                 // update all my comment status
                                 comments.forEach { (c) in
                                     // check lastStatus and compare
@@ -588,8 +590,8 @@ class RealtimeManager {
                                         let new = c
                                         // update comment
                                         new.status = .delivered
-                                        QiscusCore.database.comment.save([new])
-                                        QiscusCore.eventManager.gotMessageStatus(comment: new)
+                                        self.qiscusCore?.database.message.save([new])
+                                        self.qiscusCore?.eventManager.gotMessageStatus(comment: new)
                                     }
                                     
                                 }
@@ -604,26 +606,26 @@ class RealtimeManager {
         }
     }
     
-    func didReceiveMessage(data: String) {
+    public func didReceiveMessage(data: String) {
         let json = ApiResponse.decode(string: data)
-        let comment = CommentModel(json: json)
+        let comment = QMessage(json: json)
         
         //check comment in db
-        if let commentDB = QiscusCore.database.comment.find(id: comment.roomId){
+        if let commentDB = self.qiscusCore?.database.message.find(id: comment.chatRoomId){
             //ignored for status sent from my self / after postComment
         }else{
-            QiscusCore.database.comment.save([comment])
+            self.qiscusCore?.database.message.save([comment])
         }
         
         
     }
     
-    func didReceiveUser(typing: Bool, roomId: String, userEmail: String) {
-        QiscusEventManager.shared.gotTyping(roomID: roomId, user: userEmail, value: typing)
+    public func didReceiveUser(typing: Bool, roomId: String, userEmail: String) {
+        qiscusCore?.eventManager.gotTyping(roomID: roomId, user: userEmail, value: typing)
         
        //typing event from outside room
-        if let room = QiscusCore.database.room.find(id: roomId) {
-            guard let member = QiscusCore.database.member.find(byEmail: userEmail) else { return }
+        if let room = self.qiscusCore?.database.room.find(id: roomId) {
+            guard let member = self.qiscusCore?.database.participant.find(byEmail: userEmail) else { return }
             guard let postTyping = roomTypings[roomId] else { return }
             let typing = RoomTyping(roomID: roomId, user: member, typing: typing)
             postTyping(typing)
@@ -631,37 +633,42 @@ class RealtimeManager {
         
     }
     
-    func connectionState(change state: QiscusRealtimeConnectionState) {
-        QiscusLogger.debugPrint("Qiscus realtime connection state \(state.rawValue)")
+    public func connectionState(change state: QiscusRealtimeConnectionState) {
+        self.qiscusCore?.qiscusLogger.debugPrint("Qiscus realtime connection state \(state.rawValue)")
         
         if state == .connecting {
-            QiscusEventManager.shared.connectionDelegate?.onReconnecting()
+            qiscusCore?.eventManager.connectionDelegate?.onReconnecting()
         }
         
         self.state = state
         if let state : QiscusConnectionState = QiscusConnectionState(rawValue: state.rawValue) {
-            QiscusEventManager.shared.connectionDelegate?.connectionState(change: state)
+            qiscusCore?.eventManager.connectionDelegate?.connectionState(change: state)
         }
         
         switch state {
         case .connected:
-            ConfigManager.shared.isConnectedMqtt = true
-            QiscusLogger.debugPrint("Qiscus realtime connected")
+            self.qiscusCore?.config.isConnectedMqtt = true
+            self.qiscusCore?.qiscusLogger.debugPrint("Qiscus realtime connected")
             DispatchQueue.main.async {
                 let state = UIApplication.shared.applicationState
                 
                 if state == .active {
                     // foreground
-                    QiscusCore.shared.publishOnlinePresence(isOnline: true)
+                    self.qiscusCore?.shared.publishOnlinePresence(isOnline: true)
                 }
             }
+            
+            if let room = self.qiscusCore?.activeChatRoom{
+                self.qiscusCore?.shared.subscribeChatRoom(room)
+            }
+            
             resumePendingSubscribeTopic()
-            QiscusEventManager.shared.connectionDelegate?.onConnected()
+            qiscusCore?.eventManager.connectionDelegate?.onConnected()
             
             break
         case .disconnected:
-            QiscusLogger.debugPrint("Qiscus realtime disconnected")
-            QiscusCore.heartBeat?.resume()
+            self.qiscusCore?.qiscusLogger.debugPrint("Qiscus realtime disconnected")
+            self.qiscusCore?.heartBeat?.resume()
             break
         default:
             break
@@ -669,31 +676,31 @@ class RealtimeManager {
     }
     
     
-    func disconnect(withError err: Error?){
-        ConfigManager.shared.isConnectedMqtt = false
+    public func disconnect(withError err: Error?){
+        self.qiscusCore?.config.isConnectedMqtt = false
         if let error = err{
-            QiscusEventManager.shared.connectionDelegate?.onDisconnected(withError: QError(message: error.localizedDescription))
-            if QiscusCore.hasSetupUser(){
-                if QiscusCore.enableEventReport == true {
-                    QiscusCore.network.event_report(moduleName: "MQTT", event: "DISCONNECTED", message: error.localizedDescription, onSuccess: { (success) in
+            qiscusCore?.eventManager.connectionDelegate?.onDisconnected(withError: QError(message: error.localizedDescription))
+            if self.qiscusCore?.hasSetupUser() ?? true{
+                if self.qiscusCore?.enableEventReport == true {
+                    self.qiscusCore?.network.event_report(moduleName: "MQTT", event: "DISCONNECTED", message: error.localizedDescription, onSuccess: { (success) in
                         //success send report
                     }) { (error) in
-                        QiscusLogger.debugPrint(error.message)
+                        self.qiscusCore?.qiscusLogger.debugPrint(error.message)
                     }
                 }
             }
         }else{
-             QiscusEventManager.shared.connectionDelegate?.onDisconnected(withError: nil)
+             qiscusCore?.eventManager.connectionDelegate?.onDisconnected(withError: nil)
         }
         
-        if QiscusCore.hasSetupUser(){
-            if QiscusCore.enableRealtime == true {
-                QiscusCore.retryConnect { (success) in
+        if self.qiscusCore?.hasSetupUser() ?? true{
+            if self.qiscusCore?.enableRealtime == true {
+                self.qiscusCore?.retryConnect { (success) in
                     if success == true{
-                        if let user = QiscusCore.getProfile() {
+                        if let user = self.qiscusCore?.getProfile() {
                             // connect qiscus realtime server
-                            QiscusCore.realtime.connect(username: user.email, password: user.token)
-                            QiscusLogger.debugPrint("try reconnect Qiscus realtime with server realtime from lb")
+                            self.qiscusCore?.realtime.connect(username: user.id, password: user.token)
+                            self.qiscusCore?.qiscusLogger.debugPrint("try reconnect Qiscus realtime with server realtime from lb")
                         }
                     }
                 }

@@ -2,7 +2,7 @@
 //  ApiResponse.swift
 //  QiscusCore
 //
-//  Created by Rahardyan Bisma on 26/07/18.
+//  Created by Arief Nur Putranto on 26/07/18.
 //  Copyright © 2018 Qiscus. All rights reserved.
 //
 
@@ -32,12 +32,12 @@ class ApiResponse {
         return unread
     }
     
-    static func decode(syncEvent event: Data) -> [SyncEvent] {
+    static func decode(syncEvent event: Data, qiscusCore :  QiscusCore) -> [SyncEvent] {
         let json = JSON(event)
         var results = [SyncEvent]()
         if let result = json["events"].array {
             result.forEach { (data) in
-                let event = SyncEvent(json: data)
+                let event = SyncEvent(json: data, qiscusCore: qiscusCore)
                 results.append(event)
             }
             return results
@@ -46,9 +46,12 @@ class ApiResponse {
         }
     }
     
-    static func decodeError(from data: Data){
+    static func decodeError(from data: Data) -> String{
         let json = JSON(data)
-        let error = json["error"]["detailed_messages"].arrayObject
+        let errorMessage = json["error"]["detailed_messages"].arrayObject ?? ["Error"]
+        errorMessage.description
+        let string = errorMessage.description
+        return string
     }
 }
 
@@ -60,11 +63,11 @@ class FileApiResponse {
 }
 
 class UserApiResponse {
-    static func blockedUsers(from json: JSON) -> [MemberModel]? {
+    static func blockedUsers(from json: JSON) -> [QUser]? {
         if let rooms = json["blocked_user"].array {
-            var results = [MemberModel]()
+            var results = [QUser]()
             for room in rooms {
-                let data = MemberModel(json: room)
+                let data = QUser(json: room)
                 results.append(data)
             }
             return results
@@ -73,16 +76,16 @@ class UserApiResponse {
         }
     }
     
-    static func user(from json: JSON) -> UserModel {
+    static func user(from json: JSON) -> QAccount {
         let comment = json["user"]
-        return UserModel(json: comment)
+        return QAccount(json: comment)
     }
     
-    static func allUser(from json: JSON) -> [MemberModel]?  {
+    static func allUser(from json: JSON) -> [QUser]?  {
         if let rooms = json["users"].array {
-            var results = [MemberModel]()
+            var results = [QUser]()
             for room in rooms {
-                let data = MemberModel(json: room)
+                let data = QUser(json: room)
                 results.append(data)
             }
             return results
@@ -91,9 +94,9 @@ class UserApiResponse {
         }
     }
     
-    static func blockUser(from json: JSON) -> MemberModel {
-        let comment = json["user"]
-        return MemberModel(json: comment)
+    static func blockUser(from json: JSON) -> QUser {
+        let user = json["user"]
+        return QUser(json: user)
     }
     
     static func meta(from json: JSON) -> Meta {
@@ -103,11 +106,11 @@ class UserApiResponse {
 }
 
 class RoomApiResponse {
-    static func rooms(from json: JSON) -> [RoomModel]? {
+    static func rooms(from json: JSON) -> [QChatRoom]? {
         if let rooms = json["rooms_info"].array {
-            var results = [RoomModel]()
+            var results = [QChatRoom]()
             for room in rooms {
-                let data = RoomModel(json: room)
+                let data = QChatRoom(json: room)
                 results.append(data)
             }
             return results
@@ -116,9 +119,9 @@ class RoomApiResponse {
         }
     }
     
-    static func room(from json: JSON) -> RoomModel {
+    static func room(from json: JSON) -> QChatRoom {
         let comment = json["room"]
-        return RoomModel(json: comment)
+        return QChatRoom(json: comment)
     }
     
     static func channels(from json: JSON) -> [QiscusChannels]? {
@@ -146,6 +149,8 @@ class RoomApiResponse {
             return nil
         }
     }
+
+
     
     static func meta(from json: JSON) -> Meta {
         let meta = json["meta"]
@@ -157,11 +162,11 @@ class RoomApiResponse {
         return MetaRoomParticipant(json: meta)
     }
     
-    static func addParticipants(from json: JSON) -> [MemberModel]? {
+    static func addParticipants(from json: JSON) -> [QParticipant]? {
         if let members = json["participants_added"].array {
-            var results = [MemberModel]()
+            var results = [QParticipant]()
             for member in members {
-                let data = MemberModel(json: member)
+                let data = QParticipant(json: member)
                 results.append(data)
             }
             return results
@@ -170,11 +175,11 @@ class RoomApiResponse {
         }
     }
     
-    static func participants(from json: JSON) -> [MemberModel]? {
+    static func participants(from json: JSON) -> [QParticipant]? {
         if let members = json["participants"].array {
-            var results = [MemberModel]()
+            var results = [QParticipant]()
             for member in members {
-                let data = MemberModel(json: member)
+                let data = QParticipant(json: member)
                 results.append(data)
             }
             return results
@@ -186,11 +191,11 @@ class RoomApiResponse {
 }
 
 class CommentApiResponse {
-    static func comments(from json: JSON) -> [CommentModel]? {
+    static func comments(from json: JSON) -> [QMessage]? {
         if let comments = json["comments"].array {
-            var results = [CommentModel]()
+            var results = [QMessage]()
             for comment in comments {
-                let data = CommentModel(json: comment)
+                let data = QMessage(json: comment)
                 results.append(data)
             }
             return results
@@ -199,17 +204,17 @@ class CommentApiResponse {
         }
     }
     
-    static func comment(from json: JSON) -> CommentModel {
+    static func comment(from json: JSON) -> QMessage {
         let comment = json["comment"]
-        return CommentModel(json: comment)
+        return QMessage(json: comment)
     }
     
-    static func commentDeliveredUser(from json: JSON) -> [MemberModel]? {
+    static func commentDeliveredUser(from json: JSON) -> [QParticipant]? {
         if let members = json["delivered_to"].array {
-            var results = [MemberModel]()
+            var results = [QParticipant]()
             for member in members {
                 let user = member["user"]
-                let data = MemberModel(json: user)
+                let data = QParticipant(json: user)
                 
                 results.append(data)
             }
@@ -219,12 +224,12 @@ class CommentApiResponse {
         }
     }
     
-    static func commentReadUser(from json: JSON) -> [MemberModel]? {
+    static func commentReadUser(from json: JSON) -> [QParticipant]? {
         if let members = json["read_by"].array {
-            var results = [MemberModel]()
+            var results = [QParticipant]()
             for member in members {
                 let user = member["user"]
-                let data = MemberModel(json: user)
+                let data = QParticipant(json: user)
                 
                 results.append(data)
             }
@@ -234,12 +239,12 @@ class CommentApiResponse {
         }
     }
     
-    static func commentPendingUser(from json: JSON) -> [MemberModel]? {
+    static func commentPendingUser(from json: JSON) -> [QParticipant]? {
         if let members = json["pending"].array {
-            var results = [MemberModel]()
+            var results = [QParticipant]()
             for member in members {
                 let user = member["user"]
-                let data = MemberModel(json: user)
+                let data = QParticipant(json: user)
                 results.append(data)
             }
             return results

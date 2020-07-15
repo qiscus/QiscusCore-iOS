@@ -13,52 +13,68 @@ public enum SortType: String {
     case desc = "desc"
 }
 
-public struct UserModel {
+public struct QAccount {
     public var avatarUrl        : URL       = URL(string: "http://")!
-    public var email            : String    = ""
     public var id               : String    = ""
     public var rtKey            : String    = ""
     public var token            : String    = ""
-    public var username         : String    = ""
-    public var extras           : String    = ""
+    public var name             : String    = ""
+    public var extras           : [String:Any]? = nil
+    public var lastMessageId    : String    = ""
+    public var lastSyncEventId  : String    = ""
     
     init() { }
     
     init(json: JSON) {
         avatarUrl       = json["avatar_url"].url ?? URL(string: "http://")!
-        email           = json["email"].stringValue
-        id              = json["id_str"].stringValue
+        id              = json["email"].stringValue
         rtKey           = json["rtKey"].stringValue
         token           = json["token"].stringValue
-        username        = json["username"].stringValue
-        extras          = json["extras"].rawString() ?? ""
+        name            = json["username"].stringValue
+        extras          = json["extras"].dictionaryObject
+        lastMessageId   = json["last_comment_id_str"].stringValue
+        lastSyncEventId = json["last_sync_event_id"].stringValue
     }
 }
 
-open class MemberModel {
-    public var avatarUrl : URL? = nil
-    public var email : String   = ""
-    public var id : String      = ""
-    public var lastCommentReadId : Int  = -1
-    public var lastCommentReceivedId : Int  = -1
-    public var username : String    = ""
-    public var extras : [String:Any]? = nil
-    private let userKey = "CoreMemKey_"
+open class QParticipant {
+    public var avatarUrl : URL?             = nil
+    public var id : String                  = ""
+    public var lastMessageReadId : Int      = -1
+    public var lastMessageDeliveredId : Int = -1
+    public var name : String                = ""
+    public var extras: [String:Any]?        = nil
+    private let userKey                     = "CoreMemKey_"
     
     init() { }
     
     init(json: JSON) {
-        self.id         = json["email"].stringValue
-        self.username   = json["username"].stringValue
-        self.avatarUrl  = json["avatar_url"].url ?? nil
-        self.email      = json["email"].stringValue
-        self.lastCommentReadId      = json["last_comment_read_id"].intValue
-        self.lastCommentReceivedId  = json["last_comment_received_id"].intValue
-        self.extras                 = json["extras"].dictionaryObject
+        self.id                         = json["email"].stringValue
+        self.name                       = json["username"].stringValue
+        self.avatarUrl                  = json["avatar_url"].url ?? nil
+        self.lastMessageReadId          = json["last_comment_read_id"].intValue
+        self.lastMessageDeliveredId     = json["last_comment_received_id"].intValue
+        self.extras                     = json["extras"].dictionaryObject
     }
 }
 
-extension MemberModel {
+open class QUser {
+    public var avatarUrl : URL?             = nil
+    public var id : String                  = ""
+    public var name : String                = ""
+    public var extras : [String:Any]?       = nil
+    
+    init() { }
+    
+    init(json: JSON) {
+        self.id                         = json["email"].stringValue
+        self.name                       = json["username"].stringValue
+        self.avatarUrl                  = json["avatar_url"].url ?? nil
+        self.extras                     = json["extras"].dictionaryObject
+    }
+}
+
+extension QParticipant {
     internal func saveLastOnline(_ time: Date) {
         let db = UserDefaults.standard
         db.set(time, forKey: self.userKey + "lastSeen")

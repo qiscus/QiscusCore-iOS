@@ -17,9 +17,23 @@ internal enum APIUser {
 }
 
 extension APIUser : EndPoint {
-    var baseURL: URL {
-        return BASEURL
-    }
+     var baseURL: URL {
+           get {
+               return BASEURL
+           }
+           set {
+               BASEURL = newValue
+           }
+       }
+       
+       var header: HTTPHeaders? {
+           get {
+               return HEADERS
+           }
+           set {
+               HEADERS = newValue!
+           }
+       }
     
     var path: String {
         switch self {
@@ -43,9 +57,6 @@ extension APIUser : EndPoint {
         case .listBloked, .unread, .getUsers:
             return .get
         }
-    }
-    var header: HTTPHeaders? {
-        return HEADERS
     }
     
     var task: HTTPTask {

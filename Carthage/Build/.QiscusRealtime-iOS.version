@@ -2,7 +2,7 @@
   "commitish" : "9c1d754302d1ff2d16314247e85ee1520ab5baf4",
   "iOS" : [
     {
-      "hash" : "de575a4040fbb253ceaa72aed8b17a0f4a27ef51d932a4a93590e0d7ab032f36",
+      "hash" : "addee3ab37e50ada016ee1289715a5cf39e235ef014edfaaa4b31d4e051fefc2",
       "name" : "QiscusRealtime",
       "linking" : "dynamic",
       "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"

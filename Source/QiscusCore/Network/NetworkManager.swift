@@ -29,12 +29,37 @@ enum NetworkEnvironment : String {
     case staging
 }
 
-class NetworkManager: NSObject {
+public class NetworkManager: NSObject {
+    var qiscusCore : QiscusCore? = nil
     static let environment  : NetworkEnvironment = .production
-    let clientRouter    = Router<APIClient>()
-    let roomRouter      = Router<APIRoom>()
-    let commentRouter   = Router<APIComment>()
-    let userRouter      = Router<APIUser>()
+    var clientRouter  :Router<APIClient>{
+        get{
+            let route = Router<APIClient>()
+            route.qiscusCore = self.qiscusCore
+            return route
+        }
+    }
+    var roomRouter : Router<APIRoom>{
+        get{
+            let route = Router<APIRoom>()
+            route.qiscusCore = self.qiscusCore
+            return route
+        }
+    }
+    var commentRouter  : Router<APIComment>{
+        get{
+            let route = Router<APIComment>()
+            route.qiscusCore = self.qiscusCore
+            return route
+        }
+    }
+    var userRouter   : Router<APIUser>{
+        get{
+            let route = Router<APIUser>()
+            route.qiscusCore = self.qiscusCore
+            return route
+        }
+    }
     
     // Download Upload
     private let downloadService = DownloadService()
@@ -54,7 +79,7 @@ class NetworkManager: NSObject {
     }
     
     func handleNetworkResponse(_ response: HTTPURLResponse) -> Result<String>{
-        QiscusLogger.debugPrint("response code \(response.statusCode)")
+        qiscusCore?.qiscusLogger.debugPrint("response code \(response.statusCode)")
         switch response.statusCode {
         case 200...299: return .success
         case 400...499: return .failure(NetworkResponse.clientError.rawValue)
@@ -67,11 +92,42 @@ class NetworkManager: NSObject {
 }
 // MARK: Client
 extension NetworkManager {
+    /// get appConfig
+    ///
+    /// - Parameter completion: @ecaping on getNonce request done return Optional(QNonce) and Optional(Error message)
+    func getAppConfig(onSuccess: @escaping (AppConfigModel) -> Void, onError: @escaping (QError) -> Void) {
+        clientRouter.request(.appConfig) { (data, response, error) in
+            if error != nil {
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        onError(QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let appConfig = AppConfigModel(json: response)
+                    onSuccess(appConfig)
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    onError(QError(message: errorMessage))
+                }
+            }
+        }
+    }
+    
     /// get getBrokerLBUrl
     ///
     /// - Parameter completion: @ecaping on getNonce request done return Optional(brokerLBUrl) and Optional(Error message)
     func getBrokerLBUrl(url:String, onSuccess: @escaping (String) -> Void, onError: @escaping (QError) -> Void) {
-        
         var headers = [
             "QISCUS-SDK-PLATFORM": "iOS",
             "QISCUS-SDK-DEVICE-BRAND": "Apple",
@@ -79,23 +135,23 @@ extension NetworkManager {
             "QISCUS-SDK-DEVICE-MODEL" : UIDevice.modelName,
             "QISCUS-SDK-DEVICE-OS-VERSION" : UIDevice.current.systemVersion
         ]
-        if let appID = ConfigManager.shared.appID {
+        if let appID = self.qiscusCore?.config.appID {
             headers["QISCUS-SDK-APP-ID"] = appID
         }
         
-        if let user = ConfigManager.shared.user {
-            if let appid = ConfigManager.shared.appID {
+        if let user = self.qiscusCore?.config.user {
+            if let appid = self.qiscusCore?.config.appID {
                 headers["QISCUS-SDK-APP-ID"] = appid
             }
             if !user.token.isEmpty {
                 headers["QISCUS-SDK-TOKEN"] = user.token
             }
-            if !user.email.isEmpty {
-                headers["QISCUS-SDK-USER-ID"] = user.email
+            if !user.id.isEmpty {
+                headers["QISCUS-SDK-USER-ID"] = user.id
             }
         }
         
-        if let customHeader = ConfigManager.shared.customHeader {
+        if let customHeader = self.qiscusCore?.config.customHeader {
             headers.merge(customHeader as! [String : String]){(_, new) in new}
         }
         
@@ -106,7 +162,7 @@ extension NetworkManager {
         for (key, value) in headers {
             urlRequest.setValue(value, forHTTPHeaderField: key)
         }
-        
+
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: urlRequest) { (data, response, error) in
            if error != nil {
@@ -122,10 +178,10 @@ extension NetworkManager {
                     }
                     let response = ApiResponse.decodeWithoutResult(from: responseData)
                     let lbUrl = LBModel(json: response)
-                    QiscusLogger.debugPrint("realtimeServer from lb = \(lbUrl.node)")
+                    self.qiscusCore?.qiscusLogger.debugPrint("realtimeServer from lb = \(lbUrl.node)")
                     if lbUrl.node.isEmpty {
-                        QiscusLogger.debugPrint("realtimeServer is nill from lb, now is changed to = realtime-jawa.qiscus.com ")
-                        onSuccess(QiscusCore.defaultRealtimeURL)
+                        self.qiscusCore?.qiscusLogger.debugPrint("realtimeServer is nill from lb, now is changed to = realtime-jawa.qiscus.com ")
+                        onSuccess(self.qiscusCore?.defaultRealtimeURL ?? "realtime-jawa.qiscus.com")
                     }else{
                         onSuccess(lbUrl.node)
                     }
@@ -133,7 +189,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -167,39 +223,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
-                    } catch {
-                        
-                    }
-                    onError(QError(message: errorMessage))
-                }
-            }
-        }
-    }
-    
-    /// get appConfig
-    ///
-    /// - Parameter completion: @ecaping on getNonce request done return Optional(QNonce) and Optional(Error message)
-    func getAppConfig(onSuccess: @escaping (AppConfigModel) -> Void, onError: @escaping (QError) -> Void) {
-        clientRouter.request(.appConfig) { (data, response, error) in
-            if error != nil {
-                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
-            }
-            if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
-                switch result {
-                case .success:
-                    guard let responseData = data else {
-                        onError(QError(message: NetworkResponse.noData.rawValue))
-                        return
-                    }
-                    let response = ApiResponse.decode(from: responseData)
-                    let appConfig = AppConfigModel(json: response)
-                    onSuccess(appConfig)
-                case .failure(let errorMessage):
-                    do {
-                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -215,7 +239,7 @@ extension NetworkManager {
     /// - Parameters:
     ///   - identityToken: identity token from your server after verify the nonce
     ///   - completion: @escaping when success login retrun Optional(UserModel) and Optional(String error message)
-    func login(identityToken: String, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
+    func login(identityToken: String, onSuccess: @escaping (QAccount) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.loginRegisterJWT(identityToken: identityToken)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -235,10 +259,10 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
-                        QiscusLogger.errorPrint("Error identityToken Code =\(response.statusCode)\(errorMessage)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error identityToken Code =\(response.statusCode)\(errorMessage)")
                         onError( QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
@@ -254,7 +278,7 @@ extension NetworkManager {
     ///   - username: user display name
     ///   - avatarUrl: user avatar url
     ///   - completion: @escaping on 
-    func login(email: String, password: String ,username : String? ,avatarUrl : String?, extras: [String:Any]?, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
+    func login(email: String, password: String ,username : String? ,avatarUrl : String?, extras: [String:Any]?, onSuccess: @escaping (QAccount) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.loginRegister(user: email, password: password,username: username,avatarUrl: avatarUrl, extras: extras)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -273,7 +297,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -307,7 +331,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -340,7 +364,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -354,7 +378,7 @@ extension NetworkManager {
     /// get user profile
     ///
     /// - Parameter completion: @escaping when success get user profile, return Optional(UserModel) and Optional(String error)
-    func getProfile(onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
+    func getProfile(onSuccess: @escaping (QAccount) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.myProfile) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -373,10 +397,10 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
-                        QiscusLogger.errorPrint("Error syncEvent Code =\(response.statusCode)\(errorMessage)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error syncEvent Code =\(response.statusCode)\(errorMessage)")
                         onError(QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
@@ -390,7 +414,7 @@ extension NetworkManager {
     ///   - displayName: user new displayname
     ///   - avatarUrl: user new avatar url
     ///   - completion: @escaping when finish updating user profile return update Optional(UserModel) and Optional(String error message)
-    func updateProfile(displayName: String = "", avatarUrl: URL? = nil, extras: [String : Any]? = nil,  onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
+    func updateProfile(displayName: String = "", avatarUrl: URL? = nil, extras: [String : Any]? = nil,  onSuccess: @escaping (QAccount) -> Void, onError: @escaping (QError) -> Void) {
         if displayName.isEmpty && avatarUrl == nil {
             onError(QError(message: "Please set display name"))
             return
@@ -416,10 +440,10 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
-                        QiscusLogger.errorPrint("Error updateProfile Code =\(response.statusCode)\(errorMessage)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error updateProfile Code =\(response.statusCode)\(errorMessage)")
                         onError( QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
@@ -442,15 +466,15 @@ extension NetworkManager {
                         onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    let response = ApiResponse.decode(syncEvent: responseData)
+                    let response = ApiResponse.decode(syncEvent: responseData, qiscusCore: self.qiscusCore!)
                     onSuccess(response)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
-                        QiscusLogger.errorPrint("Error syncEvent Code =\(response.statusCode)\(errorMessage)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error syncEvent Code =\(response.statusCode)\(errorMessage)")
                         onError( QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
@@ -472,15 +496,19 @@ extension NetworkManager {
                         onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    let response = ApiResponse.decode(syncEvent: responseData)
-                    onSuccess(response)
+                    DispatchQueue.global(qos: .background).sync {
+                        let response = ApiResponse.decode(syncEvent: responseData, qiscusCore: self.qiscusCore!)
+                        onSuccess(response)
+                    }
+                    
+                    
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
-                        QiscusLogger.errorPrint("Error syncEvent Code =\(response.statusCode)\(errorMessage)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error syncEvent Code =\(response.statusCode)\(errorMessage)")
                         onError( QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
@@ -488,7 +516,7 @@ extension NetworkManager {
         }
     }
     
-    func sync(lastCommentReceivedId: String, completion: @escaping ([CommentModel]?, String?) -> Void) {
+    func sync(lastCommentReceivedId: String, completion: @escaping ([QMessage]?, String?) -> Void) {
         clientRouter.request(.sync(lastReceivedCommentId: lastCommentReceivedId)) { (data, response, error) in
             if error != nil {
                 completion(nil, error?.localizedDescription ?? "Please check your network connection.")
@@ -508,7 +536,7 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -519,7 +547,7 @@ extension NetworkManager {
         }
     }
     
-    func blockUser(email: String, onSuccess: @escaping (MemberModel) -> Void, onError: @escaping (QError) -> Void) {
+    func blockUser(email: String, onSuccess: @escaping (QUser) -> Void, onError: @escaping (QError) -> Void) {
         userRouter.request(.block(email: email)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -539,10 +567,10 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
-                        QiscusLogger.errorPrint("Error blockUser Code =\(response.statusCode)\(errorMessage)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error blockUser Code =\(response.statusCode)\(errorMessage)")
                         onError( QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
@@ -550,7 +578,7 @@ extension NetworkManager {
         }
     }
     
-    func unblockUser(email: String, onSuccess: @escaping (MemberModel) -> Void, onError: @escaping (QError) -> Void) {
+    func unblockUser(email: String, onSuccess: @escaping (QUser) -> Void, onError: @escaping (QError) -> Void) {
         userRouter.request(.unblock(email: email)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -574,10 +602,10 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
-                        QiscusLogger.errorPrint("Error unblockUser Code =\(response.statusCode)\(errorMessage)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error unblockUser Code =\(response.statusCode)\(errorMessage)")
                         onError(QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
@@ -585,7 +613,7 @@ extension NetworkManager {
         }
     }
     
-    func getBlokedUser(page: Int?, limit: Int?, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void) {
+    func getBlokedUser(page: Int?, limit: Int?, onSuccess: @escaping ([QUser]) -> Void, onError: @escaping (QError) -> Void) {
         userRouter.request(.listBloked(page: page, limit: limit)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -608,10 +636,10 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
-                        QiscusLogger.errorPrint("Error getBlockUser Code =\(response.statusCode)\(errorMessage)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error getBlockUser Code =\(response.statusCode)\(errorMessage)")
                         onError( QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
@@ -625,13 +653,15 @@ extension NetworkManager {
         let request: URLRequest
         
         do {
-            request = try NetworkUpload().createRequest(route: endpoint, data: data, filename: filename)
+            let network = NetworkUpload()
+            network.qiscusCore = self.qiscusCore
+            request = try network.createRequest(route: endpoint, data: data, filename: filename)
         } catch {
-            QiscusLogger.errorPrint(error.localizedDescription)
+            qiscusCore?.qiscusLogger.errorPrint(error.localizedDescription)
             onError(QError(message: "\(error.localizedDescription)"))
             return
         }
-        QiscusLogger.networkLogger(request: request)
+        qiscusCore?.qiscusLogger.networkLogger(request: request)
         
         let configuration = URLSessionConfiguration.default
         let session = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
@@ -650,24 +680,24 @@ extension NetworkManager {
                     }
                     let response = ApiResponse.decode(from: responseData)
                     let file     = FileApiResponse.upload(from: response)
-                    QiscusLogger.debugPrint("upload \(response)")
+                    self.qiscusCore?.qiscusLogger.debugPrint("upload \(response)")
                     DispatchQueue.main.async {
                         onSuccess(file)
                     }
                 case .failure(let errorMessage):
                     do {
                         if data == nil {
-                            QiscusLogger.errorPrint("Error upload Code =\(response.statusCode)\(errorMessage)")
+                            self.qiscusCore?.qiscusLogger.errorPrint("Error upload Code =\(response.statusCode)\(errorMessage)")
                             DispatchQueue.main.async {
                                 onError(QError(message: NetworkResponse.unableToDecode.rawValue))
                             }
                         }else{
                             let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                            QiscusLogger.errorPrint("json: \(jsondata)")
+                            self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                             onError(QError(message: "json: \(jsondata)"))
                         }
                     } catch {
-                        QiscusLogger.errorPrint("Error upload Code =\(response.statusCode)\(errorMessage)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error upload Code =\(response.statusCode)\(errorMessage)")
                         DispatchQueue.main.async {
                             onError(QError(message: NetworkResponse.unableToDecode.rawValue))
                         }
@@ -701,7 +731,7 @@ extension NetworkManager {
         let file = FileModel.init(url: url)
         DispatchQueue.global(qos: .background).async {
             // check already in local
-            if let localPath = QiscusCore.fileManager.getlocalPath(from: url) {
+            if let localPath = self.qiscusCore?.fileManager.getlocalPath(from: url) {
                 DispatchQueue.main.async {
                     onSuccess(localPath)
                 }
@@ -719,7 +749,7 @@ extension NetworkManager {
                     }
                     d.value.onCompleted = { success in
                         if !success { return }
-                        let localPath: URL = QiscusCore.fileManager.localFilePath(for: d.value.file.url)
+                        let localPath: URL = (self.qiscusCore?.fileManager.localFilePath(for: d.value.file.url))!
                         onSuccess(localPath)
                     }
                 }
@@ -728,7 +758,7 @@ extension NetworkManager {
   
     }
     
-    func getUsers(limit : Int?, page: Int?, querySearch: String?, onSuccess: @escaping ([MemberModel], Meta) -> Void, onError: @escaping (QError) -> Void) {
+    func getUsers(limit : Int?, page: Int?, querySearch: String?, onSuccess: @escaping ([QUser], Meta) -> Void, onError: @escaping (QError) -> Void) {
         userRouter.request(.getUsers(page: page, limit: limit, querySearch: querySearch)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
@@ -752,10 +782,10 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
-                        QiscusLogger.errorPrint("Error getUsers Code =\(response.statusCode)\(errorMessage)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error getUsers Code =\(response.statusCode)\(errorMessage)")
                         onError( QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
@@ -782,10 +812,10 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
-                        QiscusLogger.errorPrint("Error event_report Code =\(response.statusCode)\(errorMessage)")
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error event_report Code =\(response.statusCode)\(errorMessage)")
                         onError( QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
@@ -798,18 +828,18 @@ extension NetworkManager {
 
 // MARK: Download session
 extension NetworkManager : URLSessionDownloadDelegate {
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+    public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         guard let sourceURL = downloadTask.originalRequest?.url else { return }
         let download = downloadService.activeDownloads[sourceURL]
         downloadService.activeDownloads[sourceURL] = nil
-        if QiscusCore.fileManager.move(fromURL: sourceURL, to: location) {
+        if (self.qiscusCore?.fileManager.move(fromURL: sourceURL, to: location))! {
             download?.file.downloaded = true
             download?.onCompleted(true)
         }
     }
     
     // Updates progress info
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
+    public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
                     didWriteData bytesWritten: Int64, totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64) {
         // 1
@@ -827,7 +857,7 @@ extension NetworkManager : URLSessionDownloadDelegate {
 
     }
     
-    func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64){
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64){
         
         let uploadProgress: Double = Double(totalBytesSent) / Double(totalBytesExpectedToSend)
         DispatchQueue.main.async {

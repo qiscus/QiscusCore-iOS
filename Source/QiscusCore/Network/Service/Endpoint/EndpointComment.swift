@@ -16,14 +16,26 @@ internal enum APIComment {
     case clear(roomChannelIds: [String])
     /// Search comment on server
     case search(keyword: String, roomID: String?, lastCommentID: Int?)
-    case searchMessage(query: String, roomIDs: [String], messagetype: String, senderEmail : String?)
     case statusComment(id: String)
-    case getFileList(roomIDs: [String])
 }
 
 extension APIComment : EndPoint {
     var baseURL: URL {
-        return BASEURL
+        get {
+            return BASEURL
+        }
+        set {
+            BASEURL = newValue
+        }
+    }
+    
+    var header: HTTPHeaders? {
+        get {
+            return HEADERS
+        }
+        set {
+            HEADERS = newValue!
+        }
     }
     
     var path: String {
@@ -40,12 +52,8 @@ extension APIComment : EndPoint {
             return "/clear_room_messages"
         case .search:
             return "/search_messages"
-        case .searchMessage:
-            return "/search"
         case .statusComment(_):
             return "/comment_receipt"
-        case .getFileList:
-            return "/filelist"
         }
     }
     
@@ -53,15 +61,11 @@ extension APIComment : EndPoint {
         switch self {
         case .loadComment, .statusComment(_):
             return .get
-        case .postComment, .updateStatus, .search( _, _, _), .searchMessage( _, _, _, _), .getFileList( _):
+        case .postComment, .updateStatus, .search( _, _, _):
             return .post
         case .delete, .clear( _):
             return .delete
         }
-    }
-    
-    var header: HTTPHeaders? {
-        return HEADERS
     }
     
     var task: HTTPTask {
@@ -140,30 +144,11 @@ extension APIComment : EndPoint {
                 params["last_comment_id"] = commentID
             }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
-        case .searchMessage(let query, let roomIDs, let messagetype, let senderEmail) :
-            var params = [
-                "query"                 : query,
-                "room_ids"            : roomIDs,
-                "type"                  : messagetype
-                ] as [String : Any]
-            
-            if let senderEmail = senderEmail {
-                params["sender"] = senderEmail
-            }
-            
-            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .statusComment(let id):
             let params = [
                 "comment_id"                : id,
                 ] as [String : Any]
             return .requestParameters(bodyParameters: nil, bodyEncoding: .jsonUrlEncoding, urlParameters: params)
-        case .getFileList(let roomIDs) :
-            var param = [
-                "room_ids"            : roomIDs
-                ] as [String : Any]
-            
-            return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
-        
         }
     }
 }
