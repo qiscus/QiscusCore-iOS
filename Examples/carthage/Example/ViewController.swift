@@ -2,40 +2,58 @@
 //  ViewController.swift
 //  Example
 //
-//  Created by Qiscus on 14/07/20.
-//  Copyright © 2020 Qiscus. All rights reserved.
+//  Created by Qiscus on 16/07/18.
+//  Copyright © 2018 Qiscus. All rights reserved.
 //
 
 import UIKit
 import QiscusCore
 
 class ViewController: UIViewController {
-
+    let a = QiscusCore()
+    let b = QiscusCore()
     override func viewDidLoad() {
         super.viewDidLoad()
-        QiscusCore.setup(WithAppID: "yourAppID")
-        QiscusCore.enableDebugPrint = true
+        a.setup(WithAppID: "sampleapp-65ghcsaysse")
         
-        QiscusCore.loginOrRegister(userID: "arief92", userKey: "arief92", onSuccess: { (user) in
-            print("user: \(user.username)")
-            
-            QiscusCore.shared.chatUser(userId: "arief93", onSuccess: { (room, comments) in
-                
+        a.enableDebugPrint = true
+     
+        b.setup(WithAppID: "sdksample")
+        b.enableDebugMode(value: true)
+        
+        //login from appID A
+        a.loginOrRegister(userID: "arief92", userKey: "arief92", onSuccess: { (user) in
+            print("user: \(user.name)")
+            self.a.shared.getAllChatRooms(showParticipant: false, showRemoved: false, showEmpty: true, page: 1, limit: 100, onSuccess: { (rooms, meta) in
+                let dbRoom = self.a.database.room.all()
             }) { (error) in
                 
             }
-            
-            QiscusCore.shared.getAllChatRooms(page: 1, limit: 100, onSuccess: { (rooms, meta) in
-                
-            }) { (error) in
-                
-            }
-            
         }) { (error) in
             print(error.message)
         }
+        
+        //login from appID B
+        b.loginOrRegister(userID: "arief10", userKey: "arief10", onSuccess: { (user) in
+            print("user: \(user.name)")
+            self.b.shared.getAllChatRooms(showParticipant: false, showRemoved: false, showEmpty: true, page: 1, limit: 100, onSuccess: { (rooms, meta) in
+                let dbRoom2 = self.b.database.room.all()
+            }) { (error) in
+                
+            }
+        }) { (error) in
+            print(error.message)
+        }
+        
+        print ("user a =\(a.getUserData()?.name)")
+        print ("user b =\(b.getUserData()?.name)")
+        
     }
 
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
 
 }
 
