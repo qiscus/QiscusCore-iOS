@@ -7,18 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D1AC05024BEC60C0040F736 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */; };
-		3D1AC05124BEC60C0040F736 /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3D1AC05224BEC60C0040F736 /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */; };
-		3D1AC05324BEC60C0040F736 /* CocoaMQTT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3D1AC05424BEC60C0040F736 /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */; };
-		3D1AC05524BEC60C0040F736 /* QiscusCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3D1AC05624BEC60C0040F736 /* QiscusRealtime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */; };
-		3D1AC05724BEC60C0040F736 /* QiscusRealtime.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3D1AC05824BEC60C0040F736 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */; };
-		3D1AC05924BEC60C0040F736 /* Starscream.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3D1AC05A24BEC60C0040F736 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */; };
-		3D1AC05B24BEC60C0040F736 /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D1AC0E324BEDFBC0040F736 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */; };
+		3D1AC0E424BEDFBC0040F736 /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D1AC0E524BEDFBC0040F736 /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */; };
+		3D1AC0E624BEDFBC0040F736 /* CocoaMQTT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D1AC0E724BEDFBC0040F736 /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */; };
+		3D1AC0E824BEDFBC0040F736 /* QiscusCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D1AC0E924BEDFBC0040F736 /* QiscusRealtime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */; };
+		3D1AC0EA24BEDFBC0040F736 /* QiscusRealtime.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D1AC0EB24BEDFBC0040F736 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */; };
+		3D1AC0EC24BEDFBC0040F736 /* Starscream.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D1AC0ED24BEDFBC0040F736 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */; };
+		3D1AC0EE24BEDFBC0040F736 /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3D5E861524BDC3E10061D7E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E861424BDC3E10061D7E4 /* AppDelegate.swift */; };
 		3D5E861724BDC3E10061D7E4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E861624BDC3E10061D7E4 /* SceneDelegate.swift */; };
 		3D5E861924BDC3E10061D7E4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E861824BDC3E10061D7E4 /* ViewController.swift */; };
@@ -28,18 +28,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		3D1AC05C24BEC60D0040F736 /* Embed Frameworks */ = {
+		3D1AC0EF24BEDFBC0040F736 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				3D1AC05324BEC60C0040F736 /* CocoaMQTT.framework in Embed Frameworks */,
-				3D1AC05524BEC60C0040F736 /* QiscusCore.framework in Embed Frameworks */,
-				3D1AC05B24BEC60C0040F736 /* SwiftyJSON.framework in Embed Frameworks */,
-				3D1AC05124BEC60C0040F736 /* CocoaAsyncSocket.framework in Embed Frameworks */,
-				3D1AC05924BEC60C0040F736 /* Starscream.framework in Embed Frameworks */,
-				3D1AC05724BEC60C0040F736 /* QiscusRealtime.framework in Embed Frameworks */,
+				3D1AC0E624BEDFBC0040F736 /* CocoaMQTT.framework in Embed Frameworks */,
+				3D1AC0E824BEDFBC0040F736 /* QiscusCore.framework in Embed Frameworks */,
+				3D1AC0EE24BEDFBC0040F736 /* SwiftyJSON.framework in Embed Frameworks */,
+				3D1AC0E424BEDFBC0040F736 /* CocoaAsyncSocket.framework in Embed Frameworks */,
+				3D1AC0EC24BEDFBC0040F736 /* Starscream.framework in Embed Frameworks */,
+				3D1AC0EA24BEDFBC0040F736 /* QiscusRealtime.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,12 +69,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D1AC05224BEC60C0040F736 /* CocoaMQTT.framework in Frameworks */,
-				3D1AC05424BEC60C0040F736 /* QiscusCore.framework in Frameworks */,
-				3D1AC05A24BEC60C0040F736 /* SwiftyJSON.framework in Frameworks */,
-				3D1AC05024BEC60C0040F736 /* CocoaAsyncSocket.framework in Frameworks */,
-				3D1AC05824BEC60C0040F736 /* Starscream.framework in Frameworks */,
-				3D1AC05624BEC60C0040F736 /* QiscusRealtime.framework in Frameworks */,
+				3D1AC0E524BEDFBC0040F736 /* CocoaMQTT.framework in Frameworks */,
+				3D1AC0E724BEDFBC0040F736 /* QiscusCore.framework in Frameworks */,
+				3D1AC0ED24BEDFBC0040F736 /* SwiftyJSON.framework in Frameworks */,
+				3D1AC0E324BEDFBC0040F736 /* CocoaAsyncSocket.framework in Frameworks */,
+				3D1AC0EB24BEDFBC0040F736 /* Starscream.framework in Frameworks */,
+				3D1AC0E924BEDFBC0040F736 /* QiscusRealtime.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,7 +137,7 @@
 				3D5E860E24BDC3E10061D7E4 /* Frameworks */,
 				3D5E860F24BDC3E10061D7E4 /* Resources */,
 				3D5E866E24BDF70E0061D7E4 /* ShellScript */,
-				3D1AC05C24BEC60D0040F736 /* Embed Frameworks */,
+				3D1AC0EF24BEDFBC0040F736 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
