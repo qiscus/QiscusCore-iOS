@@ -7,39 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D1AC04024BEC0CD0040F736 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */; };
+		3D1AC04124BEC0CD0040F736 /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D1AC04224BEC0CD0040F736 /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */; };
+		3D1AC04324BEC0CD0040F736 /* CocoaMQTT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D1AC04424BEC0CD0040F736 /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */; };
+		3D1AC04524BEC0CD0040F736 /* QiscusCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D1AC04624BEC0CD0040F736 /* QiscusRealtime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */; };
+		3D1AC04724BEC0CD0040F736 /* QiscusRealtime.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D1AC04824BEC0CD0040F736 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */; };
+		3D1AC04924BEC0CD0040F736 /* Starscream.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3D1AC04A24BEC0CD0040F736 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */; };
+		3D1AC04B24BEC0CD0040F736 /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3D5E861524BDC3E10061D7E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E861424BDC3E10061D7E4 /* AppDelegate.swift */; };
 		3D5E861724BDC3E10061D7E4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E861624BDC3E10061D7E4 /* SceneDelegate.swift */; };
 		3D5E861924BDC3E10061D7E4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E861824BDC3E10061D7E4 /* ViewController.swift */; };
 		3D5E861C24BDC3E10061D7E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D5E861A24BDC3E10061D7E4 /* Main.storyboard */; };
 		3D5E861E24BDC3E50061D7E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D5E861D24BDC3E50061D7E4 /* Assets.xcassets */; };
 		3D5E862124BDC3E50061D7E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D5E861F24BDC3E50061D7E4 /* LaunchScreen.storyboard */; };
-		3D5E866124BDF6FC0061D7E4 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */; };
-		3D5E866224BDF6FC0061D7E4 /* Starscream.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3D5E866324BDF6FC0061D7E4 /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */; };
-		3D5E866424BDF6FC0061D7E4 /* QiscusCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3D5E866524BDF6FC0061D7E4 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */; };
-		3D5E866624BDF6FC0061D7E4 /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3D5E866724BDF6FC0061D7E4 /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */; };
-		3D5E866824BDF6FC0061D7E4 /* CocoaMQTT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3D5E866924BDF6FD0061D7E4 /* QiscusRealtime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */; };
-		3D5E866A24BDF6FD0061D7E4 /* QiscusRealtime.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3D5E866B24BDF6FD0061D7E4 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */; };
-		3D5E866C24BDF6FD0061D7E4 /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		3D5E866D24BDF6FD0061D7E4 /* Embed Frameworks */ = {
+		3D1AC04C24BEC0CE0040F736 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				3D5E866C24BDF6FD0061D7E4 /* CocoaAsyncSocket.framework in Embed Frameworks */,
-				3D5E866224BDF6FC0061D7E4 /* Starscream.framework in Embed Frameworks */,
-				3D5E866424BDF6FC0061D7E4 /* QiscusCore.framework in Embed Frameworks */,
-				3D5E866824BDF6FC0061D7E4 /* CocoaMQTT.framework in Embed Frameworks */,
-				3D5E866624BDF6FC0061D7E4 /* SwiftyJSON.framework in Embed Frameworks */,
-				3D5E866A24BDF6FD0061D7E4 /* QiscusRealtime.framework in Embed Frameworks */,
+				3D1AC04324BEC0CD0040F736 /* CocoaMQTT.framework in Embed Frameworks */,
+				3D1AC04524BEC0CD0040F736 /* QiscusCore.framework in Embed Frameworks */,
+				3D1AC04B24BEC0CD0040F736 /* SwiftyJSON.framework in Embed Frameworks */,
+				3D1AC04124BEC0CD0040F736 /* CocoaAsyncSocket.framework in Embed Frameworks */,
+				3D1AC04924BEC0CD0040F736 /* Starscream.framework in Embed Frameworks */,
+				3D1AC04724BEC0CD0040F736 /* QiscusRealtime.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,12 +68,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D5E866B24BDF6FD0061D7E4 /* CocoaAsyncSocket.framework in Frameworks */,
-				3D5E866124BDF6FC0061D7E4 /* Starscream.framework in Frameworks */,
-				3D5E866324BDF6FC0061D7E4 /* QiscusCore.framework in Frameworks */,
-				3D5E866724BDF6FC0061D7E4 /* CocoaMQTT.framework in Frameworks */,
-				3D5E866524BDF6FC0061D7E4 /* SwiftyJSON.framework in Frameworks */,
-				3D5E866924BDF6FD0061D7E4 /* QiscusRealtime.framework in Frameworks */,
+				3D1AC04224BEC0CD0040F736 /* CocoaMQTT.framework in Frameworks */,
+				3D1AC04424BEC0CD0040F736 /* QiscusCore.framework in Frameworks */,
+				3D1AC04A24BEC0CD0040F736 /* SwiftyJSON.framework in Frameworks */,
+				3D1AC04024BEC0CD0040F736 /* CocoaAsyncSocket.framework in Frameworks */,
+				3D1AC04824BEC0CD0040F736 /* Starscream.framework in Frameworks */,
+				3D1AC04624BEC0CD0040F736 /* QiscusRealtime.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,8 +134,8 @@
 				3D5E860D24BDC3E10061D7E4 /* Sources */,
 				3D5E860E24BDC3E10061D7E4 /* Frameworks */,
 				3D5E860F24BDC3E10061D7E4 /* Resources */,
-				3D5E866D24BDF6FD0061D7E4 /* Embed Frameworks */,
 				3D5E866E24BDF70E0061D7E4 /* ShellScript */,
+				3D1AC04C24BEC0CE0040F736 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
