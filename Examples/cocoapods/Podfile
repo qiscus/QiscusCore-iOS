@@ -7,5 +7,6 @@ target 'Example' do
 
   # Pods for Example
   pod 'QiscusCore', :path => '../../'
+  pod 'QiscusRealtime', :git => 'https://github.com/qiscus/QiscusRealtime-iOS.git', :branch => 'carthage-support'
 
 end

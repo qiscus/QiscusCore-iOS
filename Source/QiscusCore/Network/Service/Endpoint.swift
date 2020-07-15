@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol EndPoint {
     var baseURL     : URL { get set}

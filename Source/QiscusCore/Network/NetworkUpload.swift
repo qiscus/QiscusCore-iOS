@@ -4,6 +4,8 @@
 //
 //  Created by Qiscus on 05/09/18.
 //
+import UIKit
+import Foundation
 
 class NetworkUpload {
     var qiscusCore : QiscusCore? = nil

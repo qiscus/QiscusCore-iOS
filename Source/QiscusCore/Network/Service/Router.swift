@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 internal typealias NetworkRouterCompletion = (_ data: Data?,_ response: URLResponse?,_ error: Error?)->()
 

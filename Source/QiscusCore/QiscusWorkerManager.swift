@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 public class QiscusWorkerManager {
     var qiscusCore : QiscusCore? = nil
