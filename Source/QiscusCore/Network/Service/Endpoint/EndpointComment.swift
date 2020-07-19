@@ -16,9 +16,9 @@ internal enum APIComment {
     case clear(roomChannelIds: [String])
     /// Search comment on server
     case search(keyword: String, roomID: String?, lastCommentID: Int?)
-    case searchMessage(query: String, roomIDs: [String], messagetype: String, senderEmail : String?)
+    case searchMessage(query: String, roomIds: [String]?, userId : String? = nil, type: [String]?, page: Int, limit : Int)
     case statusComment(id: String)
-    case getFileList(roomIDs: [String])
+    case getFileList(roomIds: [String], page: Int, limit : Int)
 }
 
 extension APIComment : EndPoint {
@@ -45,7 +45,7 @@ extension APIComment : EndPoint {
         case .statusComment(_):
             return "/comment_receipt"
         case .getFileList:
-            return "/filelist"
+            return "/file_list"
         }
     }
     
@@ -53,7 +53,7 @@ extension APIComment : EndPoint {
         switch self {
         case .loadComment, .statusComment(_):
             return .get
-        case .postComment, .updateStatus, .search( _, _, _), .searchMessage( _, _, _, _), .getFileList( _):
+        case .postComment, .updateStatus, .search( _, _, _), .searchMessage( _, _, _, _, _, _), .getFileList( _, _, _):
             return .post
         case .delete, .clear( _):
             return .delete
@@ -140,15 +140,23 @@ extension APIComment : EndPoint {
                 params["last_comment_id"] = commentID
             }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
-        case .searchMessage(let query, let roomIDs, let messagetype, let senderEmail) :
+        case .searchMessage(let query, let roomIds, let userId, let type, let page, let limit):
             var params = [
-                "query"                 : query,
-                "room_ids"            : roomIDs,
-                "type"                  : messagetype
+                "query"             : query,
+                "page"              : page,
+                "limit"             : limit
                 ] as [String : Any]
             
-            if let senderEmail = senderEmail {
-                params["sender"] = senderEmail
+            if let roomIds = roomIds {
+                params["room_ids"] = roomIds
+            }
+            
+            if let userId = userId {
+                params["sender"] = userId
+            }
+            
+            if let type = type {
+                params["type"] = type
             }
             
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
@@ -157,9 +165,11 @@ extension APIComment : EndPoint {
                 "comment_id"                : id,
                 ] as [String : Any]
             return .requestParameters(bodyParameters: nil, bodyEncoding: .jsonUrlEncoding, urlParameters: params)
-        case .getFileList(let roomIDs) :
+        case .getFileList(let roomIds, let page, let limit) :
             var param = [
-                "room_ids"            : roomIDs
+                "room_ids"       : roomIds,
+                "page"           : page,
+                "limit"          : limit
                 ] as [String : Any]
             
             return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)

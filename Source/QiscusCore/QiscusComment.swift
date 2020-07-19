@@ -390,10 +390,12 @@ extension QiscusCore {
     /// - Parameters:
     ///   - query: required, query to search
     ///   - roomIds:array  room id
-    ///   - messagetype: text, file_attachment, reply, others
-    ///   - senderEmail : emailSender
-    public func searchMessage(query: String, roomIDs: [String], messagetype: String, senderEmail : String? = nil, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.searchMessage(query: query, roomIDs: roomIDs, messagetype: messagetype, senderEmail: senderEmail) { (results, error) in
+    ///   - type: "text", "custom", "buttons", "button_postback_response", "reply", "card", "location", "contact_person", "file_attachment", "carousel", otther
+    ///   - userId : emailSender
+    ///   - page : page
+    ///   - limit : limit
+    public func searchMessage(query: String, roomIds: [String]? = nil, userId : String? = nil, type: [String]? = nil, page: Int, limit : Int, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.searchMessage(query: query, roomIds: roomIds, userId: userId, type: type, page: page, limit: limit) { (results, error) in
             if let c = results {
                 onSuccess(c)
             }else {
@@ -406,8 +408,10 @@ extension QiscusCore {
     ///
     /// - Parameters:
     ///   - roomIds:array  room id
-    public func getFileList(roomIDs: [String], onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.getFileList(roomIDs: roomIDs) { (results, error) in
+    ///   - page: page
+    ///   - limit : limit
+    public func getFileList(roomIds: [String], page: Int, limit : Int, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.getFileList(roomIds: roomIds, page: page, limit: limit) { (results, error) in
             if let c = results {
                 onSuccess(c)
             }else {
