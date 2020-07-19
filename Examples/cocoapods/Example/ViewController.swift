@@ -24,6 +24,7 @@ class ViewController: UIViewController {
         //login from appID A
         a.loginOrRegister(userID: "arief92", userKey: "arief92", onSuccess: { (user) in
             print("user: \(user.name)")
+            print ("user a =\(self.a.getUserData()?.name)")
             self.a.shared.getAllChatRooms(showParticipant: false, showRemoved: false, showEmpty: true, page: 1, limit: 100, onSuccess: { (rooms, meta) in
                 let dbRoom = self.a.database.room.all()
             }) { (error) in
@@ -35,7 +36,8 @@ class ViewController: UIViewController {
         
         //login from appID B
         b.loginOrRegister(userID: "arief10", userKey: "arief10", onSuccess: { (user) in
-            print("user: \(user.name)")
+            print("user b: \(user.name)")
+            print ("user b =\(self.b.getUserData()?.name)")
             self.b.shared.getAllChatRooms(showParticipant: false, showRemoved: false, showEmpty: true, page: 1, limit: 100, onSuccess: { (rooms, meta) in
                 let dbRoom2 = self.b.database.room.all()
             }) { (error) in
@@ -45,8 +47,8 @@ class ViewController: UIViewController {
             print(error.message)
         }
         
-        print ("user a =\(a.getUserData()?.name)")
-        print ("user b =\(b.getUserData()?.name)")
+       
+       
         
     }
 
