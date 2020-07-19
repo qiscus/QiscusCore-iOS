@@ -19,7 +19,7 @@ public struct QAccount {
     public var rtKey            : String    = ""
     public var token            : String    = ""
     public var name             : String    = ""
-    public var extras           : [String:Any]? = nil
+    public var extras           : String    = ""
     public var lastMessageId    : String    = ""
     public var lastSyncEventId  : String    = ""
     
@@ -31,7 +31,7 @@ public struct QAccount {
         rtKey           = json["rtKey"].stringValue
         token           = json["token"].stringValue
         name            = json["username"].stringValue
-        extras          = json["extras"].dictionaryObject
+        extras          = json["extras"].rawString() ?? ""
         lastMessageId   = json["last_comment_id_str"].stringValue
         lastSyncEventId = json["last_sync_event_id"].stringValue
     }

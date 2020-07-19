@@ -187,7 +187,7 @@ public class ConfigManager : NSObject {
             user.token              = token
             user.id                 = storage.string(forKey: filename("email")) ?? ""
             user.name               = storage.string(forKey: filename("username")) ?? ""
-            user.extras             = storage.dictionary(forKey: filename("extras")) ?? nil
+            user.extras             = storage.string(forKey: filename("extras")) ?? ""
             user.avatarUrl          = storage.url(forKey: filename("avatarUrl")) ?? URL(string: "http://")!
             user.lastSyncEventId    = storage.string(forKey: filename("lastSyncEventId")) ?? ""
             user.lastMessageId      = storage.string(forKey: filename("lastMessageId")) ?? ""
