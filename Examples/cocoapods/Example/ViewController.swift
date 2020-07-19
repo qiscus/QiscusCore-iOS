@@ -13,7 +13,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        QiscusCore.setup(WithAppID: "yourAppID")
+        QiscusCore.setup(WithAppID: "sdksample")
         QiscusCore.enableDebugPrint = true
         
         QiscusCore.loginOrRegister(userID: "arief92", userKey: "arief92", onSuccess: { (user) in

@@ -2,7 +2,7 @@
   "commitish" : "b0b5519684789a037dea7397d857acd76e1e5b83",
   "iOS" : [
     {
-      "hash" : "0ac8cdb7559cb261a8e946dc6cf4c734146b721b2d29bd588815d7e41d32ef58",
+      "hash" : "135f70d6ab51c388194c77738952b1e9ea8a8e19a9d67db8019558ce27e7f9f7",
       "name" : "CocoaMQTT",
       "linking" : "dynamic",
       "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"

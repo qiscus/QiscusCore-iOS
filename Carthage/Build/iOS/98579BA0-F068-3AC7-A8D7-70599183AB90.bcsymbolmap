@@ -1,6 +1,6 @@
 BCSymbolMap Version: 2.0
 Apple clang version 11.0.3 (clang-1103.0.32.62)
-/Users/qiscus/Library/Caches/org.carthage.CarthageKit/DerivedData/11.5_11E608c/QiscusRealtime-iOS/9c1d754302d1ff2d16314247e85ee1520ab5baf4/Build/Intermediates.noindex/ArchiveIntermediates/QiscusRealtime/IntermediateBuildFilesPath/QiscusRealtime.build/Release-iphoneos/QiscusRealtime.build/DerivedSources/QiscusRealtime_vers.c
+/Users/qiscus/Library/Caches/org.carthage.CarthageKit/DerivedData/11.5_11E608c/QiscusRealtime-iOS/b7df53fca5d7247d8ed2e15ccc0fb6182754b68d/Build/Intermediates.noindex/ArchiveIntermediates/QiscusRealtime/IntermediateBuildFilesPath/QiscusRealtime.build/Release-iphoneos/QiscusRealtime.build/DerivedSources/QiscusRealtime_vers.c
 /Users/qiscus/iOS/SDK/NewSDK/QiscusCore-iOS/Carthage/Checkouts/QiscusRealtime-iOS
 _$s14QiscusRealtime10MqttClientC7connect8username8password3sslSbSS_SSSbtF
 _$s14QiscusRealtime10MqttClientC7publish_7message8retainedSbSS_SSSbtF

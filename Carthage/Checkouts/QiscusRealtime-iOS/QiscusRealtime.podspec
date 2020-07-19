@@ -11,10 +11,6 @@ s.license      = "MIT"
 s.author       = "Qiscus"
 s.source       = { :git => "https://github.com/qiscus/QiscusRealtime-iOS.git", :tag => "#{s.version}" }
 s.source_files  = "QiscusRealtime", "Source/QiscusRealtime/**/*.{h,m,swift,xib}"
-s.resources = "Source/QiscusRealtime/**/*.xcassets"
-s.resource_bundles = {
-    'QiscusRealtime' => ['Source/QiscusRealtime/**/*.{lproj,xib,xcassets,imageset,png}']
-}
 s.ios.frameworks = ["CFNetwork", "Security", "Foundation", "MobileCoreServices"]
 s.requires_arc = true
 s.platform      = :ios, "10.0"
