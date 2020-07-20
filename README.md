@@ -76,7 +76,7 @@ QiscusCore.login(withIdentityToken: identityToken, completion: { (result, error)
 ```
 
 
-## DOCS
+## Docs
 
 for other documents can be viewed on this page, [Qiscus Docs](https://documentation.qiscus.com/chat-sdk-ios)
 
@@ -85,8 +85,8 @@ for other documents can be viewed on this page, [Qiscus Docs](https://documentat
 
 You can download example how to use QiscusCore with advance usage from [QiscusCore Example](https://github.com/qiscus/qiscus-chat-sdk-ios-sample).
 
-## Security Disclosure
+## Security Disclosure / Question / Other
 
-If you believe you have identified a security vulnerability with QiscusCore, you should report it as soon as possible via email to contact.us@qiscus.com Please or you can make [Ticket](https://support.qiscus.com/hc/en-us/requests/new)
+If you any security disclosure, question, or other, you can make [Ticket](https://support.qiscus.com/hc/en-us/requests/new)
 
 
