@@ -1,0 +1,922 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 9,
+      "symbol": "QiscusDatabaseManager",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 11,
+      "symbol": "QiscusDatabaseManager.room",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 12,
+      "symbol": "QiscusDatabaseManager.message",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 13,
+      "symbol": "QiscusDatabaseManager.member",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 26,
+      "symbol": "MemberDB",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 30,
+      "symbol": "RoomDB",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 33,
+      "symbol": "RoomDB.find(predicate:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 37,
+      "symbol": "RoomDB.find(id:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 45,
+      "symbol": "RoomDB.all()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 52,
+      "symbol": "CommentDB",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 55,
+      "symbol": "CommentDB.all()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 59,
+      "symbol": "CommentDB.find(predicate:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 63,
+      "symbol": "CommentDB.find(roomId:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 71,
+      "symbol": "CommentDB.find(id:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Database/QiscusDatabaseManager.swift",
+      "line": 79,
+      "symbol": "CommentDB.find(uniqueId:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 12,
+      "symbol": "SyncMeta",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 13,
+      "symbol": "SyncMeta.last_received_message_id",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 14,
+      "symbol": "SyncMeta.need_clear",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 17,
+      "symbol": "QMessage",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 18,
+      "symbol": "QMessage.onChange",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 19,
+      "symbol": "QMessage.previousMessageId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 20,
+      "symbol": "QMessage.id",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 21,
+      "symbol": "QMessage.isDeleted",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 22,
+      "symbol": "QMessage.isPublicChannel",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 23,
+      "symbol": "QMessage.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 24,
+      "symbol": "QMessage.message",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 25,
+      "symbol": "QMessage.payload",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 26,
+      "symbol": "QMessage.extras",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 27,
+      "symbol": "QMessage.roomId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 28,
+      "symbol": "QMessage.timestamp",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 29,
+      "symbol": "QMessage.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 30,
+      "symbol": "QMessage.uniqId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 31,
+      "symbol": "QMessage.unixTimestamp",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 32,
+      "symbol": "QMessage.userAvatarUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 33,
+      "symbol": "QMessage.userId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 34,
+      "symbol": "QMessage.username",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 35,
+      "symbol": "QMessage.userEmail",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 36,
+      "symbol": "QMessage.date",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 38,
+      "symbol": "QMessage.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 124,
+      "symbol": "MessageStatus",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 125,
+      "symbol": "MessageStatus.sending",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 126,
+      "symbol": "MessageStatus.pending",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 127,
+      "symbol": "MessageStatus.failed",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 128,
+      "symbol": "MessageStatus.sent",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 129,
+      "symbol": "MessageStatus.delivered",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 130,
+      "symbol": "MessageStatus.read",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QMessage.swift",
+      "line": 131,
+      "symbol": "MessageStatus.deleted",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/FileModel.swift",
+      "line": 19,
+      "symbol": "FileModel",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/FileModel.swift",
+      "line": 20,
+      "symbol": "FileModel.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/FileModel.swift",
+      "line": 21,
+      "symbol": "FileModel.size",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/FileModel.swift",
+      "line": 22,
+      "symbol": "FileModel.url",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/FileModel.swift",
+      "line": 25,
+      "symbol": "FileModel.init(url:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/GenericModel.swift",
+      "line": 8,
+      "symbol": "DeleteType",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/GenericModel.swift",
+      "line": 9,
+      "symbol": "DeleteType.forMe",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/GenericModel.swift",
+      "line": 10,
+      "symbol": "DeleteType.forEveryone",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/NonceModel.swift",
+      "line": 12,
+      "symbol": "QNonce",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/NonceModel.swift",
+      "line": 13,
+      "symbol": "QNonce.expiredAt",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/NonceModel.swift",
+      "line": 14,
+      "symbol": "QNonce.nonce",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QError.swift",
+      "line": 11,
+      "symbol": "QError",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/QError.swift",
+      "line": 12,
+      "symbol": "QError.message",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 15,
+      "symbol": "RoomType",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 16,
+      "symbol": "RoomType.single",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 17,
+      "symbol": "RoomType.group",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 18,
+      "symbol": "RoomType.channel",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 23,
+      "symbol": "Meta",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 24,
+      "symbol": "Meta.currentPage",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 25,
+      "symbol": "Meta.totalRoom",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 34,
+      "symbol": "RoomModel",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 35,
+      "symbol": "RoomModel.onChange",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 36,
+      "symbol": "RoomModel.id",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 37,
+      "symbol": "RoomModel.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 38,
+      "symbol": "RoomModel.uniqueId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 39,
+      "symbol": "RoomModel.avatarUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 40,
+      "symbol": "RoomModel.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 41,
+      "symbol": "RoomModel.options",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 43,
+      "symbol": "RoomModel.lastComment",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 44,
+      "symbol": "RoomModel.participants",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
+      "line": 45,
+      "symbol": "RoomModel.unreadCount",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 11,
+      "symbol": "UserModel",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 13,
+      "symbol": "UserModel.avatarUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 14,
+      "symbol": "UserModel.email",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 15,
+      "symbol": "UserModel.id",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 16,
+      "symbol": "UserModel.lastCommentId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 17,
+      "symbol": "UserModel.lastSyncEventId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 18,
+      "symbol": "UserModel.pnIosConfigured",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 19,
+      "symbol": "UserModel.rtKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 20,
+      "symbol": "UserModel.token",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 21,
+      "symbol": "UserModel.username",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 52,
+      "symbol": "MemberModel",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 53,
+      "symbol": "MemberModel.avatarUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 54,
+      "symbol": "MemberModel.email",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 55,
+      "symbol": "MemberModel.id",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 56,
+      "symbol": "MemberModel.lastCommentReadId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 57,
+      "symbol": "MemberModel.lastCommentReceivedId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Model/UserModel.swift",
+      "line": 58,
+      "symbol": "MemberModel.username",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 10,
+      "symbol": "Parameters",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 12,
+      "symbol": "ParameterEncoder",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 13,
+      "symbol": "ParameterEncoder.encode(urlRequest:with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 16,
+      "symbol": "ParameterEncoding",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 18,
+      "symbol": "ParameterEncoding.urlEncoding",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 19,
+      "symbol": "ParameterEncoding.jsonEncoding",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 20,
+      "symbol": "ParameterEncoding.urlAndJsonEncoding",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 22,
+      "symbol": "ParameterEncoding.encode(urlRequest:bodyParameters:urlParameters:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 49,
+      "symbol": "NetworkError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 50,
+      "symbol": "NetworkError.parametersNil",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 51,
+      "symbol": "NetworkError.encodingFailed",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Network/Encoding/ParameterEncoding.swift",
+      "line": 52,
+      "symbol": "NetworkError.missingURL",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 12,
+      "symbol": "QiscusConnectionDelegate",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 13,
+      "symbol": "QiscusConnectionDelegate.disconnect(withError:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 14,
+      "symbol": "QiscusConnectionDelegate.connected()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 15,
+      "symbol": "QiscusConnectionDelegate.connectionState(change:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 18,
+      "symbol": "QiscusConnectionState",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 19,
+      "symbol": "QiscusConnectionState.connecting",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 20,
+      "symbol": "QiscusConnectionState.connected",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 21,
+      "symbol": "QiscusConnectionState.disconnected",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 24,
+      "symbol": "QiscusCoreDelegate",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 61,
+      "symbol": "QiscusCoreDelegate.gotNew(room:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 63,
+      "symbol": "QiscusCoreDelegate.remove(room:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Protocol/QiscusConnectionDelegate.swift",
+      "line": 66,
+      "symbol": "QiscusCoreRoomDelegate",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/QiscusComment.swift",
+      "line": 14,
+      "symbol": "QiscusCore.sendMessage(roomID:message:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/QiscusCore.swift",
+      "line": null,
+      "symbol": "QiscusCore",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/QiscusCore.swift",
+      "line": null,
+      "symbol": "QiscusCore",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/QiscusCore.swift",
+      "line": 11,
+      "symbol": "QiscusCore",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/QiscusCore.swift",
+      "line": 22,
+      "symbol": "QiscusCore.shared",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/QiscusCore.swift",
+      "line": 26,
+      "symbol": "QiscusCore.dataStore",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/QiscusCore.swift",
+      "line": 27,
+      "symbol": "QiscusCore.database",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/QiscusCore.swift",
+      "line": 29,
+      "symbol": "QiscusCore.delegate",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/QiscusCore.swift",
+      "line": 37,
+      "symbol": "QiscusCore.enableDebugPrint",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Storage/QiscusStorage.swift",
+      "line": 11,
+      "symbol": "QiscusStorage",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Storage/QiscusStorage.swift",
+      "line": 23,
+      "symbol": "QiscusStorage.getMember(byEmail:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/qiscus/iOS/SDK/QiscusCore/QiscusCore/Storage/QiscusStorage.swift",
+      "line": 36,
+      "symbol": "QiscusStorage.getMember(byEmail:inRoom:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/qiscus/iOS/SDK/QiscusCore"
+}

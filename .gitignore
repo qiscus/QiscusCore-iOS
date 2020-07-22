@@ -1,7 +1,9 @@
-fastlane/*
-build/*
+Carthage/*
 Pods/*
 Podfile.lock
-Podfile.lockbup
-**/xcuserdata/**
-**/UniversalLib.xcscheme
+Example.xcworkspace/
+Example.xcodeproj/xcuserdata/
+.build/*
+Examples/carthage/Carthage
+Examples/cocoapods/pods/
+swift package manager/Carthage/*
