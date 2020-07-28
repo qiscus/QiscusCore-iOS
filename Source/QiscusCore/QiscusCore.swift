@@ -21,8 +21,8 @@ public class QiscusCore: NSObject {
         }
     }
     
-    public static var defaultBrokerUrl : String  = "https://realtime.qiscus.com"
-    public static var defaultRealtimeURL: String = "realtime-jawa.qiscus.com"
+    public static var defaultBrokerUrl : String  = "https://realtime-lb.qiscus.com"
+    public static var defaultRealtimeURL: String = "realtime-jogja.qiscus.com"
     
     public static let shared    : QiscusCore            = QiscusCore()
     private static var config   : ConfigManager         = ConfigManager.shared
@@ -184,7 +184,7 @@ public class QiscusCore: NSObject {
     /// - Parameter
     /// AppID: Qiscus SDK App ID
     /// baseUrl: baseUrl
-    /// brokerUrl: brokerUrl for example realtime-jawa.qiscus.com
+    /// brokerUrl: brokerUrl for example realtime-jogja.qiscus.com
     /// brokerLBUrl: brokerLBUrl is optional, default using urlLB from qiscus
     
     public class func setupWithCustomServer(AppID: String, baseUrl: URL, brokerUrl: String, brokerLBUrl: String?) {
