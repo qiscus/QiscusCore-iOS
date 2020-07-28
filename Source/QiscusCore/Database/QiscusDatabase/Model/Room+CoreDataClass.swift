@@ -63,6 +63,18 @@ extension Room {
         }
     }
     
+    static func find(limit : Int, offset : Int) -> [Room]? {
+        let fetchRequest:NSFetchRequest<Room> = Room.fetchRequest()
+        fetchRequest.fetchLimit = limit
+        fetchRequest.fetchOffset = offset
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Room.lastCommentId, ascending: false)]
+        do {
+            return try  QiscusDatabase.context.fetch(fetchRequest)
+        } catch  {
+            return nil
+        }
+    }
+    
     /// Clear all member data
      static func clear() {
         QiscusDatabase.context.perform({

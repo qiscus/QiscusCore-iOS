@@ -190,6 +190,15 @@ extension RoomStorage {
         return results
     }
     
+    func find(limit : Int, offset : Int) -> [RoomModel]? {
+           guard let rooms = Room.find(limit: limit, offset: offset) else { return nil}
+           var results = [RoomModel]()
+           for r in rooms {
+               results.append(map(r))
+           }
+           return results
+       }
+    
     func clearDB() {
         Room.clear()
         QiscusLogger.debugDBPrint("delete all rooms from DB")

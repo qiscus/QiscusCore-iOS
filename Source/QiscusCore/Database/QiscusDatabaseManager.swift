@@ -152,6 +152,10 @@ public class RoomDB {
         return results
     }
     
+    public func findChatRooms(limit : Int = 10, offset: Int = 0) -> [RoomModel]? {
+        return room.find(limit : limit, offset : offset)
+    }
+    
 }
 
 public class CommentDB {
