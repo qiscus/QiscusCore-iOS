@@ -18,7 +18,7 @@ internal enum APIComment {
     case search(keyword: String, roomID: String?, lastCommentID: Int?)
     case searchMessage(query: String, roomIds: [String]?, userId : String? = nil, type: [String]?, page: Int, limit : Int)
     case statusComment(id: String)
-    case getFileList(roomIds: [String], page: Int, limit : Int)
+    case getFileList(roomIds: [String], fileType : String, page: Int, limit : Int)
 }
 
 extension APIComment : EndPoint {
@@ -53,7 +53,7 @@ extension APIComment : EndPoint {
         switch self {
         case .loadComment, .statusComment(_):
             return .get
-        case .postComment, .updateStatus, .search( _, _, _), .searchMessage( _, _, _, _, _, _), .getFileList( _, _, _):
+        case .postComment, .updateStatus, .search( _, _, _), .searchMessage( _, _, _, _, _, _), .getFileList( _, _, _, _):
             return .post
         case .delete, .clear( _):
             return .delete
@@ -165,9 +165,10 @@ extension APIComment : EndPoint {
                 "comment_id"                : id,
                 ] as [String : Any]
             return .requestParameters(bodyParameters: nil, bodyEncoding: .jsonUrlEncoding, urlParameters: params)
-        case .getFileList(let roomIds, let page, let limit) :
+        case .getFileList(let roomIds, let fileTye, let page, let limit) :
             var param = [
                 "room_ids"       : roomIds,
+                "file_type"      : fileTye,
                 "page"           : page,
                 "limit"          : limit
                 ] as [String : Any]

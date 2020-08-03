@@ -390,8 +390,8 @@ extension NetworkManager {
     ///   - roomIds:array  room id
     ///   - page: page
     ///   - limit : limit
-    func getFileList(roomIds: [String], page: Int, limit : Int, completion: @escaping ([CommentModel]?, QError?) -> Void) {
-        commentRouter.request(.getFileList(roomIds: roomIds, page: page, limit: limit)) { (data, response, error) in
+    func getFileList(roomIds: [String], fileType : String, page: Int, limit : Int, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+        commentRouter.request(.getFileList(roomIds: roomIds, fileType : fileType, page: page, limit: limit)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }

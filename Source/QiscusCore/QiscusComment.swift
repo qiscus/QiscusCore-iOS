@@ -408,10 +408,11 @@ extension QiscusCore {
     ///
     /// - Parameters:
     ///   - roomIds:array  room id
+    ///   - fileType  type of file that want to search for: "media", "doc", "link" and "others"
     ///   - page: page
-    ///   - limit : limit
-    public func getFileList(roomIds: [String], page: Int, limit : Int, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.getFileList(roomIds: roomIds, page: page, limit: limit) { (results, error) in
+    ///   - limit : limit (maximum limit is 10)
+    public func getFileList(roomIds: [String], fileType : String, page: Int, limit : Int, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.getFileList(roomIds: roomIds, fileType : fileType, page: page, limit: limit) { (results, error) in
             if let c = results {
                 onSuccess(c)
             }else {
