@@ -150,15 +150,17 @@ class QiscusWorkerManager {
     }
     
     private func pending() {
-        guard let comments = QiscusCore.database.comment.find(status: .pending) else { return }
-        comments.reversed().forEach { (c) in
-            // validation comment prevent id
-            if c.uniqId.isEmpty { QiscusCore.database.comment.evaluate(); return }
-            QiscusCore.shared.sendMessage(message: c, onSuccess: { (response) in
-                 QiscusLogger.debugPrint("success send pending message \(response.uniqId)")
-            }, onError: { (error) in
-                QiscusLogger.errorPrint("failed send pending message \(c.uniqId)")
-            })
+        DispatchQueue.global(qos: .background).sync {
+            guard let comments = QiscusCore.database.comment.find(status: .pending) else { return }
+            comments.reversed().forEach { (c) in
+                // validation comment prevent id
+                if c.uniqId.isEmpty { QiscusCore.database.comment.evaluate(); return }
+                QiscusCore.shared.sendMessage(message: c, onSuccess: { (response) in
+                     QiscusLogger.debugPrint("success send pending message \(response.uniqId)")
+                }, onError: { (error) in
+                    QiscusLogger.errorPrint("failed send pending message \(c.uniqId)")
+                })
+            }
         }
     }
 }

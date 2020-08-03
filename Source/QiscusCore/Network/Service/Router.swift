@@ -27,10 +27,20 @@ class Router<endpoint: EndPoint>: NetworkRouter {
                 QiscusLogger.networkLogger(request: request)
                 self.task = self.session.dataTask(with: request, completionHandler: { data, response, error in
                     QiscusLogger.networkLogger(request: request, response: data)
-                    DispatchQueue.main.sync { completion(data, response, error) }
+                    if Thread.isMainThread {
+                        completion(data, response, error)
+                    }else{
+                         DispatchQueue.main.sync { completion(data, response, error) }
+                    }
+                   
                 })
             }catch {
-                DispatchQueue.main.sync { completion(nil, nil, error) }
+                if Thread.isMainThread {
+                    completion(nil, nil, error)
+                }else{
+                    DispatchQueue.main.sync { completion(nil, nil, error) }
+                }
+                
             }
             self.task?.resume()
         }
@@ -41,17 +51,16 @@ class Router<endpoint: EndPoint>: NetworkRouter {
     }
     
     fileprivate func buildRequest(from route: endpoint) throws -> URLRequest {
-        
-        var request = URLRequest(url: route.baseURL.appendingPathComponent(route.path),
-                                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                                 timeoutInterval: 10.0)
-        
-        request.httpMethod = route.httpMethod.rawValue
-        if let header = route.header {
-            self.addAdditionalHeaders(header, request: &request)
-        }
-        
         do {
+            var request = URLRequest(url: route.baseURL.appendingPathComponent(route.path),
+                                     cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+                                     timeoutInterval: 10.0)
+            
+            request.httpMethod = route.httpMethod.rawValue
+            if let header = route.header {
+                self.addAdditionalHeaders(header, request: &request)
+            }
+            
             switch route.task {
             case .request:
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
