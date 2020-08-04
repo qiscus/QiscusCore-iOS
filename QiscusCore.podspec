@@ -10,7 +10,7 @@ s.license      = "MIT"
 s.author       = "Qiscus"
 s.source       = { :git => "https://github.com/qiscus/QiscusCore-iOS.git", :tag => "#{s.version}" }
 s.source_files  = "QiscusCore", "Source/QiscusCore/**/*.{h,m,swift,xib}"
-s.resources 	= "Source/QiscusCore/**/*.xcassets"
+#s.resources 	= "Source/QiscusCore/**/*.xcassets"
 s.resource_bundles = {
     'QiscusCore' => ['Source/QiscusCore/**/*.{lproj,xib,xcassets,imageset,png,xcdatamodeld,xcdatamodel}']
 }
