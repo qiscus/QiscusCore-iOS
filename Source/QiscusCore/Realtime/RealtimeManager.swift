@@ -637,12 +637,12 @@ public class RealtimeManager {
         self.qiscusCore?.qiscusLogger.debugPrint("Qiscus realtime connection state \(state.rawValue)")
         
         if state == .connecting {
-            qiscusCore?.eventManager.connectionDelegate?.onReconnecting()
+            qiscusCore?.connectionDelegate?.onReconnecting()
         }
         
         self.state = state
         if let state : QiscusConnectionState = QiscusConnectionState(rawValue: state.rawValue) {
-            qiscusCore?.eventManager.connectionDelegate?.connectionState(change: state)
+            qiscusCore?.connectionDelegate?.connectionState(change: state)
         }
         
         switch state {
@@ -663,7 +663,7 @@ public class RealtimeManager {
             }
             
             resumePendingSubscribeTopic()
-            qiscusCore?.eventManager.connectionDelegate?.onConnected()
+            qiscusCore?.connectionDelegate?.onConnected()
             
             break
         case .disconnected:
@@ -679,7 +679,7 @@ public class RealtimeManager {
     public func disconnect(withError err: Error?){
         self.qiscusCore?.config.isConnectedMqtt = false
         if let error = err{
-            qiscusCore?.eventManager.connectionDelegate?.onDisconnected(withError: QError(message: error.localizedDescription))
+            qiscusCore?.connectionDelegate?.onDisconnected(withError: QError(message: error.localizedDescription))
             if self.qiscusCore?.hasSetupUser() ?? true{
                 if self.qiscusCore?.enableEventReport == true {
                     self.qiscusCore?.network.event_report(moduleName: "MQTT", event: "DISCONNECTED", message: error.localizedDescription, onSuccess: { (success) in
@@ -690,7 +690,7 @@ public class RealtimeManager {
                 }
             }
         }else{
-             qiscusCore?.eventManager.connectionDelegate?.onDisconnected(withError: nil)
+             qiscusCore?.connectionDelegate?.onDisconnected(withError: nil)
         }
         
         if self.qiscusCore?.hasSetupUser() ?? true{

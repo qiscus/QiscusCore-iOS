@@ -10,7 +10,7 @@ import Foundation
 import QiscusRealtime
 import CoreData
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "3.0.0-beta.5"
+    public static let qiscusCoreVersionNumber:String = "3.0.0-beta.6"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -24,8 +24,8 @@ public class QiscusCore: NSObject {
     
     
     
-    public var defaultBrokerUrl : String  = "https://realtime.qiscus.com"
-    public var defaultRealtimeURL: String = "realtime-jawa.qiscus.com"
+    public var defaultBrokerUrl : String  = "https://realtime-lb.qiscus.com"
+    public var defaultRealtimeURL: String = "realtime-jogja.qiscus.com"
     public var appID : String = ""
     public var enableEventReport : Bool = false
     public var enableRealtime : Bool = true
@@ -466,7 +466,7 @@ public class QiscusCore: NSObject {
     /// - Parameter
     /// AppID: Qiscus SDK App ID
     /// baseUrl: baseUrl
-    /// brokerUrl: brokerUrl for example realtime-jawa.qiscus.com
+    /// brokerUrl: brokerUrl for example realtime-jogja.qiscus.com
     /// brokerLBUrl: brokerLBUrl is optional, default using urlLB from qiscus
     
     public func setupWithCustomServer(AppID: String, baseUrl: URL, brokerUrl: String, brokerLBUrl: String?) {

@@ -11,7 +11,7 @@ public class QiscusEventManager {
     var qiscusCore: QiscusCore? = nil
     //static var shared : QiscusEventManager = QiscusEventManager()
     // MARK: TODO delegate can't be accees from other class, please create setter/function
-    var connectionDelegate : QiscusConnectionDelegate? = nil
+//    var connectionDelegate : QiscusConnectionDelegate? = nil
 //    var delegate : QiscusCoreDelegate? = nil
 //    var roomDelegate : QiscusCoreRoomDelegate? = nil
 //    var room : QChatRoom? = nil

@@ -180,8 +180,8 @@ extension NetworkManager {
                     let lbUrl = LBModel(json: response)
                     self.qiscusCore?.qiscusLogger.debugPrint("realtimeServer from lb = \(lbUrl.node)")
                     if lbUrl.node.isEmpty {
-                        self.qiscusCore?.qiscusLogger.debugPrint("realtimeServer is nill from lb, now is changed to = realtime-jawa.qiscus.com ")
-                        onSuccess(self.qiscusCore?.defaultRealtimeURL ?? "realtime-jawa.qiscus.com")
+                        self.qiscusCore?.qiscusLogger.debugPrint("realtimeServer is nill from lb, now is changed to = realtime-jogja.qiscus.com ")
+                        onSuccess(self.qiscusCore?.defaultRealtimeURL ?? "realtime-jogja.qiscus.com")
                     }else{
                         onSuccess(lbUrl.node)
                     }
