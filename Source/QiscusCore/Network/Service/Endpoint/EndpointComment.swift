@@ -16,7 +16,7 @@ internal enum APIComment {
     case clear(roomChannelIds: [String])
     /// Search comment on server
     case search(keyword: String, roomID: String?, lastCommentID: Int?)
-    case searchMessage(query: String, roomIds: [String]?, userId : String? = nil, type: [String]?, page: Int, limit : Int)
+    case searchMessage(query: String, roomIds: [String]?, userId : String? = nil, type: [String]?, roomType : RoomType?, page: Int, limit : Int)
     case statusComment(id: String)
     case getFileList(roomIds: [String], fileType : String, page: Int, limit : Int)
 }
@@ -53,7 +53,7 @@ extension APIComment : EndPoint {
         switch self {
         case .loadComment, .statusComment(_):
             return .get
-        case .postComment, .updateStatus, .search( _, _, _), .searchMessage( _, _, _, _, _, _), .getFileList( _, _, _, _):
+        case .postComment, .updateStatus, .search( _, _, _), .searchMessage( _, _, _, _, _, _, _), .getFileList( _, _, _, _):
             return .post
         case .delete, .clear( _):
             return .delete
@@ -140,7 +140,7 @@ extension APIComment : EndPoint {
                 params["last_comment_id"] = commentID
             }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
-        case .searchMessage(let query, let roomIds, let userId, let type, let page, let limit):
+        case .searchMessage(let query, let roomIds, let userId, let type, let roomType, let page, let limit):
             var params = [
                 "query"             : query,
                 "page"              : page,
@@ -157,6 +157,21 @@ extension APIComment : EndPoint {
             
             if let type = type {
                 params["type"] = type
+            }
+            
+            if let roomType = roomType {
+                if roomType == .group {
+                    params["room_type"] = "group"
+                    params["is_public"] = false
+                    
+                } else if roomType == .single {
+                    params["room_type"] = "single"
+                    params["is_public"] = false
+                    
+                } else {
+                    params["room_type"] = "group"
+                    params["is_public"] = true
+                }
             }
             
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)

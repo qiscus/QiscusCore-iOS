@@ -352,11 +352,12 @@ extension NetworkManager {
     ///   - query: required, query to search
     ///   - roomIds:array  room id
     ///   - type: "text", "custom", "buttons", "button_postback_response", "reply", "card", "location", "contact_person", "file_attachment", "carousel", otther
+    ///   - roomType : single, group, channel
     ///   - userId : emailSender
     ///   - page : page
     ///   - limit : limit
-    func searchMessage(query: String, roomIds: [String]? = nil, userId : String? = nil, type: [String]? = nil, page: Int, limit : Int, completion: @escaping ([CommentModel]?, QError?) -> Void) {
-        commentRouter.request(.searchMessage(query: query, roomIds: roomIds, userId: userId, type: type, page: page, limit: limit)) { (data, response, error) in
+    func searchMessage(query: String, roomIds: [String]? = nil, userId : String? = nil, type: [String]? = nil, roomType : RoomType? = nil, page: Int, limit : Int, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+        commentRouter.request(.searchMessage(query: query, roomIds: roomIds, userId: userId, type: type, roomType : roomType, page: page, limit: limit)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }

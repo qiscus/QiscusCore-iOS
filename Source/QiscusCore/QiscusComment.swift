@@ -391,11 +391,12 @@ extension QiscusCore {
     ///   - query: required, query to search
     ///   - roomIds:array  room id
     ///   - type: "text", "custom", "buttons", "button_postback_response", "reply", "card", "location", "contact_person", "file_attachment", "carousel", otther
+    ///   - roomType : single, group, channel
     ///   - userId : emailSender
     ///   - page : page
     ///   - limit : limit
-    public func searchMessage(query: String, roomIds: [String]? = nil, userId : String? = nil, type: [String]? = nil, page: Int, limit : Int, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.searchMessage(query: query, roomIds: roomIds, userId: userId, type: type, page: page, limit: limit) { (results, error) in
+    public func searchMessage(query: String, roomIds: [String]? = nil, userId : String? = nil, type: [String]? = nil, roomType : RoomType? = nil, page: Int, limit : Int, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.searchMessage(query: query, roomIds: roomIds, userId: userId, type: type, roomType : roomType, page: page, limit: limit) { (results, error) in
             if let c = results {
                 onSuccess(c)
             }else {
