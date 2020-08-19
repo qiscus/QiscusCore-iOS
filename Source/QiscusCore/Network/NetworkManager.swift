@@ -323,11 +323,14 @@ extension NetworkManager {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
-                    guard let _ = data else {
+                    guard let responseData = data else {
                         onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    onSuccess(true)
+                    
+                    let response = ApiResponse.decode(from: responseData)
+                    let changed     = UserApiResponse.successRegisterDeviceToken(from: response)
+                    onSuccess(changed)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -356,11 +359,14 @@ extension NetworkManager {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
-                    guard let _ = data else {
+                    guard let responseData = data else {
                         onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    onSuccess(true)
+                    
+                    let response = ApiResponse.decode(from: responseData)
+                    let isSuccess  = UserApiResponse.successRemoveDeviceToken(from: response)
+                    onSuccess(isSuccess)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)

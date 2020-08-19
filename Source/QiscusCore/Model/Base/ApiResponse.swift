@@ -81,6 +81,16 @@ class UserApiResponse {
         return QAccount(json: comment)
     }
     
+    static func successRegisterDeviceToken(from json: JSON) -> Bool {
+        let changed = json["changed"].bool ?? false
+        return changed
+    }
+    
+    static func successRemoveDeviceToken(from json: JSON) -> Bool {
+        let success = json["success"].bool ?? false
+        return success
+    }
+
     static func allUser(from json: JSON) -> [QUser]?  {
         if let rooms = json["users"].array {
             var results = [QUser]()
