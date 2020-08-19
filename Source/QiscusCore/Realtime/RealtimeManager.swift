@@ -380,6 +380,12 @@ class RealtimeManager {
 }
 
  extension RealtimeManager: QiscusRealtimeDelegate {
+    func didReceiveRoomDelete(roomID: String, data: String){
+        guard let payload = toDictionary(text: data) else { return }
+        if let room = QiscusCore.database.room.find(id: roomID) {
+            _ = QiscusCore.database.comment.clear(inRoom: room.id, timestamp: nil)
+        }
+    }
     func didReceiveRoomEvent(roomID: String, data: String) {
         guard let payload = toDictionary(text: data) else { return }
         guard let postEvent = roomEvents[roomID] else { return }
