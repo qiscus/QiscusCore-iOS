@@ -30,6 +30,20 @@ extension QiscusCore {
                 _comment.payload!["content"] = ["":""]
             }
         }
+        
+        if (comment.type == "reply"){
+            if (comment.payload != nil) {
+                if let messageTypeReply = comment.payload?["replied_comment_type"] as? String {
+                    if messageTypeReply == "system_event" {
+                        let failed = comment
+                        failed.status  = .failed
+                        QiscusCore.database.comment.save([failed])
+                        onError(QError.init(message: "can't reply on system_event type"))
+                        return
+                    }
+                }
+            }
+        }
 
         // send message to server
         QiscusCore.network.postComment(roomId: comment.roomId, type: comment.type, message: comment.message, payload: comment.payload, extras: comment.extras, uniqueTempId: comment.uniqId) { (result, error) in
@@ -83,6 +97,20 @@ extension QiscusCore {
                 _comment.payload!["content"] = payload
             }else {
                 _comment.payload!["content"] = ["":""]
+            }
+        }
+        
+        if (message.type == "reply"){
+            if (message.payload != nil) {
+                if let messageTypeReply = message.payload?["replied_comment_type"] as? String {
+                    if messageTypeReply == "system_event" {
+                        let failed = message
+                        failed.status  = .failed
+                        QiscusCore.database.comment.save([failed])
+                        onError(QError.init(message: "can't reply on system_event type"))
+                        return
+                    }
+                }
             }
         }
         
