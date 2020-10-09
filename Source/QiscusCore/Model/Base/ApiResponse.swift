@@ -147,6 +147,11 @@ class RoomApiResponse {
         }
     }
     
+    static func getRoomUnreadCount(from json: JSON) -> Int {
+        let unreadCount = json["total_unread_count"].int ?? 0
+        return unreadCount
+    }
+    
     static func usersPresence(from json: JSON) -> [QUserPresence]? {
         if let usersStatus = json["user_status"].array {
             var results = [QUserPresence]()

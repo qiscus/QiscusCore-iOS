@@ -696,5 +696,39 @@ extension NetworkManager {
             }
         }
     }
+    
+    /// getRoomUnreadCount
+    /// - Parameters:
+    ///   - completion: @escaping when success get channels, return unread count (int)
+    func getRoomUnreadCount(token: String, completion: @escaping (Int?, String?) -> Void) {
+        roomRouter.request(.getRoomUnreadCount(token: token)) { (data, response, error) in
+            if error != nil {
+                completion(nil, error?.localizedDescription ?? "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    let response    = ApiResponse.decode(from: responseData)
+                    let unreadCount    = RoomApiResponse.getRoomUnreadCount(from: response)
+                    completion(unreadCount, nil)
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(nil, errorMessage)
+                }
+            }
+        }
+    }
+
 
 }
