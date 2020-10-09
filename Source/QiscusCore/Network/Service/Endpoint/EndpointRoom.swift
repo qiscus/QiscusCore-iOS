@@ -24,6 +24,7 @@ internal enum APIRoom {
     case getParticipant(roomId: String, page:Int?, limit: Int?, offset: Int?, sorting : SortType?)
     case getRoomById(roomId: String)
     case usersPresence(userIds : [String])
+    case getRoomUnreadCount
 }
 
 extension APIRoom : EndPoint {
@@ -63,12 +64,14 @@ extension APIRoom : EndPoint {
             return "channels/leave"
         case .usersPresence( _):
             return "users/status"
+        case .getRoomUnreadCount:
+            return "get_room_unread_count"
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
-        case .roomList, .getRoomById, .getParticipant, .getChannels:
+        case .roomList, .getRoomById, .getParticipant, .getChannels, .getRoomUnreadCount:
             return .get
         case .roomInfo, .createNewRoom, .updateRoom, .roomWithTarget, .channelWithUniqueId, .addParticipant, .removeParticipant, .getChannelsInfo, .joinChannels, .leaveChannels, .usersPresence:
             return .post
@@ -243,6 +246,13 @@ extension APIRoom : EndPoint {
                 "user_ids"  : userIds
                 ] as [String : Any]
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
+            
+        case .getRoomUnreadCount:
+            var params = [
+              "token"                    : QiscusCore.getUserData()?.token ?? ""
+                ] as [String : Any]
+            
+            return .requestParameters(bodyParameters: nil, bodyEncoding: .jsonUrlEncoding, urlParameters: params)
         }
     }
 }

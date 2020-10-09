@@ -659,6 +659,23 @@ extension QiscusCore {
         }
     }
     
+    /// getRoomUnreadCount
+    /// - Parameters:
+    ///   - completion: Response unreadCount (int)
+    public func getRoomUnreadCount(onSuccess: @escaping (Int) -> Void, onError: @escaping (QError) -> Void ) {
+        QiscusCore.network.getRoomUnreadCount() { (unreadCount, error) in
+            if let _unreadCount = unreadCount {
+                onSuccess(_unreadCount)
+            }else{
+                if let _error = error {
+                    onError(QError(message: _error))
+                }else {
+                    onError(QError(message: "Unexpected Error"))
+                }
+            }
+        }
+    }
+    
     
     @available(*, deprecated, message: "will soon become unavailable.")
     public func subscribeEvent(roomID: String, onEvent: @escaping (RoomEvent) -> Void) {
