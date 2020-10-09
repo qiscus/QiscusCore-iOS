@@ -710,10 +710,22 @@ extension NewQiscusCore {
     }
     
     public func subscribeTyping(roomID: String, onTyping: @escaping (RoomTyping) -> Void) {
+        if let roomUser = self.qiscusCore?.database.room.find(id: roomID){
+            if roomUser.type == RoomType.channel {
+                return
+            }
+        }
+    
         return (self.qiscusCore?.realtime.subscribeTyping(roomID:roomID, onTyping: onTyping))!
     }
     
     public func unsubscribeTyping(roomID: String) {
+        if let roomUser = self.qiscusCore?.database.room.find(id: roomID){
+            if roomUser.type == RoomType.channel {
+                return
+            }
+        }
+
         self.qiscusCore?.realtime.unsubscribeTyping(roomID: roomID)
     }
 }
