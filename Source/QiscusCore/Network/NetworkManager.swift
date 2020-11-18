@@ -375,15 +375,30 @@ extension NetworkManager {
                     }
                     let response = ApiResponse.decode(from: responseData)
                     let user     = UserApiResponse.user(from: response)
-                    onSuccess(user)
+                    if QiscusCore.hasSetupUser() == true {
+                         onSuccess(user)
+                    } else {
+                        return
+                    }
+                   
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
-                        onError(QError(message: "json: \(jsondata)"))
+                        if QiscusCore.hasSetupUser() == true {
+                             onError(QError(message: "json: \(jsondata)"))
+                        } else {
+                            return
+                        }
+                       
                     } catch {
                         QiscusLogger.errorPrint("Error syncEvent Code =\(response.statusCode)\(errorMessage)")
-                        onError(QError(message: NetworkResponse.unableToDecode.rawValue))
+                        if QiscusCore.hasSetupUser() == true {
+                              onError(QError(message: NetworkResponse.unableToDecode.rawValue))
+                        } else {
+                            return
+                        }
+                       
                     }
                 }
             }

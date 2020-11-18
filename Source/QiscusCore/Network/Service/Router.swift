@@ -30,15 +30,24 @@ class Router<endpoint: EndPoint>: NetworkRouter {
                     if Thread.isMainThread {
                         completion(data, response, error)
                     }else{
-                         DispatchQueue.main.sync { completion(data, response, error) }
+                        if Thread.isMainThread {
+                             completion(data, response, error)
+                        } else {
+                            DispatchQueue.main.sync { completion(data, response, error) }
+                        }
+                         
                     }
-                   
                 })
             }catch {
                 if Thread.isMainThread {
                     completion(nil, nil, error)
                 }else{
-                    DispatchQueue.main.sync { completion(nil, nil, error) }
+                    if Thread.isMainThread {
+                        completion(nil, nil, error)
+                    } else {
+                        DispatchQueue.main.sync { completion(nil, nil, error) }
+                    }
+                    
                 }
                 
             }
