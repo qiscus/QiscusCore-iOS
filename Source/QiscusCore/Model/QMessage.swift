@@ -108,6 +108,55 @@ open class QMessage {
         self.userExtras         = json["user_extras"].dictionaryObject
         
     }
+    
+    public func generateMessage(roomId : String, text : String) -> QMessage {
+        var message = QMessage.init()
+        message.type = "text"
+        message.message = text
+        message.chatRoomId = roomId
+        
+        return message
+    }
+    
+    public func generateFileAttachmentMessage(roomId : String, caption: String, name : String) -> QMessage {
+        var message = QMessage.init()
+        message.chatRoomId = roomId
+        message.type = "file_attachment"
+        message.payload = [
+            "file_name" : name,
+            "caption"   : caption
+        ]
+        
+        return message
+    }
+    
+    public func generateCustomMessage(roomId : String, text : String, type: String, payoad : [String:Any]) -> QMessage {
+        var message = QMessage.init()
+        message.chatRoomId = roomId
+        message.type = "custom"
+        message.payload = payload
+        message.payload?["type"] = type
+        message.message = text
+        
+        return message
+    }
+    
+    public func generateReplyMessage(roomId: String, text: String, repliedMessage: QMessage) -> QMessage {
+        var message = QMessage.init()
+        message.chatRoomId = roomId
+        message.type = "reply"
+        message.message = text
+        message.payload = [
+            "replied_comment_sender_email"       : repliedMessage.userEmail,
+            "replied_comment_id" : Int(repliedMessage.id),
+            "text"      : text,
+            "replied_comment_message"   : repliedMessage.message,
+            "replied_comment_sender_username" : repliedMessage.name,
+            "replied_comment_payload" : repliedMessage.payload,
+            "replied_comment_type" : repliedMessage.type
+        ]
+        return message
+    }
 }
 
 extension QMessage {
