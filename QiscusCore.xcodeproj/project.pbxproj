@@ -75,6 +75,7 @@
 		3D1AC0E024BEDAD70040F736 /* QMessageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1AC0D224BEDAD60040F736 /* QMessageStorage.swift */; };
 		3D1AC0E124BEDAD70040F736 /* QiscusDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1AC0D324BEDAD70040F736 /* QiscusDatabase.swift */; };
 		3D1AC0E224BEDAD70040F736 /* QParticipantDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1AC0D424BEDAD70040F736 /* QParticipantDatabase.swift */; };
+		3D3C88602574697C00C50F70 /* MIGRATION_GUIDE.md in Resources */ = {isa = PBXBuildFile; fileRef = 3D3C885F2574697C00C50F70 /* MIGRATION_GUIDE.md */; };
 		3D55936E20FC89CE00AE35E5 /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D55936420FC89CD00AE35E5 /* QiscusCore.framework */; };
 		3D55937320FC89CE00AE35E5 /* QiscusCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55937220FC89CE00AE35E5 /* QiscusCoreTests.swift */; };
 		3D84A2DE2164EA92008F61A5 /* ConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D84A2DD2164EA92008F61A5 /* ConfigTests.swift */; };
@@ -162,6 +163,7 @@
 		3D1AC0D224BEDAD60040F736 /* QMessageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QMessageStorage.swift; path = Source/QiscusCore/Database/QMessageStorage.swift; sourceTree = "<group>"; };
 		3D1AC0D324BEDAD70040F736 /* QiscusDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QiscusDatabase.swift; path = Source/QiscusCore/Database/QiscusDatabase/QiscusDatabase.swift; sourceTree = "<group>"; };
 		3D1AC0D424BEDAD70040F736 /* QParticipantDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QParticipantDatabase.swift; path = Source/QiscusCore/Database/QParticipantDatabase.swift; sourceTree = "<group>"; };
+		3D3C885F2574697C00C50F70 /* MIGRATION_GUIDE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = MIGRATION_GUIDE.md; sourceTree = "<group>"; };
 		3D55936420FC89CD00AE35E5 /* QiscusCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QiscusCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D55936D20FC89CE00AE35E5 /* QiscusCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QiscusCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D55937220FC89CE00AE35E5 /* QiscusCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiscusCoreTests.swift; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 		3D55935A20FC89CD00AE35E5 = {
 			isa = PBXGroup;
 			children = (
+				3D3C885F2574697C00C50F70 /* MIGRATION_GUIDE.md */,
 				3D1AC0C824BEDAD40040F736 /* ActiveRecord.swift */,
 				3D1AC0D124BEDAD60040F736 /* Message+CoreDataClass.swift */,
 				3D1AC0C624BEDAD40040F736 /* Message+CoreDataProperties.swift */,
@@ -397,6 +400,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D1AC03F24BEB8DB0040F736 /* README.md in Resources */,
+				3D3C88602574697C00C50F70 /* MIGRATION_GUIDE.md in Resources */,
 				3D1AC03E24BEB8DB0040F736 /* QiscusCore.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
