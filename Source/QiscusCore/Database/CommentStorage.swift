@@ -93,9 +93,16 @@ class CommentStorage : QiscusStorage {
             }
         }else {
             // add new
-            data.append(comment)
-            onCreate(comment)
-            save(comment)
+            if let r = find(byID: comment.id)  {
+                // update
+                save(comment)
+                onUpdate(comment)
+            }else{
+                // add new
+                data.append(comment)
+                onCreate(comment)
+                save(comment)
+            }
         }
     }
     
