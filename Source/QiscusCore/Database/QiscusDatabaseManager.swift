@@ -175,7 +175,7 @@ public class CommentDB {
     }
     
     // MARK: TODO need to improve flow, check room then add comment
-    public func save(_ data: [CommentModel], publishEvent: Bool = true) {
+    public func save(_ data: [CommentModel], publishEvent: Bool = true, isUpdateMessage : Bool = false) {
         data.forEach { (c) in
             // listen callback to provide event
             comment.add(c, onCreate: { (result) in
@@ -204,8 +204,10 @@ public class CommentDB {
                         QiscusLogger.debugPrint("Last message already updated")
                     }
                     
-                    if publishEvent {
+                    if publishEvent && isUpdateMessage == false {
                         QiscusEventManager.shared.gotNewMessage(comment: result)
+                    } else if publishEvent == true && isUpdateMessage == true {
+                        QiscusEventManager.shared.gotUpdatedMessage(comment: result)
                     }
                     
                     self.markCommentAsRead(comment: result)

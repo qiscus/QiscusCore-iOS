@@ -10,6 +10,64 @@ import Foundation
 
 // MARK: Comment Management
 extension QiscusCore {
+    /// Update Message
+    ///
+    /// - Parameters:
+    ///   - message: CommentModel()
+    ///   - completion: Response commentModel Object and error if exist.
+    public func updateMessage(message: CommentModel, onSuccess: @escaping (CommentModel) -> Void, onError: @escaping (QError) -> Void) {
+        // update comment
+        let _comment            = message
+        _comment.roomId         = message.roomId
+        _comment.status         = message.status
+        _comment.timestamp      = message.uniqId
+        // check comment type, if not Qiscus Comment set as custom type
+        if !_comment.isQiscustype() {
+            let _payload    = _comment.payload
+            let _type       = _comment.type
+            _comment.type = "custom"
+            _comment.payload?.removeAll() // clear last payload then recreate
+            _comment.payload = ["type" : _type]
+            if let payload = _payload {
+                _comment.payload!["content"] = payload
+            }else {
+                _comment.payload!["content"] = ["":""]
+            }
+        }
+        
+        if (message.type == "reply"){
+            if (message.payload != nil) {
+                if let messageTypeReply = message.payload?["replied_comment_type"] as? String {
+                    if messageTypeReply == "system_event" {
+                        let failed = message
+                        failed.status  = .failed
+                        QiscusCore.database.comment.save([failed])
+                        onError(QError.init(message: "can't reply on system_event type"))
+                        return
+                    }
+                }
+            }
+        }
+        
+        // send message to server
+        QiscusCore.network.updateComment(message: message.message, payload: message.payload, extras: message.extras, uniqueTempId: message.uniqId) { (result, error) in
+            
+            if error != nil {
+                //save in local comment pending
+                QiscusCore.database.comment.save([_comment])
+            }
+            
+            if let commentResult = result {
+                // save in local
+                QiscusCore.database.comment.save([commentResult], publishEvent: true, isUpdateMessage: true)
+                
+                onSuccess(commentResult)
+            }else {
+                onError(QError.init(message:"\(error)"))
+            }
+        }
+    }
+    
     @available(*, deprecated, message: "will soon become unavailable.")
     public func sendMessage(roomID id: String, comment: CommentModel, onSuccess: @escaping (CommentModel) -> Void, onError: @escaping (QError) -> Void) {
         // update comment

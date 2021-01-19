@@ -41,6 +41,24 @@ class QiscusEventManager {
         
     }
     
+    func gotUpdatedMessage(comment: CommentModel){
+        // filter event for active room
+        if let r = QiscusEventManager.shared.room {
+            if r.id == String(comment.roomId) {
+                if roomDelegate != nil{
+                    // publish event new comment inside room
+                    roomDelegate?.onMessageUpdated(message: comment)
+                }
+            }
+        }
+        // got new comment for other room
+        if let room = QiscusCore.database.room.find(id: comment.roomId) {
+            if delegate != nil{
+                delegate?.onRoomMessageUpdated(room, message: comment)
+            }
+        }
+    }
+    
     func gotNewMessage(comment: CommentModel) {
         guard let user = QiscusCore.getProfile() else { return }
         // no update if your comment
