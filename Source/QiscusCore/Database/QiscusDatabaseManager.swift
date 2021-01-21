@@ -215,7 +215,11 @@ public class CommentDB {
                 
             }) { (updatedResult) in
                 // MARK : TODO refactor comment update flow and event
-                QiscusCore.eventManager.gotMessageStatus(comment: updatedResult)
+                if publishEvent == true && isUpdateMessage == true {
+                    QiscusEventManager.shared.gotUpdatedMessage(comment: updatedResult)
+                }else{
+                    QiscusCore.eventManager.gotMessageStatus(comment: updatedResult)
+                }
             }
         }
     }
