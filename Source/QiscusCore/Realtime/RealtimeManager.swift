@@ -616,7 +616,7 @@ public class RealtimeManager {
     
     public func didReceiveMessage(data: String) {
         let json = ApiResponse.decode(string: data)
-        let comment = QMessage(json: json)
+        let comment = QMessage(json: json, qiscusCore: self.qiscusCore)
         
         //check comment in db
         if let commentDB = self.qiscusCore?.database.message.find(id: comment.chatRoomId){
@@ -630,7 +630,7 @@ public class RealtimeManager {
     
     public func didReceiveUpdatedMessage(data: String) {
         let json = ApiResponse.decode(string: data)
-        let comment = QMessage(json: json)
+        let comment = QMessage(json: json, qiscusCore: self.qiscusCore)
         
         //check comment in db
         qiscusCore?.database.message.save([comment], publishEvent: true, isUpdateMessage: true)

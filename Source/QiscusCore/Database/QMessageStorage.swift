@@ -286,7 +286,7 @@ extension QMessageStorage {
     
     /// map from db model to core model
     private func map(_ data: Message) -> QMessage {
-        let result = QMessage(json: [:])
+        let result = QMessage(json: [:], qiscusCore: nil)
         // check record data
         guard let id = data.id else { return result }
         guard let message = data.message else { return result }

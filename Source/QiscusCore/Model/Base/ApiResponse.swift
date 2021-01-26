@@ -206,11 +206,11 @@ class RoomApiResponse {
 }
 
 class CommentApiResponse {
-    static func comments(from json: JSON) -> [QMessage]? {
+    static func comments(from json: JSON, qiscusCore : QiscusCore? = nil) -> [QMessage]? {
         if let comments = json["comments"].array {
             var results = [QMessage]()
             for comment in comments {
-                let data = QMessage(json: comment)
+                let data = QMessage(json: comment, qiscusCore: qiscusCore)
                 results.append(data)
             }
             return results
@@ -219,9 +219,9 @@ class CommentApiResponse {
         }
     }
     
-    static func comment(from json: JSON) -> QMessage {
+    static func comment(from json: JSON, qiscusCore : QiscusCore? = nil) -> QMessage {
         let comment = json["comment"]
-        return QMessage(json: comment)
+        return QMessage(json: comment, qiscusCore: qiscusCore)
     }
     
     static func commentDeliveredUser(from json: JSON) -> [QParticipant]? {

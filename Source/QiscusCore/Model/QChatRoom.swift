@@ -65,7 +65,7 @@ open class QChatRoom {
         self.unreadCount    = json["unread_count"].intValue
         let _lastComment    = json["last_comment"]
         
-        self.lastComment    = QMessage(json: _lastComment)
+        self.lastComment    = QMessage(json: _lastComment, qiscusCore: nil)
         if let _participants    = json["participants"].array {
             var data = [QParticipant]()
             for i in _participants {

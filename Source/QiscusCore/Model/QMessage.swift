@@ -68,7 +68,7 @@ open class QMessage {
         }
     }
     
-    init(json: JSON) {
+    init(json: JSON, qiscusCore : QiscusCore? = nil) {
         self.id                 = json["id_str"].stringValue
         self.chatRoomId         = json["room_id_str"].stringValue
         self.uniqueId           = json["unique_temp_id"].stringValue
@@ -107,6 +107,14 @@ open class QMessage {
         self.extras             = json["extras"].dictionaryObject
         self.userExtras         = json["user_extras"].dictionaryObject
         
+        let roomName = json["room_name"].string ?? ""
+        
+        if !roomName.isEmpty && qiscusCore != nil {
+            if let room = qiscusCore?.database.room.find(id: self.chatRoomId) {
+                room.name = roomName
+                qiscusCore?.database.room.save([room])
+            }
+        }
     }
     
     public func generateMessage(roomId : String, text : String) -> QMessage {
