@@ -86,10 +86,27 @@ class Router<endpoint: EndPoint>: NetworkRouter {
                 qiscusCore?.qiscusLogger.networkLogger(request: request)
                 self.task = self.session.dataTask(with: request, completionHandler: { data, response, error in
                     self.qiscusCore?.qiscusLogger.networkLogger(request: request, response: data)
-                    DispatchQueue.main.sync { completion(data, response, error) }
+                    if Thread.isMainThread {
+                        completion(data, response, error)
+                    }else{
+                        if Thread.isMainThread {
+                            completion(data, response, error)
+                        } else {
+                            DispatchQueue.main.sync { completion(data, response, error) }
+                        }
+                    }
                 })
             }catch {
-                DispatchQueue.main.sync { completion(nil, nil, error) }
+                if Thread.isMainThread {
+                    completion(nil, nil, error)
+                }else{
+                    if Thread.isMainThread {
+                        completion(nil, nil, error)
+                    } else {
+                        DispatchQueue.main.sync { completion(nil, nil, error) }
+                    }
+                    
+                }
             }
             self.task?.resume()
         }

@@ -154,12 +154,23 @@ public class QiscusWorkerManager {
     }
     
     private func pending() {
+        if Thread.isMainThread {
+            sendPendingMessage()
+        } else {
+            DispatchQueue.global(qos: .background).sync {
+                sendPendingMessage()
+            }
+        }
+    }
+    
+    private func sendPendingMessage(){
         guard let comments = self.qiscusCore?.database.message.find(status: .pending) else { return }
         comments.reversed().forEach { (c) in
             // validation comment prevent id
             if c.uniqueId.isEmpty { self.qiscusCore?.database.message.evaluate(); return }
             self.qiscusCore?.shared.sendMessage(message: c, onSuccess: { (response) in
                 self.qiscusCore?.qiscusLogger.debugPrint("success send pending message \(response.uniqueId)")
+                self.qiscusCore?.config.lastCommentId = response.id
             }, onError: { (error) in
                 self.qiscusCore?.qiscusLogger.errorPrint("failed send pending message \(c.uniqueId)")
             })
