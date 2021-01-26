@@ -57,6 +57,7 @@ public class RealtimeManager {
             return
         }
         self.pendingSubscribeTopic.append(.comment(token: password))
+        self.pendingSubscribeTopic.append(.updateComment(token: password))
         self.pendingSubscribeTopic.append(.notification(token: password))
         
         if self.qiscusCore?.enableRealtime == true {
@@ -625,6 +626,15 @@ public class RealtimeManager {
         }
         
         
+    }
+    
+    public func didReceiveUpdatedMessage(data: String) {
+        let json = ApiResponse.decode(string: data)
+        let comment = QMessage(json: json)
+        
+        //check comment in db
+        qiscusCore?.database.message.save([comment], publishEvent: true, isUpdateMessage: true)
+
     }
     
     public func didReceiveUser(typing: Bool, roomId: String, userEmail: String) {

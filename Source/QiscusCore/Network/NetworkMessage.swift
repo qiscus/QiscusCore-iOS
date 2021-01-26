@@ -47,6 +47,58 @@ extension NetworkManager {
         }
     }
     
+    /// update comment
+    ///
+    /// - Parameters:
+    ///   - message: message
+    ///   - payload: comment payload (string on json format)
+    ///   - extras: comment extras (string on json format)
+    ///   - uniqueTempId: -
+    ///   - completion: @escaping when success post comment, return Optional(CommentModel) and Optional(String error message)
+    func updateComment(message: String, payload: [String:Any]? = nil, extras: [String:Any]? = nil, uniqueTempId: String = "", completion: @escaping(QMessage?, String?) -> Void) {
+        commentRouter.request(.updateComment(message: message, payload: payload, extras: extras, uniqueTempId: uniqueTempId, userToken : self.qiscusCore?.getUserData()?.token ?? "")) { (data, response, error) in
+            if error != nil {
+                completion(nil, error?.localizedDescription ?? "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let comment = CommentApiResponse.comment(from: response)
+                    completion(comment, nil)
+                case .failure(let errorMessage):
+                    if data != nil {
+                        do {
+                            let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                            self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
+                            
+                            switch response.statusCode {
+                            case 400...599:
+                                completion(nil, "json: \(jsondata)")
+                            default:
+                                completion(nil, "json: \(jsondata)")
+                                break
+                            }
+                            
+                        } catch {
+                            self.qiscusCore?.qiscusLogger.errorPrint("Error updateComment Code =\(response.statusCode)\(errorMessage)")
+                            completion(nil, NetworkResponse.unableToDecode.rawValue)
+                        }
+                    }else{
+                        self.qiscusCore?.qiscusLogger.errorPrint("Error updateComment Code =\(response.statusCode)\(errorMessage)")
+                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                }
+            }
+        }
+    }
+    
+
     
     /// post comment
     ///

@@ -228,7 +228,7 @@ public class QMessageDB {
     }
     
     // MARK: TODO need to improve flow, check room then add comment
-    public func save(_ data: [QMessage], publishEvent: Bool = true) {
+    public func save(_ data: [QMessage], publishEvent: Bool = true, isUpdateMessage : Bool = false) {
         DispatchQueue.global(qos: .background).sync {
             data.forEach { (c) in
                 if c.id == "0"{
@@ -260,8 +260,10 @@ public class QMessageDB {
                         if !(self.qiscusCore?.database.room.updateLastComment(result))! {
                         }
                         
-                        if publishEvent {
+                        if publishEvent && isUpdateMessage == false {
                             self.qiscusCore?.eventManager.gotNewMessage(comment: result)
+                        } else if publishEvent == true && isUpdateMessage == true {
+                            self.qiscusCore?.eventManager.gotUpdatedMessage(comment: result)
                         }
                         
                         self.markCommentAsRead(comment: result)
@@ -269,7 +271,13 @@ public class QMessageDB {
                     
                 }) { (updatedResult) in
                     // MARK : TODO refactor comment update flow and event
-                    self.qiscusCore?.eventManager.gotMessageStatus(comment: updatedResult)
+                    
+                    if publishEvent == true && isUpdateMessage == true {
+                        self.qiscusCore?.eventManager.gotUpdatedMessage(comment: updatedResult)
+                    }else{
+                        self.qiscusCore?.eventManager.gotMessageStatus(comment: updatedResult)
+                    }
+
                 }
             }
         }

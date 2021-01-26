@@ -42,6 +42,25 @@ public class QiscusEventManager {
         
     }
     
+    func gotUpdatedMessage(comment: QMessage){
+        // filter event for active room
+        if let r = qiscusCore?.activeChatRoom{
+            if r.id == String(comment.chatRoomId) {
+                if qiscusCore?.roomDelegate != nil{
+                    // publish event new comment inside room
+                    qiscusCore?.roomDelegate?.onMessageUpdated(message: comment)
+                }
+            }
+        }
+        // got new comment for other room
+        if let room = self.qiscusCore?.database.room.find(id: comment.chatRoomId) {
+            if qiscusCore?.delegate != nil{
+                qiscusCore?.delegate?.onRoomMessageUpdated(room, message: comment)
+            }
+        }
+    }
+
+    
     func gotNewMessage(comment: QMessage) {
         guard let user = self.qiscusCore?.getProfile() else { return }
         // no update if your comment
