@@ -112,9 +112,18 @@ extension APIRoom : EndPoint {
                 params["limit"] = l
             }
             
-            if let roomTypeParams = roomType {
-                params["room_type"] = roomTypeParams
+            if let roomType = roomType {
+                if roomType == .group {
+                    params["room_type"] = "group"
+                    
+                } else if roomType == .single {
+                    params["room_type"] = "single"
+                    
+                } else {
+                    params["room_type"] = "public_channel"
+                }
             }
+
             return .requestParameters(bodyParameters: nil, bodyEncoding: .jsonUrlEncoding, urlParameters: params)
         case .roomInfo(let roomId, let roomUniqueId ,let showParticipants, let showRemoved):
             var params = [

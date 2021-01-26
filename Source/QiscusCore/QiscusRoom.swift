@@ -388,16 +388,16 @@ extension NewQiscusCore {
     /// getAllRoom
     /// - Parameters:
     ///   - showParticipant: Bool (true = include participants obj to the room, false = participants obj nil)
-    ///   - limit: limit room per page
-    ///   - page: page
-    ///   - roomType: (single, group, public_channel) by default returning all type
     ///   - showRemoved: Bool (true = include room that has been removed, false = exclude room that has been removed)
     ///   - showEmpty: Bool (true = it will show all rooms that have been created event there are no messages, default is false where only room that have at least one message will be shown)
+    ///   - roomType: (single, group, public_channel) by default returning all type
+    ///   - page: page
+    ///   - limit: limit room per page
     ///   - completion: @escaping when success get room list returning Optional([RoomModel]), Optional(Meta) contain page, total_room per page, Optional(String error message)
-    public func getAllChatRooms(showParticipant:Bool = true,showRemoved: Bool = false, showEmpty: Bool = false, page: Int, limit: Int ,onSuccess: @escaping ([QChatRoom],Meta?) -> Void, onError: @escaping (QError) -> Void) {
+    public func getAllChatRooms(showParticipant:Bool = true,showRemoved: Bool = false, showEmpty: Bool = false, roomType : RoomType? = nil, page: Int, limit: Int ,onSuccess: @escaping ([QChatRoom],Meta?) -> Void, onError: @escaping (QError) -> Void) {
         // api get room lists
         
-        self.qiscusCore?.network.getRoomList(showParticipant: showParticipant, limit: limit, page: page, showRemoved: showRemoved, showEmpty: showEmpty) { (data, meta, error) in
+        self.qiscusCore?.network.getRoomList(showParticipant: showParticipant, limit: limit, page: page, roomType: roomType, showRemoved: showRemoved, showEmpty: showEmpty) { (data, meta, error) in
             if let rooms = data {
                 // save room
                 if rooms.count != 0{
