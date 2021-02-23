@@ -9,7 +9,7 @@
 import Foundation
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.5.10"
+    public static let qiscusCoreVersionNumber:String = "1.5.11-beta.1"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -124,6 +124,7 @@ public class QiscusCore: NSObject {
     /// - Parameter WithAppID: Qiscus SDK App ID
     @available(*, deprecated, message: "will soon become unavailable.")
     public class func setup(WithAppID id: String, server: QiscusServer? = nil) {
+        ConfigManager.shared.migrationEncrypDescrypt()
         config.appID    = id
         if let _server = server {
             config.server = _server
@@ -159,6 +160,7 @@ public class QiscusCore: NSObject {
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
     public class func setup(AppID: String) {
+        ConfigManager.shared.migrationEncrypDescrypt()
         config.appID    = AppID
         
         config.server   = QiscusServer(url: URL.init(string: "https://api.qiscus.com")!, realtimeURL: self.defaultRealtimeURL, realtimePort: 1885, brokerLBUrl: self.defaultBrokerUrl)
@@ -188,6 +190,7 @@ public class QiscusCore: NSObject {
     /// brokerLBUrl: brokerLBUrl is optional, default using urlLB from qiscus
     
     public class func setupWithCustomServer(AppID: String, baseUrl: URL, brokerUrl: String, brokerLBUrl: String?) {
+        ConfigManager.shared.migrationEncrypDescrypt()
         config.appID    = AppID
         
         if brokerLBUrl != nil{
@@ -404,6 +407,7 @@ public class QiscusCore: NSObject {
         }
         network.login(email: userID, password: userKey, username: username, avatarUrl: avatarURL?.absoluteString, extras: extras, onSuccess: { (user) in
             // save user in local
+            KeychainWrapper.standard.set(user.rtKey, forKey: "rtKey")
             ConfigManager.shared.user = user
             realtime.connect(username: user.email, password: user.token)
             onSuccess(user)
@@ -423,6 +427,7 @@ public class QiscusCore: NSObject {
         }
         network.login(email: userId, password: userKey, username: username, avatarUrl: avatarURL?.absoluteString, extras: extras, onSuccess: { (user) in
             // save user in local
+            KeychainWrapper.standard.set(user.rtKey, forKey: "rtKey")
             ConfigManager.shared.user = user
             realtime.connect(username: user.email, password: user.token)
             onSuccess(user)
@@ -444,6 +449,7 @@ public class QiscusCore: NSObject {
         }
         network.login(identityToken: token, onSuccess: { (user) in
             // save user in local
+            KeychainWrapper.standard.set(user.rtKey, forKey: "rtKey")
             ConfigManager.shared.user = user
             onSuccess(user)
         }) { (error) in
@@ -462,6 +468,7 @@ public class QiscusCore: NSObject {
         }
         network.login(identityToken: token, onSuccess: { (user) in
             // save user in local
+            KeychainWrapper.standard.set(user.rtKey, forKey: "rtKey")
             ConfigManager.shared.user = user
             onSuccess(user)
         }) { (error) in
@@ -512,7 +519,7 @@ public class QiscusCore: NSObject {
     /// - Returns: return true if already login
     @available(*, deprecated, message: "will soon become unavailable.")
     public static var isLogined : Bool {
-        get {
+    get {
             if let user = getProfile(){
                 if !user.token.isEmpty{
                      return true
@@ -568,6 +575,7 @@ public class QiscusCore: NSObject {
     public func registerDeviceToken(token : String, isDevelopment:Bool = false, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
         if QiscusCore.isLogined {
             QiscusCore.network.registerDeviceToken(deviceToken: token, isDevelopment: isDevelopment, onSuccess: { (success) in
+                QiscusCore.config.deviceToken = token
                 onSuccess(success)
             }) { (error) in
                 onError(error)

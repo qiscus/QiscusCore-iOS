@@ -81,7 +81,10 @@
 		3D5E860524BDA8530061D7E4 /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5E860324BDA8530061D7E4 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3D5E860724BDAA5B0061D7E4 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E860624BDAA5B0061D7E4 /* README.md */; };
 		3D5E864E24BDCDEA0061D7E4 /* Qiscus.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E864C24BDCDEA0061D7E4 /* Qiscus.xcdatamodeld */; };
+		3D7F71C625DFA9220057E03E /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7F71C525DFA9220057E03E /* HMAC.swift */; };
 		3D84A2DE2164EA92008F61A5 /* ConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D84A2DD2164EA92008F61A5 /* ConfigTests.swift */; };
+		3DE23AD325E388680086D5E8 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE23AD225E388680086D5E8 /* KeychainWrapper.swift */; };
+		3DE23AD625E3889F0086D5E8 /* KeychainItemAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE23AD525E3889F0086D5E8 /* KeychainItemAccessibility.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,8 +187,11 @@
 		3D5E860324BDA8530061D7E4 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		3D5E860624BDAA5B0061D7E4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3D5E864D24BDCDEA0061D7E4 /* Qiscus.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Qiscus.xcdatamodel; sourceTree = "<group>"; };
+		3D7F71C525DFA9220057E03E /* HMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HMAC.swift; path = Source/QiscusCore/Util/HMAC.swift; sourceTree = "<group>"; };
 		3D84A2DD2164EA92008F61A5 /* ConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigTests.swift; sourceTree = "<group>"; };
 		3DE20492215888B600E3DF96 /* QiscusCore.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = QiscusCore.podspec; path = Cocoapods/QiscusCore.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		3DE23AD225E388680086D5E8 /* KeychainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KeychainWrapper.swift; path = Source/QiscusCore/Util/KeychainWrapper.swift; sourceTree = "<group>"; };
+		3DE23AD525E3889F0086D5E8 /* KeychainItemAccessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KeychainItemAccessibility.swift; path = Source/QiscusCore/Util/KeychainItemAccessibility.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -286,6 +292,9 @@
 				3D5E85D024BD9D230061D7E4 /* Data+Json.swift */,
 				3D5E85C324BD9D1E0061D7E4 /* QiscusHeartBeat.swift */,
 				3D5E85C424BD9D1E0061D7E4 /* QiscusLogger.swift */,
+				3D7F71C525DFA9220057E03E /* HMAC.swift */,
+				3DE23AD225E388680086D5E8 /* KeychainWrapper.swift */,
+				3DE23AD525E3889F0086D5E8 /* KeychainItemAccessibility.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -647,6 +656,7 @@
 			files = (
 				3D5E859924BD9CF30061D7E4 /* PersistentStore.swift in Sources */,
 				3D5E860724BDAA5B0061D7E4 /* README.md in Sources */,
+				3D7F71C625DFA9220057E03E /* HMAC.swift in Sources */,
 				3D5E859A24BD9CF30061D7E4 /* LBModel.swift in Sources */,
 				3D5E859B24BD9CF30061D7E4 /* RoomStorage.swift in Sources */,
 				3D5E859C24BD9CF30061D7E4 /* UserModel.swift in Sources */,
@@ -689,6 +699,7 @@
 				3D5E85A224BD9CF30061D7E4 /* Comment+CoreDataClass.swift in Sources */,
 				3D5E85A324BD9CF30061D7E4 /* Member+CoreDataProperties.swift in Sources */,
 				3D5E85A424BD9CF30061D7E4 /* NonceModel.swift in Sources */,
+				3DE23AD325E388680086D5E8 /* KeychainWrapper.swift in Sources */,
 				3D5E85A524BD9CF40061D7E4 /* UIDeviceInfo.swift in Sources */,
 				3D5E85A724BD9CF40061D7E4 /* FileModel.swift in Sources */,
 				3D5E85A824BD9CF40061D7E4 /* QiscusDatabase.swift in Sources */,
@@ -704,6 +715,7 @@
 				3D5E85B224BD9CF40061D7E4 /* QiscusChannels.swift in Sources */,
 				3D5E85B324BD9CF40061D7E4 /* AppConfigModel.swift in Sources */,
 				3D5E85B424BD9CF40061D7E4 /* ApiResponse.swift in Sources */,
+				3DE23AD625E3889F0086D5E8 /* KeychainItemAccessibility.swift in Sources */,
 				3D5E85B524BD9CF40061D7E4 /* ActiveRecord.swift in Sources */,
 				3D5E85B624BD9CF40061D7E4 /* QUserPresence.swift in Sources */,
 			);
