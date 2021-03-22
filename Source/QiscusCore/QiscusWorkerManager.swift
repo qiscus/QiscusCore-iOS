@@ -16,7 +16,8 @@ class QiscusWorkerManager {
             self.sync()
             self.pending()
             DispatchQueue.main.sync {
-                let state = UIApplication.shared.applicationState
+                let stateApp = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as! UIApplication
+                let state = stateApp.applicationState
                 
                 DispatchQueue.global(qos: .background).sync {
                     if state == .active {

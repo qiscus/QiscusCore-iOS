@@ -676,7 +676,9 @@ class RealtimeManager {
             ConfigManager.shared.isConnectedMqtt = true
             QiscusLogger.debugPrint("Qiscus realtime connected")
             DispatchQueue.main.async {
-                let state = UIApplication.shared.applicationState
+                let stateApp = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as! UIApplication
+                let state = stateApp.applicationState
+
                 
                 if state == .active {
                     // foreground
