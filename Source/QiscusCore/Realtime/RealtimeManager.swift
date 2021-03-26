@@ -35,6 +35,7 @@ class RealtimeManager {
         if let customPort = ConfigManager.shared.server?.realtimePort {
             config.port = customPort
         }
+        
         client = QiscusRealtime.init(withConfig: config)
         QiscusRealtime.enableDebugPrint = QiscusCore.enableDebugPrint
     }
@@ -56,6 +57,7 @@ class RealtimeManager {
             return
         }
         self.pendingSubscribeTopic.append(.comment(token: password))
+        self.pendingSubscribeTopic.append(.updateComment(token: password))
         self.pendingSubscribeTopic.append(.notification(token: password))
         
         if QiscusCore.enableRealtime == true {
@@ -203,11 +205,7 @@ class RealtimeManager {
         }
         
         for room in rooms {
-            if room.type == .channel {
-                if let appId = ConfigManager.shared.appID {
-                    c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
-                }
-            }else{
+            if room.type != .channel {
                 // unsubcribe room event
                 c.unsubscribe(endpoint: .delivery(roomID: room.id))
                 c.unsubscribe(endpoint: .read(roomID: room.id))
@@ -221,7 +219,7 @@ class RealtimeManager {
         
     }
     
-    func unsubscribeRoomsWithoutOnlineStatus(rooms: [RoomModel]) {
+    func unsubscribeRoomsChannel(rooms: [RoomModel]) {
         guard let c = client else {
             return
         }
@@ -231,13 +229,23 @@ class RealtimeManager {
                 if let appId = ConfigManager.shared.appID {
                     c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
                 }
-            }else{
+            }
+        }
+        
+    }
+    
+    func unsubscribeRoomsWithoutOnlineStatus(rooms: [RoomModel]) {
+        guard let c = client else {
+            return
+        }
+        
+        for room in rooms {
+            if room.type != .channel {
                 // unsubcribe room event
                 c.unsubscribe(endpoint: .delivery(roomID: room.id))
                 c.unsubscribe(endpoint: .read(roomID: room.id))
                 c.unsubscribe(endpoint: .typing(roomID: room.id))
             }
-           
         }
         
     }
@@ -634,6 +642,15 @@ class RealtimeManager {
         }
         
         
+    }
+    
+    func didReceiveUpdatedMessage(data: String) {
+        let json = ApiResponse.decode(string: data)
+        let comment = CommentModel(json: json)
+        
+        //check comment in db
+        QiscusCore.database.comment.save([comment], publishEvent: true, isUpdateMessage: true)
+
     }
     
     func didReceiveUser(typing: Bool, roomId: String, userEmail: String) {

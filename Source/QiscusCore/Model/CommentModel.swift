@@ -96,6 +96,16 @@ open class CommentModel {
         
         self.extras             = json["extras"].dictionaryObject
         self.userExtras         = json["user_extras"].dictionaryObject
+        
+        let roomName = json["room_name"].string ?? ""
+        
+        if !roomName.isEmpty {
+            if let room = QiscusCore.database.room.find(id: self.roomId) {
+                room.name = roomName
+                QiscusCore.database.room.save([room])
+            }
+        }
+        
     }
 }
 

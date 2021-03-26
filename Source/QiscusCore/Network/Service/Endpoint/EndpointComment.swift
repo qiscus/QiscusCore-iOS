@@ -10,6 +10,7 @@ import Foundation
 // MARK: Comment API
 internal enum APIComment {
     case postComment(topicId: String, type: String, message: String, payload: [String:Any]?, extras: [String:Any]?, uniqueTempId: String?)
+    case updateComment(message: String, payload: [String:Any]?, extras: [String:Any]?, uniqueTempId: String?)
     case loadComment(topicId: String, lastCommentId: String?, after: Bool?, limit: Int?)
     case delete(commentUniqueId: [String])
     case updateStatus(roomId: String,lastCommentReadId: String?, lastCommentReceivedId: String?)
@@ -30,6 +31,8 @@ extension APIComment : EndPoint {
         switch self {
         case .postComment:
             return "/post_comment"
+        case .updateComment:
+            return "/update_message"
         case .loadComment:
             return "/load_comments"
         case .delete( _):
@@ -53,7 +56,7 @@ extension APIComment : EndPoint {
         switch self {
         case .loadComment, .statusComment(_):
             return .get
-        case .postComment, .updateStatus, .search( _, _, _), .searchMessage( _, _, _, _, _, _, _), .getFileList( _, _, _, _):
+        case .postComment, .updateComment, .updateStatus, .search( _, _, _), .searchMessage( _, _, _, _, _, _, _), .getFileList( _, _, _, _):
             return .post
         case .delete, .clear( _):
             return .delete
@@ -80,6 +83,19 @@ extension APIComment : EndPoint {
             }
             if let uniquetempid = uniqueTempId {
                 params["unique_temp_id"] = uniquetempid
+            }
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
+        case .updateComment(let message, let payload, let extras, let uniqueTempId):
+            var params = [
+                "token"                   : QiscusCore.getUserData()?.token,
+                "unique_id"               : uniqueTempId,
+                "comment"                 : message
+                ] as [String : Any]
+            if let payloadParams = payload {
+                params["payload"] = payloadParams
+            }
+            if let extrasParams = extras {
+                params["extras"] = extrasParams
             }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .loadComment(let topicId, let lastCommentId,let after,let limit):

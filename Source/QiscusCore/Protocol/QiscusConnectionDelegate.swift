@@ -32,6 +32,13 @@ public protocol QiscusCoreDelegate {
     ///   - comment: new comment object
     func onRoomMessageReceived(_ room: RoomModel, message: CommentModel)
     
+    /// messageUpdated
+    ///
+    /// - Parameters:
+    ///   - room: room where event happen
+    ///   - comment: comment  object
+    func onRoomMessageUpdated(_ room: RoomModel, message: CommentModel)
+    
     /// Deleted Comment
     ///
     /// - Parameter comment: comment deleted
@@ -83,6 +90,12 @@ public protocol QiscusCoreRoomDelegate {
     /// - Parameters:
     ///   - comment: new comment object
     func onMessageReceived(message: CommentModel)
+    
+    /// onMessageUpdated
+    ///
+    /// - Parameters:
+    ///   - comment: comment object
+    func onMessageUpdated(message: CommentModel)
     
     /// comment status change
     ///
