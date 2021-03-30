@@ -288,34 +288,34 @@ extension NetworkManager {
     ///   - keyword: required, keyword to search
     ///   - roomID: optional, search on specific room by room id
     ///   - lastCommentId: optional, will get comments aafter this id
-    func searchMessage(keyword: String, roomID: String?, lastCommentId: Int?, completion: @escaping ([QMessage]?, QError?) -> Void) {
-        commentRouter.request(.search(keyword: keyword, roomID: roomID, lastCommentID: lastCommentId)) { (data, response, error) in
-            if error != nil {
-                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
-            }
-            if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
-                switch result {
-                case .success:
-                    guard let responseData = data else {
-                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
-                        return
-                    }
-                    let response = ApiResponse.decode(from: responseData)
-                    let comments = CommentApiResponse.comments(from: response)
-                    completion(comments, nil)
-                case .failure(let errorMessage):
-                    do {
-                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
-                    } catch {
-                        
-                    }
-                    completion(nil, QError(message: errorMessage))
-                }
-            }
-        }
-    }
+//    func searchMessage(keyword: String, roomID: String?, lastCommentId: Int?, completion: @escaping ([QMessage]?, QError?) -> Void) {
+//        commentRouter.request(.search(keyword: keyword, roomID: roomID, lastCommentID: lastCommentId)) { (data, response, error) in
+//            if error != nil {
+//                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
+//            }
+//            if let response = response as? HTTPURLResponse {
+//                let result = self.handleNetworkResponse(response)
+//                switch result {
+//                case .success:
+//                    guard let responseData = data else {
+//                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+//                        return
+//                    }
+//                    let response = ApiResponse.decode(from: responseData)
+//                    let comments = CommentApiResponse.comments(from: response)
+//                    completion(comments, nil)
+//                case .failure(let errorMessage):
+//                    do {
+//                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+//                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
+//                    } catch {
+//
+//                    }
+//                    completion(nil, QError(message: errorMessage))
+//                }
+//            }
+//        }
+//    }
     
     /// Clear message from
     ///
@@ -397,5 +397,83 @@ extension NetworkManager {
             }
         }
         
+    }
+    
+    /// Search message from server
+    ///
+    /// - Parameters:
+    ///   - query: required, query to search
+    ///   - roomIds:array  room id
+    ///   - type: "text", "custom", "buttons", "button_postback_response", "reply", "card", "location", "contact_person", "file_attachment", "carousel", otther
+    ///   - roomType : single, group, channel
+    ///   - userId : emailSender
+    ///   - page : page
+    ///   - limit : limit
+    func searchMessage(query: String, roomIds: [String]? = nil, userId : String? = nil, type: [String]? = nil, roomType : RoomType? = nil, page: Int, limit : Int, completion: @escaping ([QMessage]?, QError?) -> Void) {
+        commentRouter.request(.searchMessage(query: query, roomIds: roomIds, userId: userId, type: type, roomType : roomType, page: page, limit: limit)) { (data, response, error) in
+            if error != nil {
+                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let comments = CommentApiResponse.comments(from: response)
+                    completion(comments, nil)
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    completion(nil, QError(message: errorMessage))
+                }
+            }
+        }
+    }
+    
+    /// get fileList message from server
+    ///
+    /// - Parameters:
+    ///   - roomIds:array  room id
+    ///   - fileType  type of file that want to search for: "media", "doc", "link" and "others"
+    ///   - userId : Sender userId
+    ///   - includeExtensions : example ["jpg", ''png']
+    ///   - excludeExtensions : example ["gif"]
+    ///   - page: page
+    ///   - limit : limit
+    func getFileList(roomIds: [String]? = nil, fileType : String? = nil,  userId: String? = nil, includeExtensions : [String]? = nil, excludeExtensions : [String]? = nil, page: Int, limit : Int, completion: @escaping ([QMessage]?, QError?) -> Void) {
+        commentRouter.request(.getFileList(roomIds: roomIds, fileType : fileType, userId : userId, includeExtensions: includeExtensions,excludeExtensions: excludeExtensions, page: page, limit: limit)) { (data, response, error) in
+            if error != nil {
+                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let comments = CommentApiResponse.comments(from: response)
+                    completion(comments, nil)
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        self.qiscusCore?.qiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    completion(nil, QError(message: errorMessage))
+                }
+            }
+        }
     }
 }

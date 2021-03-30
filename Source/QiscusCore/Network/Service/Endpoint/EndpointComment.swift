@@ -17,7 +17,9 @@ internal enum APIComment {
     case clear(roomChannelIds: [String])
     /// Search comment on server
     case search(keyword: String, roomID: String?, lastCommentID: Int?)
+    case searchMessage(query: String, roomIds: [String]?, userId : String? = nil, type: [String]?, roomType : RoomType?, page: Int, limit : Int)
     case statusComment(id: String)
+    case getFileList(roomIds: [String]? , fileType : String?, userId : String?, includeExtensions: [String]?, excludeExtensions: [String]?, page: Int, limit : Int)
 }
 
 extension APIComment : EndPoint {
@@ -55,8 +57,12 @@ extension APIComment : EndPoint {
             return "/clear_room_messages"
         case .search:
             return "/search_messages"
+        case .searchMessage:
+            return "/search"
         case .statusComment(_):
             return "/comment_receipt"
+        case .getFileList:
+            return "/file_list"
         }
     }
     
@@ -64,7 +70,7 @@ extension APIComment : EndPoint {
         switch self {
         case .loadComment, .statusComment(_):
             return .get
-        case .postComment, .updateComment, .updateStatus, .search( _, _, _):
+        case .postComment, .updateComment, .updateStatus, .search( _, _, _), .searchMessage( _, _, _, _, _, _, _), .getFileList( _, _, _, _, _, _, _):
             return .post
         case .delete, .clear( _):
             return .delete
@@ -160,11 +166,76 @@ extension APIComment : EndPoint {
                 params["last_comment_id"] = commentID
             }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
+        case .searchMessage(let query, let roomIds, let userId, let type, let roomType, let page, let limit):
+            var params = [
+                "query"             : query,
+                "page"              : page,
+                "limit"             : limit
+            ] as [String : Any]
+            
+            if let roomIds = roomIds {
+                params["room_ids"] = roomIds
+            }
+            
+            if let userId = userId {
+                params["sender"] = userId
+            }
+            
+            if let type = type {
+                params["type"] = type
+            }
+            
+            if let roomType = roomType {
+                if roomType == .group {
+                    params["room_type"] = "group"
+                    params["is_public"] = false
+                    
+                } else if roomType == .single {
+                    params["room_type"] = "single"
+                    params["is_public"] = false
+                    
+                } else {
+                    params["room_type"] = "group"
+                    params["is_public"] = true
+                }
+            }
+            
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .statusComment(let id):
             let params = [
                 "comment_id"                : id,
                 ] as [String : Any]
             return .requestParameters(bodyParameters: nil, bodyEncoding: .jsonUrlEncoding, urlParameters: params)
+        case .getFileList(let roomIds, let fileTye, let userId, let includeExtensions, let excludeExtensions,  let page, let limit) :
+            
+            
+            var params = [
+                "page"           : page,
+                "limit"          : limit
+            ] as [String : Any]
+            
+            if let roomIds = roomIds {
+                params["room_ids"] = roomIds
+            }
+            
+            if let fileType = fileTye {
+                params["file_type"] = fileType
+            }
+            
+            if let userId = userId {
+                params["sender"] = userId
+            }
+            
+            if let includeExtensions = includeExtensions {
+                params["include_extensions"] = includeExtensions
+            }
+            
+            if let excludeExtensions = excludeExtensions {
+                params["exclude_extensions"] = excludeExtensions
+            }
+            
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
+            
         }
     }
 }

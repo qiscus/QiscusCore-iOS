@@ -501,6 +501,46 @@ extension NewQiscusCore {
 //        }
 //    }
     
+    /// Search message from server
+    ///
+    /// - Parameters:
+    ///   - query: required, query to search
+    ///   - roomIds:array  room id
+    ///   - type: "text", "custom", "buttons", "button_postback_response", "reply", "card", "location", "contact_person", "file_attachment", "carousel", otther
+    ///   - roomType : single, group, channel
+    ///   - userId : emailSender
+    ///   - page : page
+    ///   - limit : limit
+    public func searchMessage(query: String, roomIds: [String]? = nil, userId : String? = nil, type: [String]? = nil, roomType : RoomType? = nil, page: Int, limit : Int, onSuccess: @escaping ([QMessage]) -> Void, onError: @escaping (QError) -> Void) {
+        self.qiscusCore?.network.searchMessage(query: query, roomIds: roomIds, userId: userId, type: type, roomType : roomType, page: page, limit: limit) { (results, error) in
+            if let c = results {
+                onSuccess(c)
+            }else {
+                onError(error ?? QError(message: "Unexpected error"))
+            }
+        }
+    }
+    
+    /// get fileList message from server
+    ///
+    /// - Parameters:
+    ///   - roomIds:array  room id
+    ///   - fileType  type of file that want to search for: "media", "doc", "link" and "others"
+    ///   - userId : Sender userId
+    ///   - includeExtensions : example ["jpg", ''png']
+    ///   - excludeExtensions : example ["gif"]
+    ///   - page: page
+    ///   - limit : limit (maximum limit is 10)
+    public func getFileList(roomIds: [String]? = nil, fileType : String? = nil , userId: String? = nil, includeExtensions : [String]? = nil, excludeExtensions : [String]? = nil, page: Int, limit : Int, onSuccess: @escaping ([QMessage]) -> Void, onError: @escaping (QError) -> Void) {
+        self.qiscusCore?.network.getFileList(roomIds: roomIds, fileType : fileType,userId: userId, includeExtensions: includeExtensions, excludeExtensions: excludeExtensions, page: page, limit: limit) { (results, error) in
+            if let c = results {
+                onSuccess(c)
+            }else {
+                onError(error ?? QError(message: "Unexpected error"))
+            }
+        }
+    }
+    
     /// Mark Comment as read, include comment before
     ///
     /// - Parameters:
