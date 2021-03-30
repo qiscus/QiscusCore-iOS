@@ -496,10 +496,13 @@ extension QiscusCore {
     /// - Parameters:
     ///   - roomIds:array  room id
     ///   - fileType  type of file that want to search for: "media", "doc", "link" and "others"
+    ///   - userId : Sender userId
+    ///   - includeExtensions : example ["jpg", ''png']
+    ///   - excludeExtensions : example ["gif"]
     ///   - page: page
     ///   - limit : limit (maximum limit is 10)
-    public func getFileList(roomIds: [String], fileType : String, page: Int, limit : Int, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.getFileList(roomIds: roomIds, fileType : fileType, page: page, limit: limit) { (results, error) in
+    public func getFileList(roomIds: [String]? = nil, fileType : String? = nil , userId: String? = nil, includeExtensions : [String]? = nil, excludeExtensions : [String]? = nil, page: Int, limit : Int, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.getFileList(roomIds: roomIds, fileType : fileType,userId: userId, includeExtensions: includeExtensions, excludeExtensions: excludeExtensions, page: page, limit: limit) { (results, error) in
             if let c = results {
                 onSuccess(c)
             }else {
