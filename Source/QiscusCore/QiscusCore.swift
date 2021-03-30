@@ -321,7 +321,7 @@ public class QiscusCore: NSObject {
                 var newBaseUrl : URL = oldConfig.url //default using old baseUrl
                 var newBrokerLBURL : String? = oldConfig.brokerLBUrl  //default using old brokerLBURL
                 var newBrokerURL : String? = oldConfig.realtimeURL  //default using old brokerLBURL
-                var restartRealtime : Bool = false
+                
                 
                 //check for baseUrl
                 if appConfig.baseURL != ""{
@@ -349,7 +349,6 @@ public class QiscusCore: NSObject {
                         if brokerURL.range(of: appConfig.brokerURL) == nil {
                             //using new realtimeURL or brokerURL
                             newBrokerURL = appConfig.brokerURL
-                            restartRealtime = true
                         }
                     }
                 }
@@ -357,17 +356,10 @@ public class QiscusCore: NSObject {
                 
                 self.config.server = QiscusServer(url: newBaseUrl, realtimeURL: newBrokerURL, realtimePort: 1885, brokerLBUrl: newBrokerLBURL)
                 
-                if restartRealtime == true && appConfig.enableRealtime == true {
+                if appConfig.enableRealtime == true {
                     if let appID = self.config.appID {
-                        self.config.isConnectedMqtt = false
-                        self.realtime.disconnect()
                         self.realtime.setup(appName: appID)
-                        restartRealtime = false
                     }
-                } else if (appConfig.enableRealtime == false) {
-                    restartRealtime = false
-                    self.realtime.disconnect()
-                    self.config.isConnectedMqtt = false
                 }
             }
            
@@ -385,6 +377,10 @@ public class QiscusCore: NSObject {
             self.setupReachability()
             
         }) { (error) in
+            if let appID = self.config.appID {
+                self.realtime.setup(appName: appID)
+            }
+            
             // Background sync when realtime off
             self.heartBeat = QiscusHeartBeat.init(timeInterval: self.config.syncInterval)
             self.heartBeat?.eventHandler = {
@@ -413,22 +409,6 @@ public class QiscusCore: NSObject {
             config.server   = QiscusServer(url: URL.init(string: "https://api.qiscus.com")!, realtimeURL: self.defaultRealtimeURL, realtimePort: 1885, brokerLBUrl: self.defaultBrokerUrl)
         }
         
-        if config.server?.brokerLBUrl != nil {
-            getBrokerLBUrl(onSuccess: { (realtimeUrl) in
-                if server != nil{
-                    self.config.server   = QiscusServer(url: self.config.server!.url, realtimeURL: realtimeUrl, realtimePort: 1885, brokerLBUrl: self.config.server!.brokerLBUrl)
-                }else{
-                    self.config.server   = QiscusServer(url: self.config.server!.url, realtimeURL: realtimeUrl, realtimePort: 1885, brokerLBUrl: self.config.server!.brokerLBUrl)
-                }
-               
-                self.realtime.setup(appName: id)
-            }) { (error) in
-                self.realtime.setup(appName: id)
-            }
-        }else{
-            realtime.setup(appName: id)
-        }
-        
         if self.isLogined{
             // Populate data from db
            self.database.loadData()
@@ -444,14 +424,6 @@ public class QiscusCore: NSObject {
         self.appID = AppID
         config.appID    = AppID
         config.server   = QiscusServer(url: URL.init(string: "https://api.qiscus.com")!, realtimeURL: self.defaultRealtimeURL, realtimePort: 1885, brokerLBUrl: self.defaultBrokerUrl)
-        
-        getBrokerLBUrl(onSuccess: { (realtimeUrl) in
-            self.config.server   = QiscusServer(url: self.config.server!.url, realtimeURL: realtimeUrl, realtimePort: 1885, brokerLBUrl: self.config.server!.brokerLBUrl)
-            self.realtime.setup(appName: AppID)
-        }) { (error) in
-            self.config.server   = QiscusServer(url: self.config.server!.url, realtimeURL: self.config.server!.realtimeURL, realtimePort: 1885, brokerLBUrl: self.config.server!.brokerLBUrl)
-            self.realtime.setup(appName: AppID)
-        }
         
         if self.isLogined{
             // Populate data from db
@@ -475,17 +447,8 @@ public class QiscusCore: NSObject {
         
         if brokerLBUrl != nil{
             config.server   = QiscusServer(url: baseUrl, realtimeURL: brokerUrl, realtimePort: 1885, brokerLBUrl: brokerLBUrl)
-            
-            getBrokerLBUrl(onSuccess: { (url) in
-                self.config.server   = QiscusServer(url: baseUrl, realtimeURL: url, realtimePort: 1885, brokerLBUrl: brokerLBUrl)
-                self.realtime.setup(appName: AppID)
-            }) { (error) in
-                self.realtime.setup(appName: AppID)
-            }
-            
         }else{
             self.config.server   = QiscusServer(url: baseUrl, realtimeURL: brokerUrl, realtimePort: 1885, brokerLBUrl: nil)
-            self.realtime.setup(appName: AppID)
         }
         
         if self.isLogined{

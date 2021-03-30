@@ -206,11 +206,7 @@ public class RealtimeManager {
         }
         
         for room in rooms {
-            if room.type == .channel {
-                if let appId = self.qiscusCore?.config.appID {
-                    c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
-                }
-            }else{
+            if room.type != .channel {
                 // unsubcribe room event
                 c.unsubscribe(endpoint: .delivery(roomID: room.id))
                 c.unsubscribe(endpoint: .read(roomID: room.id))
@@ -224,7 +220,7 @@ public class RealtimeManager {
         
     }
     
-    func unsubscribeRoomsWithoutOnlineStatus(rooms: [QChatRoom]) {
+    func unsubscribeRoomsChannel(rooms: [QChatRoom]) {
         guard let c = self.qiscusCore?.client else {
             return
         }
@@ -234,15 +230,24 @@ public class RealtimeManager {
                 if let appId = self.qiscusCore?.config.appID {
                     c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
                 }
-            }else{
+            }
+        }
+        
+    }
+    
+    func unsubscribeRoomsWithoutOnlineStatus(rooms: [QChatRoom]) {
+        guard let c = self.qiscusCore?.client else {
+            return
+        }
+        
+        for room in rooms {
+            if room.type != .channel {
                 // unsubcribe room event
                 c.unsubscribe(endpoint: .delivery(roomID: room.id))
                 c.unsubscribe(endpoint: .read(roomID: room.id))
                 c.unsubscribe(endpoint: .typing(roomID: room.id))
             }
-           
         }
-        
     }
     
 

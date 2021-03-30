@@ -476,4 +476,19 @@ public class NewQiscusCore: NSObject {
         self.qiscusCore?.realtime.unsubscribeUserOnlinePresence(userIds: userIds)
     }
     
+    /// Set unSubcribeChatRoomChannel room
+    ///
+    /// - Parameter value: RoomModel
+    public func unSubcribeChatRoomChannel(_ room: QChatRoom) {
+        self.qiscusCore?.realtime.unsubscribeRoomsChannel(rooms: [room])
+    }
+    
+    /// Set unSubcribeChatRoomChannels rooms
+    ///
+    /// - Parameter value: [RoomModel]
+    public func unSubcribeChatRoomsChannel(_ room: [QChatRoom]) {
+        self.qiscusCore?.realtime.unsubscribeRoomsChannel(rooms: room)
+    }
+
+    
 }
