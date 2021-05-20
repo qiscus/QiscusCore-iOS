@@ -185,9 +185,16 @@ public class CommentDB {
                         // save room
                         if let comments = comments {
                             room.lastComment = comments.first
+                            
+                            QiscusCore.shared.getChatRooms(roomIds: [room.id]) { (rooms) in
+                                room.unreadCount = rooms.first?.unreadCount ?? 0
+                                QiscusCore.database.room.save([room])
+                            } onError: { (error) in
+                                QiscusCore.database.room.save([room])
+                            }
                         }
                         
-                        QiscusCore.database.room.save([room])
+                      
                         // save comments
                         var c = [CommentModel]()
                         if let _comments = comments {
