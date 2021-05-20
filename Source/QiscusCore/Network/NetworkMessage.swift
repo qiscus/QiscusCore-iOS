@@ -159,8 +159,11 @@ extension NetworkManager {
                                         let failed = comment
                                         failed.status  = .failed
                                         QiscusCore.database.comment.save([failed])
+                                        completion(nil, "json: \(jsondata)")
+                                    }else{
+                                        completion(nil, "failed send message")
                                     }
-                                    completion(nil, "json: \(jsondata)")
+                                   
                                 default:
                                     completion(nil, "json: \(jsondata)")
                                     break

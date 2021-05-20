@@ -100,7 +100,10 @@ class QiscusEventManager {
             }
         }
         
-        ConfigManager.shared.lastCommentId = comment.id
+        if comment.status == .sent || comment.status == .delivered || comment.status == .read {
+            ConfigManager.shared.lastCommentId = comment.id
+        }
+       
     }
     
     func deleteRoom(_ room: RoomModel) {
