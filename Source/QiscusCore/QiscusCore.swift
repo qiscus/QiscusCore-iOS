@@ -471,6 +471,33 @@ public class QiscusCore: NSObject {
         QiscusCore.realtime.disconnect()
     }
     
+    public static func openRealtimeConnection() -> Bool{
+        if let user = getProfile() {
+            ConfigManager.shared.isEnableDisableRealtimeManually = true
+            if ConfigManager.shared.isConnectedMqtt == false {
+                realtime.connect(username: user.email, password: user.token)
+            }
+            return true
+        }else {
+            return false
+        }
+    }
+    
+    public static func closeRealtimeConnection() -> Bool{
+        if hasSetupUser(){
+            if ConfigManager.shared.isConnectedMqtt == true{
+                self.realtime.disconnect()
+                ConfigManager.shared.isEnableDisableRealtimeManually = false
+                return true
+            }else{
+                //already disconnect
+                return true
+            }
+        }else{
+            return false
+        }
+    }
+    
     /// check already logined
     ///
     /// - Returns: return true if already login

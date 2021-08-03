@@ -93,6 +93,15 @@ class ConfigManager : NSObject {
         }
     }
     
+    var isEnableDisableRealtimeManually : Bool {
+        get {
+            return self.getIsEnableDisableRealtimeManuallly()
+        }
+        set {
+            self.setIsEnableDisableRealtimeManuallly(newValue)
+        }
+    }
+    
     var server      : QiscusServer?     = nil
     var syncInterval : TimeInterval     = 5
     
@@ -209,6 +218,28 @@ class ConfigManager : NSObject {
         return defaults.bool(forKey: filename("isConnectedMQTT")) ?? true
     }
     
+    private func setIsEnableDisableRealtimeManuallly(_ value: Bool) {
+        // save in file
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: filename("enableDisableRealtimeManuallly"))
+    }
+    
+    //by default is enable
+    private func getIsEnableDisableRealtimeManuallly() -> Bool {
+        let defaults = UserDefaults.standard
+        let checkFirstTIme = defaults.bool(forKey: filename("firstTime"))
+        
+        if checkFirstTIme == false {
+            defaults.set(true, forKey: filename("firstTime"))
+            self.setIsEnableDisableRealtimeManuallly(true)
+            return true
+        }else{
+            // save in file
+            return defaults.bool(forKey: filename("enableDisableRealtimeManuallly")) 
+        }
+        
+    }
+    
     func clearConfig() {
         // remove file user
         let storage = UserDefaults.standard
@@ -225,6 +256,8 @@ class ConfigManager : NSObject {
         storage.removeObject(forKey: filename("customHeader"))
         storage.removeObject(forKey: filename("deviceToken"))
         storage.removeObject(forKey: filename("lastCommentId"))
+        storage.removeObject(forKey: filename("firstTime"))
+        storage.removeObject(forKey: filename("enableDisableRealtimeManuallly"))
         self.userCache = nil
     }
 }
