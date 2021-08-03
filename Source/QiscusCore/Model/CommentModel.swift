@@ -101,8 +101,17 @@ open class CommentModel {
         
         if !roomName.isEmpty {
             if let room = QiscusCore.database.room.find(id: self.roomId) {
-                room.name = roomName
-                QiscusCore.database.room.save([room])
+                if room.type != .single {
+                    room.name = roomName
+                    QiscusCore.database.room.save([room])
+                }else{
+                    if self.username.lowercased() == "System".lowercased(){
+                        //ignored
+                    }else{
+                        room.name = roomName
+                        QiscusCore.database.room.save([room])
+                    }
+                }
             }
         }
         
