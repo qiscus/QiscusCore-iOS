@@ -228,7 +228,7 @@ public class QiscusCore: NSObject {
     public var connectionDelegate : QiscusConnectionDelegate? = nil
     public var activeChatRoom : QChatRoom? = nil
     
-    var reachability:QiscusReachability?
+    public var reachability:QiscusReachability?
     
     func setupReachability(){
         self.reachability = QiscusReachability()

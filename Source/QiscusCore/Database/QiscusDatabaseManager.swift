@@ -242,9 +242,16 @@ public class QMessageDB {
                             // save room
                             if let comments = comments {
                                 room.lastComment = comments.first
+                                
+                                self.qiscusCore?.shared.getChatRooms(roomIds: [room.id]) { (rooms) in
+                                    room.unreadCount = rooms.first?.unreadCount ?? 0
+                                    self.qiscusCore?.database.room.save([room])
+                                } onError: { (error) in
+                                    QiscusCore.database.room.save([room])
+                                }
+
                             }
                             
-                            self.qiscusCore?.database.room.save([room])
                             // save comments
                             var c = [QMessage]()
                             if let _comments = comments {

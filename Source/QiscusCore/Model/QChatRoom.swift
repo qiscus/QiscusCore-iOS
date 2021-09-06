@@ -47,7 +47,7 @@ open class QChatRoom {
     public internal(set) var uniqueId : String = ""
     public internal(set) var avatarUrl : URL? = nil
     public internal(set) var type : RoomType                  = .group
-    public internal(set) var extras : String? = nil
+    public var extras : String? = nil
     // can be update after got new comment
     public internal(set) var lastComment : QMessage?      = nil
     public internal(set) var participants : [QParticipant]?    = nil
