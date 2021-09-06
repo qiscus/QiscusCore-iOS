@@ -120,6 +120,7 @@ extension NewQiscusCore {
             
             if error != nil {
                 //save in local comment pending
+                _comment.status = .pending
                 self.qiscusCore?.database.message.save([_comment])
             }
             
@@ -137,11 +138,26 @@ extension NewQiscusCore {
                 //comment.onChange(commentResult) // view data binding
                 onSuccess(commentResult)
             }else {
-                let _pending = comment
-                _pending.status  = .pending
-                self.qiscusCore?.database.message.save([_pending])
-                //comment.onChange(_pending) // view data binding
-                onError(QError.init(message: error ?? "Pending to send message"))
+                if let comment = self.qiscusCore?.database.comment.find(uniqueId: comment.uniqId){
+                    if comment.status == .failed{
+                        onError(QError.init(message: error ?? "Failed to send message"))
+                    }else{
+                        let _pending = _comment
+                        _pending.status  = .pending
+                        self.qiscusCore?.database.comment.save([_pending])
+                        onError(QError.init(message: error ?? "Pending to send message"))
+                    }
+                }else if error?.contains("failed send message") == true{
+                    let _failed = _comment
+                    _failed.status  = .failed
+                    self.qiscusCore?.database.comment.save([_failed])
+                    onError(QError.init(message: error ?? "Failed to send message"))
+                }else{
+                    let _pending = _comment
+                    _pending.status  = .pending
+                    self.qiscusCore?.database.comment.save([_pending])
+                    onError(QError.init(message: error ?? "Pending to send message"))
+                }
             }
         }
     }
@@ -205,6 +221,7 @@ extension NewQiscusCore {
             
             if error != nil {
                 //save in local comment pending
+                _comment.status = .pending
                 self.qiscusCore?.database.message.save([_comment])
             }
             
@@ -222,11 +239,26 @@ extension NewQiscusCore {
                 //comment.onChange(commentResult) // view data binding
                 onSuccess(commentResult)
             }else {
-                let _pending = message
-                _pending.status  = .pending
-                self.qiscusCore?.database.message.save([_pending])
-                //comment.onChange(_pending) // view data binding
-                onError(QError.init(message: error ?? "Pending to send message"))
+                if let comment = self.qiscusCore?.database.comment.find(uniqueId: comment.uniqId){
+                    if comment.status == .failed{
+                        onError(QError.init(message: error ?? "Failed to send message"))
+                    }else{
+                        let _pending = _comment
+                        _pending.status  = .pending
+                        self.qiscusCore?.database.comment.save([_pending])
+                        onError(QError.init(message: error ?? "Pending to send message"))
+                    }
+                }else if error?.contains("failed send message") == true{
+                    let _failed = _comment
+                    _failed.status  = .failed
+                    self.qiscusCore?.database.comment.save([_failed])
+                    onError(QError.init(message: error ?? "Failed to send message"))
+                }else{
+                    let _pending = _comment
+                    _pending.status  = .pending
+                    self.qiscusCore?.database.comment.save([_pending])
+                    onError(QError.init(message: error ?? "Pending to send message"))
+                }
             }
         }
     }
