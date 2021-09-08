@@ -830,11 +830,11 @@ public class QiscusCore: NSObject {
         }
     }
     
-    public static func openRealtimeConnection() -> Bool{
-        if let user = getProfile() {
+    public func openRealtimeConnection() -> Bool{
+        if let user = self.getProfile() {
             self.config.isEnableDisableRealtimeManually = true
             if self.config.isConnectedMqtt == false {
-                realtime.connect(username: user.email, password: user.token)
+                realtime.connect(username: user.id, password: user.token)
             }
             return true
         }else {
@@ -842,7 +842,7 @@ public class QiscusCore: NSObject {
         }
     }
     
-    public static func closeRealtimeConnection() -> Bool{
+    public func closeRealtimeConnection() -> Bool{
         if hasSetupUser(){
             if self.config.isConnectedMqtt == true{
                 self.realtime.disconnect()

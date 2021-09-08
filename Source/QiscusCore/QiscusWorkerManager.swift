@@ -50,7 +50,7 @@ public class QiscusWorkerManager {
     }
     
     private func syncEvent() {
-        if self.qiscusCore?.isLogined{
+        if self.qiscusCore?.isLogined ?? false{
             //sync event
             var id = self.qiscusCore?.config.syncEventId
             if id!.isEmpty{
@@ -137,7 +137,7 @@ public class QiscusWorkerManager {
             if self.qiscusCore?.config.isEnableDisableRealtimeManually == false {
                 self.synchronize()
             } else {
-                if ConfigManager.shared.isConnectedMqtt == true {
+                if self.qiscusCore?.config.isConnectedMqtt == true {
                     self.synchronize()
                 }
             }

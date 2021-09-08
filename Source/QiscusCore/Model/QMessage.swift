@@ -115,7 +115,7 @@ open class QMessage {
                     room.name = roomName
                     qiscusCore?.database.room.save([room])
                 }else{
-                    if self.username.lowercased() == "System".lowercased(){
+                    if self.name.lowercased() == "System".lowercased(){
                         //ignored
                     }else{
                         room.name = roomName

@@ -138,24 +138,24 @@ extension NewQiscusCore {
                 //comment.onChange(commentResult) // view data binding
                 onSuccess(commentResult)
             }else {
-                if let comment = self.qiscusCore?.database.comment.find(uniqueId: comment.uniqId){
+                if let comment = self.qiscusCore?.database.message.find(uniqueId: comment.uniqueId){
                     if comment.status == .failed{
                         onError(QError.init(message: error ?? "Failed to send message"))
                     }else{
                         let _pending = _comment
                         _pending.status  = .pending
-                        self.qiscusCore?.database.comment.save([_pending])
+                        self.qiscusCore?.database.message.save([_pending])
                         onError(QError.init(message: error ?? "Pending to send message"))
                     }
                 }else if error?.contains("failed send message") == true{
                     let _failed = _comment
                     _failed.status  = .failed
-                    self.qiscusCore?.database.comment.save([_failed])
+                    self.qiscusCore?.database.message.save([_failed])
                     onError(QError.init(message: error ?? "Failed to send message"))
                 }else{
                     let _pending = _comment
                     _pending.status  = .pending
-                    self.qiscusCore?.database.comment.save([_pending])
+                    self.qiscusCore?.database.message.save([_pending])
                     onError(QError.init(message: error ?? "Pending to send message"))
                 }
             }
@@ -239,24 +239,24 @@ extension NewQiscusCore {
                 //comment.onChange(commentResult) // view data binding
                 onSuccess(commentResult)
             }else {
-                if let comment = self.qiscusCore?.database.comment.find(uniqueId: comment.uniqId){
+                if let comment = self.qiscusCore?.database.message.find(uniqueId: message.uniqueId){
                     if comment.status == .failed{
                         onError(QError.init(message: error ?? "Failed to send message"))
                     }else{
                         let _pending = _comment
                         _pending.status  = .pending
-                        self.qiscusCore?.database.comment.save([_pending])
+                        self.qiscusCore?.database.message.save([_pending])
                         onError(QError.init(message: error ?? "Pending to send message"))
                     }
                 }else if error?.contains("failed send message") == true{
                     let _failed = _comment
                     _failed.status  = .failed
-                    self.qiscusCore?.database.comment.save([_failed])
+                    self.qiscusCore?.database.message.save([_failed])
                     onError(QError.init(message: error ?? "Failed to send message"))
                 }else{
                     let _pending = _comment
                     _pending.status  = .pending
-                    self.qiscusCore?.database.comment.save([_pending])
+                    self.qiscusCore?.database.message.save([_pending])
                     onError(QError.init(message: error ?? "Pending to send message"))
                 }
             }

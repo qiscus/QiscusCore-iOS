@@ -322,7 +322,7 @@ public class RealtimeManager {
     func subscribeTyping(roomID: String, onTyping: @escaping (RoomTyping) -> Void) {
         guard let c = self.qiscusCore?.client else { return }
         
-        if let roomUser = QiscusCore.database.room.find(id: roomID){
+        if let roomUser = self.qiscusCore?.database.room.find(id: roomID){
             if roomUser.type == RoomType.channel {
                 return
             }
@@ -348,7 +348,7 @@ public class RealtimeManager {
     }
     
     func unsubscribeTyping(roomID: String) {
-        if let roomUser = QiscusCore.database.room.find(id: roomID){
+        if let roomUser = self.qiscusCore?.database.room.find(id: roomID){
             if roomUser.type == RoomType.channel {
                 return
             }
