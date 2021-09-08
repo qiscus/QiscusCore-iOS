@@ -14,23 +14,26 @@ public class QiscusWorkerManager {
     func resume() {
         // MARK : Improve realtime state acurate disconnected
         if self.qiscusCore?.isLogined ?? false {
-            self.sync()
-            self.pending()
-            DispatchQueue.main.sync {
-                let state = UIApplication.shared.applicationState
-                
-                DispatchQueue.global(qos: .background).sync {
-                    if state == .active {
-                        // foreground
-                        if self.qiscusCore?.realtime.state == .connected {
-                            self.qiscusCore?.shared.publishOnlinePresence(isOnline: true)
-                            isBackground = false
-                        }
-                    }else{
-                        if isBackground == false {
-                            isBackground = true
+            if self.qiscusCore?.config.isEnableDisableRealtimeManually == true{
+                self.sync()
+                self.pending()
+                DispatchQueue.main.sync {
+                    let stateApp = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as! UIApplication
+                    let state = stateApp.applicationState
+                    
+                    DispatchQueue.global(qos: .background).sync {
+                        if state == .active {
+                            // foreground
                             if self.qiscusCore?.realtime.state == .connected {
-                                self.qiscusCore?.shared.publishOnlinePresence(isOnline: false)
+                                self.qiscusCore?.shared.publishOnlinePresence(isOnline: true)
+                                isBackground = false
+                            }
+                        }else{
+                            if isBackground == false {
+                                isBackground = true
+                                if self.qiscusCore?.realtime.state == .connected {
+                                    self.qiscusCore?.shared.publishOnlinePresence(isOnline: false)
+                                }
                             }
                         }
                     }
@@ -40,62 +43,64 @@ public class QiscusWorkerManager {
     }
     
     func resumeSyncEvent() {
-           // MARK : Improve realtime state acurate disconnected
+        // MARK : Improve realtime state acurate disconnected
         if self.qiscusCore?.isLogined ?? false {
-               self.syncAuto()
-           }
-       }
+            self.syncAuto()
+        }
+    }
     
     private func syncEvent() {
-        //sync event
-        var id = self.qiscusCore?.config.syncEventId
-        if id!.isEmpty{
-            id = self.qiscusCore?.config.user?.lastSyncEventId ?? "0"
-        }
-        self.qiscusCore?.network.synchronizeEvent(lastEventId: id ?? "0", onSuccess: { (events) in
-            if !events.isEmpty{
-                self.qiscusCore?.config.syncEventId = events.first!.id
+        if self.qiscusCore?.isLogined{
+            //sync event
+            var id = self.qiscusCore?.config.syncEventId
+            if id!.isEmpty{
+                id = self.qiscusCore?.config.user?.lastSyncEventId ?? "0"
             }
-            
-            events.forEach({ (event) in
-                DispatchQueue.global(qos: .background).sync {
-                    if event.id == id { return }
-                    
-                    switch event.actionTopic {
-                    case .deletedMessage :
-                        let ids = event.getDeletedMessageUniqId()
-                        ids.forEach({ (id) in
-                            if let comment = self.qiscusCore?.database.message.find(uniqueId: id) {
-                                _ = self.qiscusCore?.database.message.delete(comment)
-                            }
-                        })
-                        self.qiscusCore?.config.syncEventId = event.id
-                    case .clearRoom:
-                        let ids = event.getClearRoomUniqId()
-                        ids.forEach({ (id) in
-                            if let room = self.qiscusCore?.database.room.find(uniqID: id) {
-                                _ = self.qiscusCore?.database.message.clear(inRoom: room.id, timestamp: event.timestamp)
-                            }
-                        })
-                        self.qiscusCore?.config.syncEventId = event.id
-                        
-                    case .noActionTopic:
-                        break
-                        
-                    case .sent:
-                        break
-                        
-                    case .delivered:
-                        event.updatetStatusMessage()
-                    case .read:
-                        event.updatetStatusMessage()
-                    }
-                    
+            self.qiscusCore?.network.synchronizeEvent(lastEventId: id ?? "0", onSuccess: { (events) in
+                if !events.isEmpty{
+                    self.qiscusCore?.config.syncEventId = events.first!.id
                 }
-               
-            })
-        }) { (error) in
-            self.qiscusCore?.qiscusLogger.errorPrint("sync event error, \(error.message)")
+                
+                events.forEach({ (event) in
+                    DispatchQueue.global(qos: .background).sync {
+                        if event.id == id { return }
+                        
+                        switch event.actionTopic {
+                        case .deletedMessage :
+                            let ids = event.getDeletedMessageUniqId()
+                            ids.forEach({ (id) in
+                                if let comment = self.qiscusCore?.database.message.find(uniqueId: id) {
+                                    _ = self.qiscusCore?.database.message.delete(comment)
+                                }
+                            })
+                            self.qiscusCore?.config.syncEventId = event.id
+                        case .clearRoom:
+                            let ids = event.getClearRoomUniqId()
+                            ids.forEach({ (id) in
+                                if let room = self.qiscusCore?.database.room.find(uniqID: id) {
+                                    _ = self.qiscusCore?.database.message.clear(inRoom: room.id, timestamp: event.timestamp)
+                                }
+                            })
+                            self.qiscusCore?.config.syncEventId = event.id
+                            
+                        case .noActionTopic:
+                            break
+                            
+                        case .sent:
+                            break
+                            
+                        case .delivered:
+                            event.updatetStatusMessage()
+                        case .read:
+                            event.updatetStatusMessage()
+                        }
+                        
+                    }
+                   
+                })
+            }) { (error) in
+                self.qiscusCore?.qiscusLogger.errorPrint("sync event error, \(error.message)")
+            }
         }
     }
     
@@ -129,28 +134,37 @@ public class QiscusWorkerManager {
     //default is 30s
     private func syncAuto() {
         DispatchQueue.global(qos: .background).sync {
-            if self.qiscusCore?.config.isConnectedMqtt == true {
-                var id = self.qiscusCore?.config.syncId
-                let latestComment = self.qiscusCore?.config.lastCommentId
-                
-                if latestComment != "" && id != "" {
-                    if id == latestComment {
-                        //id same
-                    }else{
-                        id = latestComment
-                    }
+            if self.qiscusCore?.config.isEnableDisableRealtimeManually == false {
+                self.synchronize()
+            } else {
+                if ConfigManager.shared.isConnectedMqtt == true {
+                    self.synchronize()
                 }
-
-                self.qiscusCore?.synchronize(lastMessageId: id!, onSuccess: { (comments) in
-                    self.syncEvent()
-                    if let c = comments.first {
-                        self.qiscusCore?.config.syncId = c.id
-                    }
-                }, onError: { (error) in
-                    self.qiscusCore?.qiscusLogger.errorPrint("sync auto error, \(error.message)")
-                })
             }
         }
+    }
+    
+    // for condition sync 30s
+    private func synchronize(){
+        var id = self.qiscusCore?.config.syncId
+        let latestComment = self.qiscusCore?.config.lastCommentId
+        
+        if latestComment != "" && id != "" {
+            if id == latestComment {
+                //id same
+            }else{
+                id = latestComment
+            }
+        }
+
+        self.qiscusCore?.synchronize(lastMessageId: id!, onSuccess: { (comments) in
+            self.syncEvent()
+            if let c = comments.first {
+                self.qiscusCore?.config.syncId = c.id
+            }
+        }, onError: { (error) in
+            self.qiscusCore?.qiscusLogger.errorPrint("sync auto error, \(error.message)")
+        })
     }
     
     private func pending() {

@@ -56,11 +56,12 @@ public class RealtimeManager {
             }
             return
         }
-        self.pendingSubscribeTopic.append(.comment(token: password))
-        self.pendingSubscribeTopic.append(.updateComment(token: password))
-        self.pendingSubscribeTopic.append(.notification(token: password))
         
-        if self.qiscusCore?.enableRealtime == true {
+        if self.qiscusCore?.enableRealtime == true{
+            self.pendingSubscribeTopic.append(.comment(token: password))
+            self.pendingSubscribeTopic.append(.updateComment(token: password))
+            self.pendingSubscribeTopic.append(.notification(token: password))
+            
             c.connect(username: username, password: password, delegate: self)
         } else {
             self.qiscusCore?.config.isConnectedMqtt = false
@@ -77,42 +78,45 @@ public class RealtimeManager {
         guard let c = self.qiscusCore?.client else {
             return
         }
-        for room in rooms {
-            if room.type == .channel{
-                if let appId = self.qiscusCore?.config.appID {
-                    if !c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)){
-                         self.pendingSubscribeTopic.append(.roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
-                         self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
+        
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            for room in rooms {
+                if room.type == .channel{
+                    if let appId = self.qiscusCore?.config.appID {
+                        if !c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)){
+                             self.pendingSubscribeTopic.append(.roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
+                             self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
+                        }
+                    }
+                }else{
+                    // subscribe comment deliverd receipt
+                    if !c.subscribe(endpoint: .delivery(roomID: room.id)){
+                        self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
+                        self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
+                    }
+                    // subscribe comment read
+                    if !c.subscribe(endpoint: .read(roomID: room.id)) {
+                        self.pendingSubscribeTopic.append(.read(roomID: room.id))
+                        self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
+                    }
+                    if !c.subscribe(endpoint: .typing(roomID: room.id)) {
+                        self.pendingSubscribeTopic.append(.typing(roomID: room.id))
+                        self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
+                    }
+                    guard let participants = room.participants else { return }
+                    for u in participants {
+                        if !c.subscribe(endpoint: .onlineStatus(user: u.id)) {
+                            self.pendingSubscribeTopic.append(.onlineStatus(user: u.id))
+                            self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe online status user \(u.id), then queue in pending")
+                        }
                     }
                 }
-            }else{
-                // subscribe comment deliverd receipt
-                if !c.subscribe(endpoint: .delivery(roomID: room.id)){
-                    self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
-                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
-                }
-                // subscribe comment read
-                if !c.subscribe(endpoint: .read(roomID: room.id)) {
-                    self.pendingSubscribeTopic.append(.read(roomID: room.id))
-                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
-                }
-                if !c.subscribe(endpoint: .typing(roomID: room.id)) {
-                    self.pendingSubscribeTopic.append(.typing(roomID: room.id))
-                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
-                }
-                guard let participants = room.participants else { return }
-                for u in participants {
-                    if !c.subscribe(endpoint: .onlineStatus(user: u.id)) {
-                        self.pendingSubscribeTopic.append(.onlineStatus(user: u.id))
-                        self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe online status user \(u.id), then queue in pending")
-                    }
-                }
+                
+               
             }
             
-           
+            self.resumePendingSubscribeTopic()
         }
-        
-        self.resumePendingSubscribeTopic()
     }
     
     /// subscribe user online presence / online status
@@ -123,9 +127,11 @@ public class RealtimeManager {
             return
         }
         
-        if !c.subscribe(endpoint: .onlineStatus(user: userId)) {
-            self.pendingSubscribeTopic.append(.onlineStatus(user: userId))
-            self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe online status user \(userId), then queue in pending")
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            if !c.subscribe(endpoint: .onlineStatus(user: userId)) {
+                self.pendingSubscribeTopic.append(.onlineStatus(user: userId))
+                self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe online status user \(userId), then queue in pending")
+            }
         }
     }
     
@@ -137,12 +143,15 @@ public class RealtimeManager {
             return
         }
         
-        for userId in userIds {
-            if !c.subscribe(endpoint: .onlineStatus(user: userId)) {
-                self.pendingSubscribeTopic.append(.onlineStatus(user: userId))
-                self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe online status user \(userId), then queue in pending")
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            for userId in userIds {
+                if !c.subscribe(endpoint: .onlineStatus(user: userId)) {
+                    self.pendingSubscribeTopic.append(.onlineStatus(user: userId))
+                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe online status user \(userId), then queue in pending")
+                }
             }
         }
+        
     }
     
     func unsubscribeUserOnlinePresence(userId : String){
@@ -150,7 +159,9 @@ public class RealtimeManager {
             return
         }
         
-        c.unsubscribe(endpoint: .onlineStatus(user: userId))
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            c.unsubscribe(endpoint: .onlineStatus(user: userId))
+        }
     }
     
     func unsubscribeUserOnlinePresence(userIds : [String]){
@@ -158,8 +169,10 @@ public class RealtimeManager {
             return
         }
         
-        for userId in userIds {
-            c.unsubscribe(endpoint: .onlineStatus(user: userId))
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            for userId in userIds {
+                c.unsubscribe(endpoint: .onlineStatus(user: userId))
+            }
         }
     }
     
@@ -171,33 +184,36 @@ public class RealtimeManager {
         guard let c = self.qiscusCore?.client else {
             return
         }
-        for room in rooms {
-            if room.type == .channel{
-                if let appId = self.qiscusCore?.config.appID {
-                    if !c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)){
-                        self.pendingSubscribeTopic.append(.roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
-                        self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
+        
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            for room in rooms {
+                if room.type == .channel{
+                    if let appId = self.qiscusCore?.config.appID {
+                        if !c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)){
+                            self.pendingSubscribeTopic.append(.roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
+                            self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
+                        }
+                    }
+                }else{
+                    // subscribe comment deliverd receipt
+                    if !c.subscribe(endpoint: .delivery(roomID: room.id)){
+                        self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
+                        self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
+                    }
+                    // subscribe comment read
+                    if !c.subscribe(endpoint: .read(roomID: room.id)) {
+                        self.pendingSubscribeTopic.append(.read(roomID: room.id))
+                        self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
+                    }
+                    if !c.subscribe(endpoint: .typing(roomID: room.id)) {
+                        self.pendingSubscribeTopic.append(.typing(roomID: room.id))
+                        self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
                     }
                 }
-            }else{
-                // subscribe comment deliverd receipt
-                if !c.subscribe(endpoint: .delivery(roomID: room.id)){
-                    self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
-                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
-                }
-                // subscribe comment read
-                if !c.subscribe(endpoint: .read(roomID: room.id)) {
-                    self.pendingSubscribeTopic.append(.read(roomID: room.id))
-                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
-                }
-                if !c.subscribe(endpoint: .typing(roomID: room.id)) {
-                    self.pendingSubscribeTopic.append(.typing(roomID: room.id))
-                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
-                }
             }
+            
+            self.resumePendingSubscribeTopic()
         }
-        
-        self.resumePendingSubscribeTopic()
     }
     
     func unsubscribeRooms(rooms: [QChatRoom]) {
@@ -205,19 +221,20 @@ public class RealtimeManager {
             return
         }
         
-        for room in rooms {
-            if room.type != .channel {
-                // unsubcribe room event
-                c.unsubscribe(endpoint: .delivery(roomID: room.id))
-                c.unsubscribe(endpoint: .read(roomID: room.id))
-                c.unsubscribe(endpoint: .typing(roomID: room.id))
-                guard let participants = room.participants else { return }
-                for u in participants {
-                    c.unsubscribe(endpoint: .onlineStatus(user: u.id))
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            for room in rooms {
+                if room.type != .channel {
+                    // unsubcribe room event
+                    c.unsubscribe(endpoint: .delivery(roomID: room.id))
+                    c.unsubscribe(endpoint: .read(roomID: room.id))
+                    c.unsubscribe(endpoint: .typing(roomID: room.id))
+                    guard let participants = room.participants else { return }
+                    for u in participants {
+                        c.unsubscribe(endpoint: .onlineStatus(user: u.id))
+                    }
                 }
             }
         }
-        
     }
     
     func unsubscribeRoomsChannel(rooms: [QChatRoom]) {
@@ -225,10 +242,12 @@ public class RealtimeManager {
             return
         }
         
-        for room in rooms {
-            if room.type == .channel {
-                if let appId = self.qiscusCore?.config.appID {
-                    c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            for room in rooms {
+                if room.type == .channel {
+                    if let appId = self.qiscusCore?.config.appID {
+                        c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
+                    }
                 }
             }
         }
@@ -240,14 +259,17 @@ public class RealtimeManager {
             return
         }
         
-        for room in rooms {
-            if room.type != .channel {
-                // unsubcribe room event
-                c.unsubscribe(endpoint: .delivery(roomID: room.id))
-                c.unsubscribe(endpoint: .read(roomID: room.id))
-                c.unsubscribe(endpoint: .typing(roomID: room.id))
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            for room in rooms {
+                if room.type != .channel {
+                    // unsubcribe room event
+                    c.unsubscribe(endpoint: .delivery(roomID: room.id))
+                    c.unsubscribe(endpoint: .read(roomID: room.id))
+                    c.unsubscribe(endpoint: .typing(roomID: room.id))
+                }
             }
         }
+        
     }
     
 
@@ -255,8 +277,11 @@ public class RealtimeManager {
         guard let c = self.qiscusCore?.client else {
             return
         }
-        if !c.publish(endpoint: .isTyping(value: value, roomID: roomID)) {
-            self.qiscusCore?.qiscusLogger.errorPrint("failed to send typing to roomID \(roomID)")
+        
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            if !c.publish(endpoint: .isTyping(value: value, roomID: roomID)) {
+                self.qiscusCore?.qiscusLogger.errorPrint("failed to send typing to roomID \(roomID)")
+            }
         }
     }
     
@@ -264,8 +289,11 @@ public class RealtimeManager {
         guard let c = self.qiscusCore?.client else {
             return
         }
-        if !c.publish(endpoint: .onlineStatus(value: value)) {
-            self.qiscusCore?.qiscusLogger.errorPrint("failed to send Online status")
+        
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            if !c.publish(endpoint: .onlineStatus(value: value)) {
+                self.qiscusCore?.qiscusLogger.errorPrint("failed to send Online status")
+            }
         }
     }
     
@@ -273,49 +301,67 @@ public class RealtimeManager {
         guard let client = self.qiscusCore?.client else {
             return
         }
-        self.qiscusCore?.qiscusLogger.debugPrint("Resume pending subscribe")
-        // resume pending subscribe
-        if !pendingSubscribeTopic.isEmpty {
-            for (i,t) in pendingSubscribeTopic.enumerated().reversed() {
-                // check if success subscribe
-                if client.subscribe(endpoint: t) {
-                    // remove from pending list
-                   self.pendingSubscribeTopic.remove(at: i)
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            self.qiscusCore?.qiscusLogger.debugPrint("Resume pending subscribe")
+            // resume pending subscribe
+            if !pendingSubscribeTopic.isEmpty {
+                for (i,t) in pendingSubscribeTopic.enumerated().reversed() {
+                    // check if success subscribe
+                    if client.subscribe(endpoint: t) {
+                        // remove from pending list
+                       self.pendingSubscribeTopic.remove(at: i)
+                    }
                 }
             }
+            
+            self.qiscusCore?.qiscusLogger.debugPrint("pendingSubscribeTopic count = \(pendingSubscribeTopic.count)")
         }
-        
-        self.qiscusCore?.qiscusLogger.debugPrint("pendingSubscribeTopic count = \(pendingSubscribeTopic.count)")
     }
     
     // MARK : Typing event
     func subscribeTyping(roomID: String, onTyping: @escaping (RoomTyping) -> Void) {
         guard let c = self.qiscusCore?.client else { return }
         
-        if c.isConnect{
-            if !c.subscribe(endpoint: .typing(roomID: roomID)) {
-                self.pendingSubscribeTopic.append(.typing(roomID: roomID))
-                self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event typing from room \(roomID), then queue in pending")
-            }else{
-                self.roomTypings[roomID] = onTyping
+        if let roomUser = QiscusCore.database.room.find(id: roomID){
+            if roomUser.type == RoomType.channel {
+                return
             }
-        }else{
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                self.subscribeTyping(roomID: roomID) { (roomTyping) in
+        }
+        
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            if c.isConnect{
+                if !c.subscribe(endpoint: .typing(roomID: roomID)) {
+                    self.pendingSubscribeTopic.append(.typing(roomID: roomID))
+                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe event typing from room \(roomID), then queue in pending")
+                }else{
                     self.roomTypings[roomID] = onTyping
                 }
+            }else{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                    self.subscribeTyping(roomID: roomID) { (roomTyping) in
+                        self.roomTypings[roomID] = onTyping
+                    }
+                }
+                
             }
-            
         }
     }
     
     func unsubscribeTyping(roomID: String) {
-        roomTypings.removeValue(forKey: roomID)
-        guard let c = self.qiscusCore?.client else {
-            return
+        if let roomUser = QiscusCore.database.room.find(id: roomID){
+            if roomUser.type == RoomType.channel {
+                return
+            }
         }
-        // unsubcribe room event
-        c.unsubscribe(endpoint: .typing(roomID: roomID))
+        
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            guard let c = self.qiscusCore?.client else {
+                return
+            }
+            // unsubcribe room event
+            roomTypings.removeValue(forKey: roomID)
+            c.unsubscribe(endpoint: .typing(roomID: roomID))
+        }
     }
     
     // MARK : Custom Event
@@ -328,36 +374,40 @@ public class RealtimeManager {
             return
         }
         
-        if c.isConnect{
-            // subcribe user token to get new comment
-            if !c.subscribe(endpoint: .roomEvent(roomID: roomID)) {
-                self.pendingSubscribeTopic.append(.roomEvent(roomID: roomID))
-                self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe room Event, then queue in pending")
-            }else {
-                self.roomEvents[roomID] = onEvent
-            }
-        }else{
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                self.subscribeEvent(roomID: roomID, onEvent: { (roomEvent) in
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            if c.isConnect{
+                // subcribe user token to get new comment
+                if !c.subscribe(endpoint: .roomEvent(roomID: roomID)) {
+                    self.pendingSubscribeTopic.append(.roomEvent(roomID: roomID))
+                    self.qiscusCore?.qiscusLogger.errorPrint("failed to subscribe room Event, then queue in pending")
+                }else {
                     self.roomEvents[roomID] = onEvent
-                })
+                }
+            }else{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                    self.subscribeEvent(roomID: roomID, onEvent: { (roomEvent) in
+                        self.roomEvents[roomID] = onEvent
+                    })
+                }
             }
         }
     }
     
     func unsubscribeEvent(roomID: String) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            if self.roomEvents.count == 0 {
-                return
-            }
-            
-            guard let c = self.self.qiscusCore?.client else {
-                return
-            }
-            
-            if self.roomEvents.removeValue(forKey: roomID) != nil{
-                // unsubcribe room event
-                c.unsubscribe(endpoint: .roomEvent(roomID: roomID))
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                if self.roomEvents.count == 0 {
+                    return
+                }
+                
+                guard let c = self.self.qiscusCore?.client else {
+                    return
+                }
+                
+                if self.roomEvents.removeValue(forKey: roomID) != nil{
+                    // unsubcribe room event
+                    c.unsubscribe(endpoint: .roomEvent(roomID: roomID))
+                }
             }
         }
     }
@@ -367,9 +417,13 @@ public class RealtimeManager {
             return false
         }
         
-        if c.publish(endpoint: .roomEvent(roomID: roomID, payload: payload.dict2json())) {
-            return true //
-        }else {
+        if self.qiscusCore?.config.isEnableDisableRealtimeManually == true {
+            if c.publish(endpoint: .roomEvent(roomID: roomID, payload: payload.dict2json())) {
+                return true //
+            }else {
+                return false
+            }
+        }else{
             return false
         }
     }
@@ -672,7 +726,8 @@ public class RealtimeManager {
             self.qiscusCore?.config.isConnectedMqtt = true
             self.qiscusCore?.qiscusLogger.debugPrint("Qiscus realtime connected")
             DispatchQueue.main.async {
-                let state = UIApplication.shared.applicationState
+                let stateApp = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as! UIApplication
+                let state = stateApp.applicationState
                 
                 if state == .active {
                     // foreground
@@ -716,7 +771,7 @@ public class RealtimeManager {
         }
         
         if self.qiscusCore?.hasSetupUser() ?? true{
-            if self.qiscusCore?.enableRealtime == true {
+            if self.qiscusCore?.enableRealtime == true && self.qiscusCore?.config.isEnableDisableRealtimeManually == true{
                 self.qiscusCore?.retryConnect { (success) in
                     if success == true{
                         if let user = self.qiscusCore?.getProfile() {

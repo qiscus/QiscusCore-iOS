@@ -111,8 +111,17 @@ open class QMessage {
         
         if !roomName.isEmpty && qiscusCore != nil {
             if let room = qiscusCore?.database.room.find(id: self.chatRoomId) {
-                room.name = roomName
-                qiscusCore?.database.room.save([room])
+                if room.type != .single {
+                    room.name = roomName
+                    qiscusCore?.database.room.save([room])
+                }else{
+                    if self.username.lowercased() == "System".lowercased(){
+                        //ignored
+                    }else{
+                        room.name = roomName
+                        qiscusCore?.database.room.save([room])
+                    }
+                }
             }
         }
     }
