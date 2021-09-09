@@ -22,12 +22,16 @@ class RealtimeManager {
     func setup(appName: String) {
         // make sure realtime client still single object
        // if client != nil { return }
-        let bundle = Bundle.main.infoDictionary![kCFBundleNameKey as String] as! String
-        var deviceID = "00000000"
-        if let vendorIdentifier = UIDevice.current.identifierForVendor {
-            deviceID = vendorIdentifier.uuidString
+        
+        var bundle = "0"
+        if let bundleData = Bundle.main.infoDictionary?[kCFBundleNameKey as String] as? String{
+            bundle = bundleData
         }
-        let clientID = "iosMQTT-\(bundle)-\(deviceID)"
+        
+        let now = Int64(NSDate().timeIntervalSince1970 * 1000000000.0) // nano sec
+        
+        let clientID = "iosMQTT-\(bundle)-\(appName)-\(randomString(10))-\(now)"
+        
         var config = QiscusRealtimeConfig(appName: appName, clientID: clientID)
         if let customServer = ConfigManager.shared.server?.realtimeURL {
             config.hostRealtimeServer = customServer
@@ -38,6 +42,11 @@ class RealtimeManager {
         
         client = QiscusRealtime.init(withConfig: config)
         QiscusRealtime.enableDebugPrint = QiscusCore.enableDebugPrint
+    }
+    
+    func randomString(_ n: Int) -> String {
+        let digits = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        return String(Array(0..<n).map { _ in digits.randomElement()! })
     }
     
     func disconnect() {
