@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E266" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="1.0">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19206" systemVersion="20G165" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="1.0">
     <entity name="Comment" representedClassName="QiscusCore.Comment" syncable="YES">
         <attribute name="commentBeforeId" optional="YES" attributeType="String"/>
         <attribute name="extras" optional="YES" attributeType="String"/>
@@ -50,7 +50,7 @@
         <attribute name="options" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
-        <attribute name="unreadCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="unreadCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Member" inverseName="rooms" inverseEntity="Member"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -61,6 +61,6 @@
     <elements>
         <element name="Comment" positionX="-164" positionY="132" width="128" height="313"/>
         <element name="Member" positionX="243" positionY="108" width="128" height="178"/>
-        <element name="Room" positionX="9" positionY="306" width="128" height="195"/>
+        <element name="Room" positionX="9" positionY="306" width="128" height="179"/>
     </elements>
 </model>

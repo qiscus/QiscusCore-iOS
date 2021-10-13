@@ -252,7 +252,7 @@ extension RoomStorage {
         }
         result.id            = core.id
         result.uniqueId      = core.uniqueId
-        result.unreadCount   = Int16(core.unreadCount)
+        result.unreadCount   = Int64(core.unreadCount)
         result.name          = core.name
         result.avatarUrl     = core.avatarUrl?.absoluteString ?? ""
         result.options       = core.options
