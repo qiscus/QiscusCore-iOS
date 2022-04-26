@@ -1,2 +1,2 @@
-github "qiscus/QiscusRealtime-iOS" "carthage-support"
+github "qiscus/QiscusRealtime-iOS" "support-xcode13-carthage"
 github "SwiftyJSON/SwiftyJSON" ~> 5.0
