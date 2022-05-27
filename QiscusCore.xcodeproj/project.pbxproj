@@ -8,15 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		20F184F628184377008A1F6B /* CocoaMQTT.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20DE56F32817DDC5008B3FDB /* CocoaMQTT.xcframework */; };
-		20F184F728184377008A1F6B /* CocoaMQTT.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20DE56F32817DDC5008B3FDB /* CocoaMQTT.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		20F184F828184377008A1F6B /* Starscream.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20DE56F42817DDC5008B3FDB /* Starscream.xcframework */; };
-		20F184F928184377008A1F6B /* Starscream.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20DE56F42817DDC5008B3FDB /* Starscream.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		20F184FA28184377008A1F6B /* CocoaAsyncSocket.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20DE56F22817DDC5008B3FDB /* CocoaAsyncSocket.xcframework */; };
-		20F184FB28184377008A1F6B /* CocoaAsyncSocket.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20DE56F22817DDC5008B3FDB /* CocoaAsyncSocket.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		20F184FF28184377008A1F6B /* SwiftyJSON.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20F184FD28184377008A1F6B /* SwiftyJSON.xcframework */; };
-		20F1850028184377008A1F6B /* SwiftyJSON.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20F184FD28184377008A1F6B /* SwiftyJSON.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		20F1850128184377008A1F6B /* QiscusRealtime.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20F184FE28184377008A1F6B /* QiscusRealtime.xcframework */; };
-		20F1850228184377008A1F6B /* QiscusRealtime.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20F184FE28184377008A1F6B /* QiscusRealtime.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3D1AC03E24BEB8DB0040F736 /* QiscusCore.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 3D1AC03C24BEB8DA0040F736 /* QiscusCore.podspec */; };
 		3D1AC03F24BEB8DB0040F736 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3D1AC03D24BEB8DA0040F736 /* README.md */; };
 		3D1AC06C24BEDA6F0040F736 /* QiscusCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1AC06624BEDA6D0040F736 /* QiscusCore.swift */; };
@@ -95,24 +90,6 @@
 			remoteInfo = QiscusCore;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		20F184FC28184377008A1F6B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				20F184FB28184377008A1F6B /* CocoaAsyncSocket.xcframework in Embed Frameworks */,
-				20F1850028184377008A1F6B /* SwiftyJSON.xcframework in Embed Frameworks */,
-				20F1850228184377008A1F6B /* QiscusRealtime.xcframework in Embed Frameworks */,
-				20F184F928184377008A1F6B /* Starscream.xcframework in Embed Frameworks */,
-				20F184F728184377008A1F6B /* CocoaMQTT.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		20DE56F22817DDC5008B3FDB /* CocoaAsyncSocket.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CocoaAsyncSocket.xcframework; path = Carthage/Build/CocoaAsyncSocket.xcframework; sourceTree = "<group>"; };
@@ -357,7 +334,6 @@
 				3D55936020FC89CD00AE35E5 /* Frameworks */,
 				3D55936120FC89CD00AE35E5 /* Headers */,
 				3D55936220FC89CD00AE35E5 /* Resources */,
-				20F184FC28184377008A1F6B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
