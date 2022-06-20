@@ -741,7 +741,9 @@ extension NetworkManager {
                     d.value.onCompleted = { success in
                         if !success { return }
                         let localPath: URL = QiscusCore.fileManager.localFilePath(for: d.value.file.url)
-                        onSuccess(localPath)
+                        DispatchQueue.main.async {
+                            onSuccess(localPath)
+                        }
                     }
                 }
             }
