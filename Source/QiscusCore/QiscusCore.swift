@@ -95,6 +95,8 @@ public class QiscusCore: NSObject {
 
     public static var enableEventReport : Bool = false
     public static var enableRealtime : Bool = true
+    public static var enableSync : Bool = true
+    public static var enableSyncEvent : Bool = false
     
     @available(*, deprecated, message: "will soon become unavailable.")
     public static var enableDebugPrint: Bool = false
@@ -186,6 +188,8 @@ public class QiscusCore: NSObject {
         network.getAppConfig(onSuccess: { (appConfig) in
             QiscusCore.enableEventReport = appConfig.enableEventReport
             QiscusCore.enableRealtime = appConfig.enableRealtime
+            QiscusCore.enableSync = appConfig.enableSync
+            QiscusCore.enableSyncEvent = appConfig.enableSyncEvent
             
             //check old and new appServer
             if let oldConfig = config.server {
