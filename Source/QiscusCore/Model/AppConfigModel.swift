@@ -18,6 +18,8 @@ public class AppConfigModel {
     public var syncInterval : Double = 0
     public var syncOnConnect : Double = 0
     public var extras : String = ""
+    public var enableSync : Bool = true
+    public var enableSyncEvent : Bool = false
     
     init(json: JSON) {
         self.baseURL  = json["base_url"].string ?? ""
@@ -28,5 +30,7 @@ public class AppConfigModel {
         self.syncInterval  = json["sync_interval"].double ?? 5000
         self.syncOnConnect  = json["sync_on_connect"].double ?? 30000
         self.extras  = json["extras"].string ?? ""
+        self.enableSync = json["enable_sync"].bool ?? true
+        self.enableSyncEvent = json["enable_sync_event"].bool ?? false
     }
 }

@@ -15,7 +15,9 @@ public class QiscusWorkerManager {
         // MARK : Improve realtime state acurate disconnected
         if self.qiscusCore?.isLogined ?? false {
             if self.qiscusCore?.config.isEnableDisableRealtimeManually == true{
-                self.sync()
+                if self.qiscusCore?.enableSync == true {
+                    self.sync()
+                }
                 self.pending()
                 DispatchQueue.main.sync {
                     let stateApp = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as! UIApplication
@@ -50,7 +52,7 @@ public class QiscusWorkerManager {
     }
     
     private func syncEvent() {
-        if self.qiscusCore?.isLogined ?? false{
+        if self.qiscusCore?.isLogined ?? false && self.qiscusCore?.enableSyncEvent == true{
             //sync event
             var id = self.qiscusCore?.config.syncEventId
             if id!.isEmpty{
@@ -135,10 +137,14 @@ public class QiscusWorkerManager {
     private func syncAuto() {
         DispatchQueue.global(qos: .background).sync {
             if self.qiscusCore?.config.isEnableDisableRealtimeManually == false {
-                self.synchronize()
+                if self.qiscusCore?.enableSync == true {
+                    self.synchronize()
+                }
             } else {
                 if self.qiscusCore?.config.isConnectedMqtt == true {
-                    self.synchronize()
+                    if self.qiscusCore?.enableSync == true {
+                        self.synchronize()
+                    }
                 }
             }
         }

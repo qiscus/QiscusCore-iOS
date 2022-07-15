@@ -10,7 +10,7 @@ import Foundation
 import QiscusRealtime
 import CoreData
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "3.0.0-beta.13"
+    public static let qiscusCoreVersionNumber:String = "3.0.0-beta.14"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -286,6 +286,10 @@ public class QiscusCore: NSObject {
         self.enableDebugPrint = value
     }
     
+    public var enableSync : Bool = true
+    public var enableSyncEvent : Bool = false
+
+    
     private func heartBeatForSync(timeInterval : Double = 30){
         self.heartBeatSync = QiscusSyncEventInterval.init(timeInterval: timeInterval)
         self.heartBeatSync?.eventHandler = {
@@ -315,6 +319,10 @@ public class QiscusCore: NSObject {
         network.getAppConfig(onSuccess: { (appConfig) in
             self.enableEventReport = appConfig.enableEventReport
             self.enableRealtime = appConfig.enableRealtime
+            self.enableSync = appConfig.enableSync
+            self.enableSyncEvent = appConfig.enableSyncEvent
+
+            
             
             //check old and new appServer
             if let oldConfig = self.config.server {
