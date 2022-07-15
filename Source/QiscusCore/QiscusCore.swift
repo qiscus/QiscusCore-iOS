@@ -9,7 +9,7 @@
 import Foundation
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.5.15"
+    public static let qiscusCoreVersionNumber:String = "1.6.1"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
