@@ -5,6 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "QiscusCore",
+     platforms: [
+            .macOS(.v10_12),
+            .iOS(.v10),
+    ],
     products: [
         .library(
             name: "QiscusCore",
