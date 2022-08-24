@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/qiscus/QiscusRealtime-iOS.git",
       "state" : {
-        "revision" : "5083d35a53a15a934094d57e365283d188d43ed7",
-        "version" : "1.5.0-beta.1"
+        "revision" : "7a90ccd8e6b2e162ae5834a6dc44448c7d30f435",
+        "version" : "1.5.0-beta.2"
       }
     },
     {
