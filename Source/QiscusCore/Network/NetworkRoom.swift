@@ -7,6 +7,7 @@
 
 // MARK: Room
 import SwiftyJSON
+import UIKit
 extension NetworkManager {
     /// get room chat room list
     ///

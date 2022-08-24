@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		200AC26A28B5DD7300ED6AAB /* QiscusRealtime in Frameworks */ = {isa = PBXBuildFile; productRef = 200AC26928B5DD7300ED6AAB /* QiscusRealtime */; };
+		200AC26D28B5DDB300ED6AAB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 200AC26C28B5DDB300ED6AAB /* SwiftyJSON */; };
 		3D55936E20FC89CE00AE35E5 /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D55936420FC89CD00AE35E5 /* QiscusCore.framework */; };
 		3D55937320FC89CE00AE35E5 /* QiscusCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55937220FC89CE00AE35E5 /* QiscusCoreTests.swift */; };
 		3D55939520FC8F3500AE35E5 /* QiscusCore.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 3D55939420FC8F3500AE35E5 /* QiscusCore.podspec */; };
@@ -194,6 +196,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D5E84C624BD9A750061D7E4 /* CocoaMQTT.framework in Frameworks */,
+				200AC26D28B5DDB300ED6AAB /* SwiftyJSON in Frameworks */,
+				200AC26A28B5DD7300ED6AAB /* QiscusRealtime in Frameworks */,
 				3D5E84C824BD9A750061D7E4 /* Starscream.framework in Frameworks */,
 				3D5E84CA24BD9A750061D7E4 /* CocoaAsyncSocket.framework in Frameworks */,
 				3D5E84C424BD9A750061D7E4 /* QiscusRealtime.framework in Frameworks */,
@@ -473,6 +477,10 @@
 			dependencies = (
 			);
 			name = QiscusCore;
+			packageProductDependencies = (
+				200AC26928B5DD7300ED6AAB /* QiscusRealtime */,
+				200AC26C28B5DDB300ED6AAB /* SwiftyJSON */,
+			);
 			productName = QiscusCore;
 			productReference = 3D55936420FC89CD00AE35E5 /* QiscusCore.framework */;
 			productType = "com.apple.product-type.framework";
@@ -527,6 +535,10 @@
 				Base,
 			);
 			mainGroup = 3D55935A20FC89CD00AE35E5;
+			packageReferences = (
+				200AC26828B5DD7300ED6AAB /* XCRemoteSwiftPackageReference "QiscusRealtime-iOS" */,
+				200AC26B28B5DDB300ED6AAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+			);
 			productRefGroup = 3D55936520FC89CD00AE35E5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -842,7 +854,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -870,7 +883,11 @@
 				INFOPLIST_FILE = QiscusCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiscus.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -902,7 +919,11 @@
 				INFOPLIST_FILE = QiscusCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiscus.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -920,7 +941,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QG8KA4P8TE;
 				INFOPLIST_FILE = QiscusCoreTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiscusdev.QiscusCoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -935,7 +960,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QG8KA4P8TE;
 				INFOPLIST_FILE = QiscusCoreTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiscusdev.QiscusCoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -974,6 +1003,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		200AC26828B5DD7300ED6AAB /* XCRemoteSwiftPackageReference "QiscusRealtime-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/qiscus/QiscusRealtime-iOS.git";
+			requirement = {
+				kind = exactVersion;
+				version = "1.5.0-beta.1";
+			};
+		};
+		200AC26B28B5DDB300ED6AAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		200AC26928B5DD7300ED6AAB /* QiscusRealtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 200AC26828B5DD7300ED6AAB /* XCRemoteSwiftPackageReference "QiscusRealtime-iOS" */;
+			productName = QiscusRealtime;
+		};
+		200AC26C28B5DDB300ED6AAB /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 200AC26B28B5DDB300ED6AAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		3D5E864C24BDCDEA0061D7E4 /* Qiscus.xcdatamodeld */ = {

@@ -7,6 +7,7 @@
 //
 
 import SwiftyJSON
+import UIKit
 
 public enum SortType: String {
     case asc = "asc"
