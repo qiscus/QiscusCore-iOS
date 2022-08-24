@@ -19,7 +19,6 @@ let package = Package(
         .target(
             name: "QiscusCore",
             dependencies: ["QiscusRealtime"],
- 	    dependencies: ["SwiftyJSON"],
 	    path: "Source"),
     ]
 )
