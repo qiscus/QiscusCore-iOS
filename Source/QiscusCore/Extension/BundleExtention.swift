@@ -5,7 +5,7 @@ private class BundleFinder {}
 extension Foundation.Bundle {
     /// Returns the resource bundle associated with the current Swift module.
     static var moduleData: Bundle = {
-        let bundleName = "QiscusCore"
+        let bundleName = "QiscusCore_QiscusCore"
 
         let candidates = [
             // Bundle should be present here when the package is linked into an App.
