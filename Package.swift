@@ -15,7 +15,7 @@ let package = Package(
             targets: ["QiscusCore"]),
     ],
     dependencies: [
-       .package(url: "https://github.com/qiscus/QiscusRealtime-iOS.git", .upToNextMajor(from: "1.5.0-beta.2")),
+       .package(url: "https://github.com/qiscus/QiscusRealtime-iOS.git", .upToNextMajor(from: "1.5.0-beta.3")),
  	.package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", from: "5.0.0")
     ],
     targets: [
@@ -25,7 +25,8 @@ let package = Package(
 	    .product(name: "QiscusRealtime", package: "QiscusRealtime-iOS"),
 	    .product(name: "SwiftyJSON", package: "SwiftyJSON")],
 	    path: "Source",  resources: [
-            .process("Resources/Qiscus.xcdatamodeld"),
+            //.process("Resources/Qiscus.xcdatamodeld"),
+            .copy("Resources/Qiscus.xcdatamodeld"),
         ]),
     ]
 )
