@@ -40,7 +40,7 @@ class PresistentStore {
             })
             return container
         }else{
-            let modelURL = Bundle.module.url(forResource: DB_NAME, withExtension: "momd")!
+            let modelURL = Bundle.moduleData.url(forResource: DB_NAME, withExtension: "momd")!
             let container = NSPersistentContainer.init(name: DB_NAME, managedObjectModel: NSManagedObjectModel(contentsOf: modelURL)!)
             container.loadPersistentStores(completionHandler: { (storeDescription, error) in
                 container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy

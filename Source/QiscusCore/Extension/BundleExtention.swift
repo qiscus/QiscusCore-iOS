@@ -1,18 +1,10 @@
-//
-//  test.swift
-//  QiscusCore
-//
-//  Created by arief nur putranto on 25/08/22.
-//
-
-import Foundation
 import class Foundation.Bundle
 
 private class BundleFinder {}
 
 extension Foundation.Bundle {
     /// Returns the resource bundle associated with the current Swift module.
-    static var module: Bundle = {
+    static var moduleData: Bundle = {
         let bundleName = "QiscusCore"
 
         let candidates = [
@@ -32,5 +24,6 @@ extension Foundation.Bundle {
                 return bundle
             }
         }
+        fatalError("unable to find bundle named QiscusCore")
     }()
 }
