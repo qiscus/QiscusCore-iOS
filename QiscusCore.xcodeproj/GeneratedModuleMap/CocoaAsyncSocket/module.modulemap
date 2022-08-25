@@ -1,0 +1,4 @@
+module CocoaAsyncSocket {
+    umbrella "/Users/ariefnurputranto/Documents/IOS/SDKV2/QiscusCore/.build/checkouts/CocoaAsyncSocket/Source/GCD"
+    export *
+}
