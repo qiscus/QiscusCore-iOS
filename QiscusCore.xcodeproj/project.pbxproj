@@ -527,7 +527,7 @@
 			path = Encoding;
 			sourceTree = "<group>";
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -550,7 +550,6 @@
 				OBJ_155 /* firebase.json */,
 				OBJ_156 /* Podfile */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_53 /* Service */ = {
@@ -594,6 +593,7 @@
 		OBJ_7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				208EBB5D28B738D6002DBF9D /* Resources */,
 				OBJ_8 /* QiscusCore */,
 			);
 			name = Sources;
@@ -627,7 +627,6 @@
 		OBJ_8 /* QiscusCore */ = {
 			isa = PBXGroup;
 			children = (
-				208EBB5D28B738D6002DBF9D /* Resources */,
 				OBJ_9 /* Database */,
 				OBJ_25 /* Extension */,
 				OBJ_27 /* Model */,
@@ -906,7 +905,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			packageReferences = (
 				208EBB5728B7381C002DBF9D /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				208EBB5A28B73829002DBF9D /* XCRemoteSwiftPackageReference "QiscusRealtime-iOS" */,
