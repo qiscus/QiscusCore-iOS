@@ -795,6 +795,7 @@
 			buildPhases = (
 				OBJ_213 /* Sources */,
 				OBJ_273 /* Frameworks */,
+				208EBBAB28B7524F002DBF9D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -927,6 +928,26 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		208EBBAB28B7524F002DBF9D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -R ${BUILT_PRODUCTS_DIR}/*.bundle ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		OBJ_161 /* Sources */ = {
