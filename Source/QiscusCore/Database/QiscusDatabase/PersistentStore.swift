@@ -30,15 +30,27 @@ class PresistentStore {
     
     @available(iOS 10.0, *)
     static var persistentContainer: NSPersistentContainer = {
-        let modelURL = QiscusCore.bundle.url(forResource: DB_NAME, withExtension: "momd")!
-        let container = NSPersistentContainer.init(name: DB_NAME, managedObjectModel: NSManagedObjectModel(contentsOf: modelURL)!)
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-            if let error = error as NSError? {
-                QiscusLogger.errorPrint("Unresolved error \(error.localizedDescription), \(error.userInfo)")
-            }
-        })
-        return container
+        if let modelURL = QiscusCore.bundle.url(forResource: DB_NAME, withExtension: "momd") {
+            let container = NSPersistentContainer.init(name: DB_NAME, managedObjectModel: NSManagedObjectModel(contentsOf: modelURL)!)
+            container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+                container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+                if let error = error as NSError? {
+                    QiscusLogger.errorPrint("Unresolved error \(error.localizedDescription), \(error.userInfo)")
+                }
+            })
+            return container
+        }else{
+            let modelURL = Bundle.module.url(forResource: DB_NAME, withExtension: "momd")!
+            let container = NSPersistentContainer.init(name: DB_NAME, managedObjectModel: NSManagedObjectModel(contentsOf: modelURL)!)
+            container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+                container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+                if let error = error as NSError? {
+                    QiscusLogger.errorPrint("Unresolved error \(error.localizedDescription), \(error.userInfo)")
+                }
+            })
+            return container
+        }
+        
     }()
     
     // iOS 9 and below

@@ -10,6 +10,7 @@
 		208EBB5928B7381D002DBF9D /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 208EBB5828B7381D002DBF9D /* SwiftyJSON */; };
 		208EBB6628B73954002DBF9D /* Qiscus.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 208EBB6428B73954002DBF9D /* Qiscus.xcdatamodeld */; };
 		208EBBA128B74870002DBF9D /* QiscusRealtime in Frameworks */ = {isa = PBXBuildFile; productRef = 208EBBA028B74870002DBF9D /* QiscusRealtime */; };
+		208EBBB028B75401002DBF9D /* BundleExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208EBBAF28B75401002DBF9D /* BundleExtention.swift */; };
 		OBJ_162 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_132 /* GCDAsyncSocket.m */; };
 		OBJ_163 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_133 /* GCDAsyncUdpSocket.m */; };
 		OBJ_170 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_131 /* Package.swift */; };
@@ -172,6 +173,7 @@
 
 /* Begin PBXFileReference section */
 		208EBB6528B73954002DBF9D /* Qiscus.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Qiscus.xcdatamodel; sourceTree = "<group>"; };
+		208EBBAF28B75401002DBF9D /* BundleExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtention.swift; sourceTree = "<group>"; };
 		OBJ_10 /* CommentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentStorage.swift; sourceTree = "<group>"; };
 		OBJ_101 /* MqttClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MqttClient.swift; sourceTree = "<group>"; };
 		OBJ_105 /* CocoaMQTT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaMQTT.swift; sourceTree = "<group>"; };
@@ -462,6 +464,7 @@
 		OBJ_25 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				208EBBAF28B75401002DBF9D /* BundleExtention.swift */,
 				OBJ_26 /* UIDeviceInfo.swift */,
 			);
 			path = Extension;
@@ -795,7 +798,6 @@
 			buildPhases = (
 				OBJ_213 /* Sources */,
 				OBJ_273 /* Frameworks */,
-				208EBBAB28B7524F002DBF9D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -929,26 +931,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		208EBBAB28B7524F002DBF9D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cp -R ${BUILT_PRODUCTS_DIR}/*.bundle ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		OBJ_161 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1064,6 +1046,7 @@
 				OBJ_264 /* QiscusFileManager.swift in Sources */,
 				OBJ_265 /* QiscusStorage.swift in Sources */,
 				OBJ_266 /* Data+Json.swift in Sources */,
+				208EBBB028B75401002DBF9D /* BundleExtention.swift in Sources */,
 				OBJ_267 /* QiscusHeartBeat.swift in Sources */,
 				OBJ_268 /* QiscusLogger.swift in Sources */,
 				OBJ_269 /* QiscusReachability.swift in Sources */,
