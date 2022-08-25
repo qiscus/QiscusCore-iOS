@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SwiftyJSON
+import Foundation
 
 enum NetworkResponse:String {
     case success
