@@ -25,9 +25,7 @@ let package = Package(
 	    .product(name: "QiscusRealtime", package: "QiscusRealtime-iOS"),
 	    .product(name: "SwiftyJSON", package: "SwiftyJSON")],
 	    path: "Source",  resources: [
-            .process("Resources"),
-            .process("Assets.xcassets"),
-            .process("Qiscus.xcdatamodeld"),
+            .process("Resources/Qiscus.xcdatamodeld"),
         ]),
     ]
 )
