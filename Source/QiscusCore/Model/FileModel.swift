@@ -15,6 +15,7 @@
  */
 
 import SwiftyJSON
+import UIKit
 
 public struct FileModel {
     public var name : String    = ""

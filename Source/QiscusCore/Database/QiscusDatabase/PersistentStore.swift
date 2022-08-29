@@ -30,15 +30,26 @@ class PresistentStore {
     
     @available(iOS 10.0, *)
     static var persistentContainer: NSPersistentContainer = {
-        let modelURL = QiscusCore.bundle.url(forResource: DB_NAME, withExtension: "momd")!
-        let container = NSPersistentContainer.init(name: DB_NAME, managedObjectModel: NSManagedObjectModel(contentsOf: modelURL)!)
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-            if let error = error as NSError? {
-                QiscusLogger.errorPrint("Unresolved error \(error.localizedDescription), \(error.userInfo)")
-            }
-        })
-        return container
+        if let modelURL = QiscusCore.bundle.url(forResource: DB_NAME, withExtension: "momd") {
+            let container = NSPersistentContainer.init(name: DB_NAME, managedObjectModel: NSManagedObjectModel(contentsOf: modelURL)!)
+            container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+                container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+                if let error = error as NSError? {
+                    QiscusLogger.errorPrint("Unresolved error \(error.localizedDescription), \(error.userInfo)")
+                }
+            })
+            return container
+        }else{
+            let modelURL = Bundle.moduleData.url(forResource: DB_NAME, withExtension: "momd")!
+            let container = NSPersistentContainer.init(name: DB_NAME, managedObjectModel: NSManagedObjectModel(contentsOf: modelURL)!)
+            container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+                container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+                if let error = error as NSError? {
+                    QiscusLogger.errorPrint("Unresolved error \(error.localizedDescription), \(error.userInfo)")
+                }
+            })
+            return container
+        }
     }()
     
     // iOS 9 and below
@@ -49,8 +60,13 @@ class PresistentStore {
     
     static var managedObjectModel: NSManagedObjectModel = {
         // The managed object model for the application. This property is not optional. It is a fatal error for the application not to be able to find and load its model.
-        let modelURL = QiscusCore.bundle.url(forResource: DB_NAME, withExtension: "momd")!
-        return NSManagedObjectModel(contentsOf: modelURL)!
+        if let modelURL = QiscusCore.bundle.url(forResource: DB_NAME, withExtension: "momd"){
+            return NSManagedObjectModel(contentsOf: modelURL)!
+        }else{
+            let modelURL = Bundle.moduleData.url(forResource: DB_NAME, withExtension: "momd")!
+            return NSManagedObjectModel(contentsOf: modelURL)!
+        }
+        
     }()
     
     static var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
