@@ -32,7 +32,7 @@ Then, run the following command:
 $ pod install
 ```
 
-## Swift Package Manager
+## Installation Swift Package Manager (SPM)
 You can use The Swift Package Manager to install QiscusCore by adding the proper description to your Package.swift file:
 
 ```
