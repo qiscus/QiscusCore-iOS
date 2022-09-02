@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		208EBBD828BC6009002DBF9D /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 208EBBD728BC6009002DBF9D /* SwiftyJSON */; };
-		208EBBDB28BC6027002DBF9D /* QiscusRealtime in Frameworks */ = {isa = PBXBuildFile; productRef = 208EBBDA28BC6027002DBF9D /* QiscusRealtime */; };
 		208EBBDF28BC6116002DBF9D /* BundleExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208EBBDE28BC6116002DBF9D /* BundleExtention.swift */; };
+		208EBBE528C1B541002DBF9D /* QiscusRealtime in Frameworks */ = {isa = PBXBuildFile; productRef = 208EBBE428C1B541002DBF9D /* QiscusRealtime */; };
 		OBJ_162 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_132 /* GCDAsyncSocket.m */; };
 		OBJ_163 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_133 /* GCDAsyncUdpSocket.m */; };
 		OBJ_170 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_131 /* Package.swift */; };
@@ -316,7 +316,7 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_274 /* SwiftyJSON.framework in Frameworks */,
-				208EBBDB28BC6027002DBF9D /* QiscusRealtime in Frameworks */,
+				208EBBE528C1B541002DBF9D /* QiscusRealtime in Frameworks */,
 				OBJ_275 /* QiscusRealtime.framework in Frameworks */,
 				OBJ_276 /* CocoaMQTT.framework in Frameworks */,
 				208EBBD828BC6009002DBF9D /* SwiftyJSON in Frameworks */,
@@ -799,7 +799,7 @@
 			name = QiscusCore;
 			packageProductDependencies = (
 				208EBBD728BC6009002DBF9D /* SwiftyJSON */,
-				208EBBDA28BC6027002DBF9D /* QiscusRealtime */,
+				208EBBE428C1B541002DBF9D /* QiscusRealtime */,
 			);
 			productName = QiscusCore;
 			productReference = "qiscuscore::QiscusCore::Product" /* QiscusCore.framework */;
@@ -900,7 +900,7 @@
 			mainGroup = OBJ_5;
 			packageReferences = (
 				208EBBD628BC6009002DBF9D /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
-				208EBBD928BC6027002DBF9D /* XCRemoteSwiftPackageReference "QiscusRealtime-iOS" */,
+				208EBBE328C1B541002DBF9D /* XCRemoteSwiftPackageReference "QiscusRealtime-iOS" */,
 			);
 			productRefGroup = OBJ_137 /* Products */;
 			projectDirPath = "";
@@ -1751,12 +1751,12 @@
 				kind = branch;
 			};
 		};
-		208EBBD928BC6027002DBF9D /* XCRemoteSwiftPackageReference "QiscusRealtime-iOS" */ = {
+		208EBBE328C1B541002DBF9D /* XCRemoteSwiftPackageReference "QiscusRealtime-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/qiscus/QiscusRealtime-iOS.git";
 			requirement = {
 				kind = exactVersion;
-				version = "1.5.0-beta.3";
+				version = 1.5.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1767,9 +1767,9 @@
 			package = 208EBBD628BC6009002DBF9D /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
 		};
-		208EBBDA28BC6027002DBF9D /* QiscusRealtime */ = {
+		208EBBE428C1B541002DBF9D /* QiscusRealtime */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 208EBBD928BC6027002DBF9D /* XCRemoteSwiftPackageReference "QiscusRealtime-iOS" */;
+			package = 208EBBE328C1B541002DBF9D /* XCRemoteSwiftPackageReference "QiscusRealtime-iOS" */;
 			productName = QiscusRealtime;
 		};
 /* End XCSwiftPackageProductDependency section */
