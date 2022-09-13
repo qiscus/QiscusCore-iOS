@@ -32,6 +32,20 @@ Then, run the following command:
 $ pod install
 ```
 
+## Installation Swift Package Manager (SPM)
+You can use The Swift Package Manager to install QiscusCore by adding the proper description to your Package.swift file:
+
+```
+import PackageDescription
+
+let package = Package(
+    name: "YOUR_PROJECT_NAME",
+    dependencies: [
+        .package(url: "https://github.com/qiscus/QiscusCore-iOS.git", from: "1.7.0"),
+    ]
+)
+```
+
 ## Installation Carthage
 [Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks. To integrate QiscusCore into your Xcode project using Carthage, specify it in your Cartfile:
 
