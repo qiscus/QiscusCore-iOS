@@ -90,6 +90,7 @@ internal enum APIClient {
     case upload
     case eventReport(moduleName: String, event: String, message: String)
     case appConfig
+    case refreshUserToken(userId : String, refreshToken: String)
 }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 extension APIClient : EndPoint {
@@ -127,6 +128,8 @@ extension APIClient : EndPoint {
             return "/event_report"
         case .appConfig:
             return "/config"
+        case .refreshUserToken( _, _):
+            return "/refresh_user_token"
         }
     }
     
@@ -134,7 +137,7 @@ extension APIClient : EndPoint {
         switch self {
         case .sync, .syncEvent, .unread, .myProfile, .appConfig:
             return .get
-        case .search, .registerDeviceToken, .removeDeviceToken, .loginRegister, .loginRegisterJWT, .upload, .nonce, .eventReport:
+        case .search, .registerDeviceToken, .removeDeviceToken, .loginRegister, .loginRegisterJWT, .upload, .nonce, .eventReport, .refreshUserToken:
             return .post
         case .updateMyProfile :
             return .patch
@@ -242,6 +245,12 @@ extension APIClient : EndPoint {
             
         case .appConfig :
             return .requestParameters(bodyParameters: nil, bodyEncoding: .jsonUrlEncoding, urlParameters: nil)
+        case .refreshUserToken(let userId, let refreshToken):
+            let param = [
+                "user_id"               : userId,
+                "refresh_token"         : refreshToken
+                ] as [String : Any]
+            return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
         }
     }
 }

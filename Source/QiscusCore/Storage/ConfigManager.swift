@@ -53,6 +53,7 @@ class ConfigManager : NSObject {
         }
         set {
             if let value = newValue {
+                self.userCache = nil
                 saveUser(value)
             }
         }
@@ -122,6 +123,7 @@ class ConfigManager : NSObject {
 //        defaults.set(data.lastCommentId, forKey: filename("lastCommentId"))
         defaults.set(data.avatarUrl, forKey: filename("avatarUrl"))
         defaults.set(data.extras, forKey: filename("extras"))
+        defaults.set(data.refreshUserToken, forKey: filename("refreshToken"))
     }
     
     private func loadUser() -> UserModel? {
@@ -136,6 +138,7 @@ class ConfigManager : NSObject {
             user.username   = storage.string(forKey: filename("username")) ?? ""
             user.extras     = storage.string(forKey: filename("extras")) ?? ""
             user.avatarUrl  = storage.url(forKey: filename("avatarUrl")) ?? URL(string: "http://")!
+            user.refreshUserToken = storage.string(forKey: filename("refreshToken")) ?? ""
 //            user.lastSyncEventId    = Int64(storage.integer(forKey: filename("username")))
             self.userCache  = user
             return user
@@ -258,6 +261,7 @@ class ConfigManager : NSObject {
         storage.removeObject(forKey: filename("lastCommentId"))
         storage.removeObject(forKey: filename("firstTime"))
         storage.removeObject(forKey: filename("enableDisableRealtimeManuallly"))
+        storage.removeObject(forKey: filename("refreshToken"))
         self.userCache = nil
     }
 }

@@ -22,6 +22,7 @@ public struct UserModel {
     public var token            : String    = ""
     public var username         : String    = ""
     public var extras           : String    = ""
+    public var refreshUserToken : String    = ""
     
     init() { }
     
@@ -33,6 +34,7 @@ public struct UserModel {
         token           = json["token"].stringValue
         username        = json["username"].stringValue
         extras          = json["extras"].rawString() ?? ""
+        refreshUserToken = json["refresh_token"].string ?? ""
     }
 }
 

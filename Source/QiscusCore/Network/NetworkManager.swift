@@ -861,4 +861,46 @@ extension NetworkManager : URLSessionDownloadDelegate {
         
     }
     
+    /// refresh user token
+    ///
+    /// - Parameters:
+    ///   - completion: @escaping on
+    func refreshUserToken(userId: String, refreshToken: String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
+        clientRouter.request(.refreshUserToken(userId: userId, refreshToken: refreshToken)) { (data, response, error) in
+            if error != nil {
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        onError(QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    
+                    let userRefreshToken = response["refresh_token"].string ?? ""
+                    let token = response["token"].string ?? ""
+                    
+                    if var user = QiscusCore.getUserData(){
+                        user.refreshUserToken = userRefreshToken
+                        user.token = token
+                        ConfigManager.shared.user = user
+                    }
+                    
+                    onSuccess(true)
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    onError(QError(message:errorMessage))
+                }
+            }
+        }
+    }
+    
 }

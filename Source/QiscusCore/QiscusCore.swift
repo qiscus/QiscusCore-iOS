@@ -1143,4 +1143,19 @@ public class QiscusCore: NSObject {
             }
         }
     }
+    
+    public func refreshUserToken(onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void ){
+    
+        let refreshUserToken = QiscusCore.getUserData()?.refreshUserToken ?? ""
+        let userID = QiscusCore.getUserData()?.email ?? ""
+        if  userID.isEmpty == true || refreshUserToken.isEmpty == true {
+            onError(QError(message: "Please force logout and setUser first"))
+        }else{
+            QiscusCore.network.refreshUserToken(userId: userID, refreshToken: refreshUserToken) { success in
+                onSuccess(success)
+            } onError: { error in
+                onError(error)
+            }
+        }
+    }
 }
