@@ -9,7 +9,7 @@
 import Foundation
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.6.1"
+    public static let qiscusCoreVersionNumber:String = "1.8.0"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -1144,7 +1144,7 @@ public class QiscusCore: NSObject {
         }
     }
     
-    public func refreshUserToken(onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void ){
+    public func refreshToken(onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void ){
     
         let refreshUserToken = QiscusCore.getUserData()?.refreshUserToken ?? ""
         let userID = QiscusCore.getUserData()?.email ?? ""
