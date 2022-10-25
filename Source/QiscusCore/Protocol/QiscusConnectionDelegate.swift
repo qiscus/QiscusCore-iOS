@@ -22,6 +22,11 @@ public enum QiscusConnectionState : String{
     case disconnected   = "disconnected"
 }
 
+public enum QiscusRefreshTokenEvent : String {
+    case isUnauthorized = "unauthorized"
+    case isTokenExpired = "tokenexpired"
+}
+
 public protocol QiscusCoreDelegate {
     // MARK: Event Room List
     
@@ -80,6 +85,8 @@ public protocol QiscusCoreDelegate {
     func gotNew(room: RoomModel)
     
     func onChatRoomCleared(roomId : String)
+    
+    func onRefreshToken(event : QiscusRefreshTokenEvent)
 }
 
 public protocol QiscusCoreRoomDelegate {

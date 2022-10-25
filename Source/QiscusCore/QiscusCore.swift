@@ -9,7 +9,7 @@
 import Foundation
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.9.0"
+    public static let qiscusCoreVersionNumber:String = "1.10.0"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -97,6 +97,7 @@ public class QiscusCore: NSObject {
     public static var enableRealtime : Bool = true
     public static var enableSync : Bool = true
     public static var enableSyncEvent : Bool = false
+    public static var enableExpiredToken : Bool = true
     
     @available(*, deprecated, message: "will soon become unavailable.")
     public static var enableDebugPrint: Bool = false
@@ -190,6 +191,7 @@ public class QiscusCore: NSObject {
             QiscusCore.enableRealtime = appConfig.enableRealtime
             QiscusCore.enableSync = appConfig.enableSync
             QiscusCore.enableSyncEvent = appConfig.enableSyncEvent
+            QiscusCore.enableExpiredToken = appConfig.autoRefreshToken
             
             //check old and new appServer
             if let oldConfig = config.server {
@@ -249,6 +251,10 @@ public class QiscusCore: NSObject {
             
             QiscusCore.setupReachability()
             
+            if QiscusCore.isLogined {
+                self.checkExpiredToken()
+            }
+            
         }) { (error) in
             if let appID = config.appID {
                 realtime.setup(appName: appID)
@@ -265,7 +271,66 @@ public class QiscusCore: NSObject {
             QiscusCore.shared.heartBeatForSync()
             
             QiscusCore.setupReachability()
+            
+            if QiscusCore.isLogined {
+                self.checkExpiredToken()
+            }
         }
+    }
+    
+    private class func checkExpiredToken(){
+        //1. check appConfig about token expired enable or disable
+        if enableExpiredToken == true {
+            let tokenExpiresAt = QiscusCore.getUserData()?.tokenExpiresAt ?? ""
+            
+            if !tokenExpiresAt.isEmpty{
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"
+                dateFormatter.timeZone = .current
+                if let date = dateFormatter.date(from: tokenExpiresAt) {
+                    let dateFormatter2 = DateFormatter()
+                    dateFormatter2.dateFormat = "dd/MM/yy"
+                    let dateString = dateFormatter2.string(from: date)
+                    
+                    var relativeDate = ""
+                    
+                    if #available(iOS 13.0, *) {
+                        let formatter = RelativeDateTimeFormatter()
+                        formatter.unitsStyle = .full
+                        let components = formatter.calendar.dateComponents([.year, .month, .day], from: date)
+                        relativeDate = formatter.localizedString(for: date, relativeTo: Date())
+                    } else {
+                        if date < Date()  {
+                            relativeDate = "was expired"
+                        }
+                    }
+                    
+                    
+                    if Calendar.current.isDateInToday(date) || Calendar.current.isDateInYesterday(date) || Calendar.current.isDateInTomorrow(date) ||
+                        relativeDate.contains("day ago") || relativeDate.contains("days ago") ||
+                        relativeDate.contains("weeks ago") || relativeDate.contains("week ago") ||
+                        relativeDate.contains("month ago") || relativeDate.contains("months ago") ||
+                        relativeDate.contains("year ago") || relativeDate.contains("years ago") ||
+                        relativeDate.contains("was expired") {
+                        print("sudah lewat waktu expired")
+                        // call api refreshToken
+                        QiscusCore.shared.refreshToken { success in
+                            
+                        } onError: { error in
+                            
+                        }
+
+                    }else{
+                        print("\(dateString)")
+                    }
+                }
+
+            }
+            
+        }
+        
+       
+    
     }
 
     public class func setCustomHeader(values : [String: Any]){
@@ -442,19 +507,32 @@ public class QiscusCore: NSObject {
     /// - Parameter completionHandler: The code to be executed once the request has finished, also give a user object and error.
     @available(*, deprecated, message: "will soon become unavailable.")
     public static func logout(completion: @escaping (QError?) -> Void) {
-        QiscusCore.shared.flowLogOut()
-        completion(nil)
+        QiscusCore.shared.flowLogOut { error in
+            completion(nil)
+        }
     }
     
     /// Disconnect or logout
     ///
     /// - Parameter completionHandler: The code to be executed once the request has finished, also give a user object and error.
     public static func clearUser(completion: @escaping (QError?) -> Void) {
-        QiscusCore.shared.flowLogOut()
-        completion(nil)
+        QiscusCore.shared.flowLogOut { error in
+            completion(nil)
+        }
     }
     
-    private func flowLogOut(){
+    private func flowLogOut(completion: @escaping (QError?) -> Void){
+        QiscusCore.shared.logout { success in
+            self.stopQiscusCore()
+            completion(nil)
+        } onError: { error in
+            self.stopQiscusCore()
+            completion(nil)
+        }
+        
+    }
+    
+    private func stopQiscusCore(){
         let clientRouter    = Router<APIClient>()
         let roomRouter      = Router<APIRoom>()
         let commentRouter   = Router<APIComment>()
@@ -1152,6 +1230,21 @@ public class QiscusCore: NSObject {
             onError(QError(message: "Please force logout and setUser first"))
         }else{
             QiscusCore.network.refreshUserToken(userId: userID, refreshToken: refreshUserToken) { success in
+                onSuccess(success)
+            } onError: { error in
+                onError(error)
+            }
+        }
+    }
+    
+    public func logout(onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void ){
+    
+        let token = QiscusCore.getUserData()?.token ?? ""
+        let userID = QiscusCore.getUserData()?.email ?? ""
+        if  userID.isEmpty == true || token.isEmpty == true {
+            onError(QError(message: "userId empty or token empty"))
+        }else{
+            QiscusCore.network.logout(userId: userID, token: token) { success in
                 onSuccess(success)
             } onError: { error in
                 onError(error)

@@ -65,6 +65,39 @@ class NetworkManager: NSObject {
         default: return .failure(NetworkResponse.failed.rawValue)
         }
     }
+    
+    func errorCheck(statusCode : Int = 0, errorMessage : String = ""){
+        //show to delegate
+        if QiscusCore.enableExpiredToken == true {
+            if errorMessage.lowercased() == "Unauthorized. Token is expired".lowercased(){
+                QiscusCore.shared.refreshToken { isSuccess in
+                    
+                } onError: { error in
+                    
+                }
+            }else{
+                if let delegate = QiscusCore.delegate {
+                    if statusCode == 403 && errorMessage.lowercased() == "Unauthorized. Token is expired".lowercased(){
+                        delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isTokenExpired)
+                    }else if statusCode == 403 && errorMessage.lowercased() == "Unauthorized".lowercased(){
+                        delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                    }else if statusCode == 401{
+                        delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                    }
+                }
+            }
+        }else{
+            if let delegate = QiscusCore.delegate {
+                if statusCode == 403 && errorMessage.lowercased() == "Unauthorized. Token is expired".lowercased(){
+                    delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isTokenExpired)
+                }else if statusCode == 403 && errorMessage.lowercased() == "Unauthorized".lowercased(){
+                    delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                }else if statusCode == 401{
+                    delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                }
+            }
+        }
+    }
 
 }
 // MARK: Client
@@ -136,6 +169,14 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
                     } catch {
                         
                     }
@@ -170,6 +211,15 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
+                        
                     } catch {
                         
                     }
@@ -313,6 +363,13 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
                     } catch {
                         
                     }
@@ -349,6 +406,13 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
                     } catch {
                         
                     }
@@ -388,6 +452,13 @@ extension NetworkManager {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
                         if QiscusCore.hasSetupUser() == true {
+                            let data = JSON(jsondata)
+                            let status = data["status"].int ?? 0
+                            let errorMessage = data["error"]["message"].string ?? ""
+                            
+                            if status == 403 {
+                                self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            }
                              onError(QError(message: "json: \(jsondata)"))
                         } else {
                             return
@@ -440,6 +511,13 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
                         QiscusLogger.errorPrint("Error updateProfile Code =\(response.statusCode)\(errorMessage)")
@@ -471,6 +549,13 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
                         QiscusLogger.errorPrint("Error syncEvent Code =\(response.statusCode)\(errorMessage)")
@@ -501,6 +586,13 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
                         QiscusLogger.errorPrint("Error syncEvent Code =\(response.statusCode)\(errorMessage)")
@@ -531,6 +623,13 @@ extension NetworkManager {
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
                         QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
@@ -563,6 +662,13 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
                         QiscusLogger.errorPrint("Error blockUser Code =\(response.statusCode)\(errorMessage)")
@@ -598,6 +704,13 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
                         QiscusLogger.errorPrint("Error unblockUser Code =\(response.statusCode)\(errorMessage)")
@@ -632,6 +745,13 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
                         QiscusLogger.errorPrint("Error getBlockUser Code =\(response.statusCode)\(errorMessage)")
@@ -687,6 +807,13 @@ extension NetworkManager {
                         }else{
                             let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                             QiscusLogger.errorPrint("json: \(jsondata)")
+                            let data = JSON(jsondata)
+                            let status = data["status"].int ?? 0
+                            let errorMessage = data["error"]["message"].string ?? ""
+                            
+                            if status == 403 {
+                                self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            }
                             onError(QError(message: "json: \(jsondata)"))
                         }
                     } catch {
@@ -778,6 +905,13 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        }
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
                         QiscusLogger.errorPrint("Error getUsers Code =\(response.statusCode)\(errorMessage)")
@@ -881,10 +1015,12 @@ extension NetworkManager : URLSessionDownloadDelegate {
                     let response = ApiResponse.decode(from: responseData)
                     
                     let userRefreshToken = response["refresh_token"].string ?? ""
+                    let userTokenExpiresAt = response["token_expires_at"].string ?? ""
                     let token = response["token"].string ?? ""
                     
                     if var user = QiscusCore.getUserData(){
                         user.refreshUserToken = userRefreshToken
+                        user.tokenExpiresAt = userTokenExpiresAt
                         user.token = token
                         ConfigManager.shared.user = user
                     }
@@ -894,6 +1030,53 @@ extension NetworkManager : URLSessionDownloadDelegate {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 || status == 401 {
+                            if let delegate = QiscusCore.delegate {
+                                if status == 403 && errorMessage.lowercased() == "Unauthorized".lowercased(){
+                                    delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                               }else if status == 401{
+                                    delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                               }
+                            }
+                        }
+                    } catch {
+                        
+                    }
+                    onError(QError(message:errorMessage))
+                }
+            }
+        }
+    }
+    
+    /// Logout user token
+    ///
+    /// - Parameters:
+    ///   - completion: @escaping on
+    func logout(userId: String, token: String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
+        clientRouter.request(.logout(userId: userId, token: token)) { (data, response, error) in
+            if error != nil {
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        onError(QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    
+                    onSuccess(true)
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        
                     } catch {
                         
                     }

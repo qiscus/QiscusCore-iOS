@@ -91,6 +91,7 @@ internal enum APIClient {
     case eventReport(moduleName: String, event: String, message: String)
     case appConfig
     case refreshUserToken(userId : String, refreshToken: String)
+    case logout(userId : String, token : String)
 }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 extension APIClient : EndPoint {
@@ -130,6 +131,8 @@ extension APIClient : EndPoint {
             return "/config"
         case .refreshUserToken( _, _):
             return "/refresh_user_token"
+        case .logout( _, _):
+            return "/logout"
         }
     }
     
@@ -137,7 +140,7 @@ extension APIClient : EndPoint {
         switch self {
         case .sync, .syncEvent, .unread, .myProfile, .appConfig:
             return .get
-        case .search, .registerDeviceToken, .removeDeviceToken, .loginRegister, .loginRegisterJWT, .upload, .nonce, .eventReport, .refreshUserToken:
+        case .search, .registerDeviceToken, .removeDeviceToken, .loginRegister, .loginRegisterJWT, .upload, .nonce, .eventReport, .refreshUserToken, .logout:
             return .post
         case .updateMyProfile :
             return .patch
@@ -249,6 +252,12 @@ extension APIClient : EndPoint {
             let param = [
                 "user_id"               : userId,
                 "refresh_token"         : refreshToken
+                ] as [String : Any]
+            return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
+        case .logout(let userId, let token):
+            let param = [
+                "user_id"               : userId,
+                "token"         : token
                 ] as [String : Any]
             return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
         }
