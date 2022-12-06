@@ -117,7 +117,17 @@ public class ConfigManager : NSObject {
                }
            }
        }
-    var syncInterval : TimeInterval     = 5
+    
+    var syncInterval    : TimeInterval {
+           get {
+                return loadQiscusSyncInterval()
+           }
+           set {
+               saveQiscusSyncInterval(newValue)
+           }
+       }
+    
+    //var syncInterval : TimeInterval     = 5
     
     fileprivate func fileNameQiscusServer(_ name: String) -> String {
         return prefix + name + "qiscusServer"
@@ -157,6 +167,20 @@ public class ConfigManager : NSObject {
         }
         
         
+    }
+    
+    private func loadQiscusSyncInterval() -> TimeInterval {
+        let storage = UserDefaults.standard
+        
+        let localTimeInterval = storage.integer(forKey: filename("timeInterval"))
+        
+        return TimeInterval(localTimeInterval)
+    }
+    
+    private func saveQiscusSyncInterval(_ value: TimeInterval) {
+        // save in file
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: filename("timeInterval"))
     }
     
     
@@ -237,7 +261,6 @@ public class ConfigManager : NSObject {
     private func setSyncEventId(_ id: String) {
         // save in file
         let defaults = UserDefaults.standard
-        let current = self.getSyncEventId()
         defaults.set(id, forKey: filename("syncEventId"))
     }
     

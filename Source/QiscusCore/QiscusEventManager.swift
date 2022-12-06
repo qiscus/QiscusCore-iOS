@@ -111,6 +111,10 @@ public class QiscusEventManager {
             }
         }
         
+        if comment.status == .sent || comment.status == .delivered || comment.status == .read {
+            qiscusCore?.config.lastCommentId = comment.id
+        }
+        
     }
     
     func deleteRoom(_ room: QChatRoom) {

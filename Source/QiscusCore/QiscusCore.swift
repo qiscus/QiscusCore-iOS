@@ -10,7 +10,7 @@ import Foundation
 import QiscusRealtime
 import CoreData
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "3.0.0-beta.14"
+    public static let qiscusCoreVersionNumber:String = "3.0.0-beta.15"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -288,6 +288,60 @@ public class QiscusCore: NSObject {
     
     public var enableSync : Bool = true
     public var enableSyncEvent : Bool = false
+    
+    var AUTHTOKEN : String {
+        get {
+            if let user = self.config.user {
+                return user.token
+            }else {
+                return ""
+            }
+            
+        }
+    }
+
+    var BASEURL : URL {
+        get {
+            if let server = self.config.server {
+                return server.url
+            }else {
+                return URL.init(string: "https://api3.qiscus.com/api/v2/mobile")!
+            }
+        }
+    }
+
+    var HEADERS : [String: String] {
+        get {
+            var headers = [
+                "QISCUS-SDK-PLATFORM": "iOS",
+                "QISCUS-SDK-DEVICE-BRAND": "Apple",
+                "QISCUS-SDK-VERSION": QiscusCore.qiscusCoreVersionNumber,
+                "QISCUS-SDK-DEVICE-MODEL" : UIDevice.modelName,
+                "QISCUS-SDK-DEVICE-OS-VERSION" : UIDevice.current.systemVersion
+                ]
+            if let appID = self.config.appID {
+                headers["QISCUS-SDK-APP-ID"] = appID
+            }
+            
+            if let user = self.config.user {
+                if let appid = self.config.appID {
+                    headers["QISCUS-SDK-APP-ID"] = appid
+                }
+                if !user.token.isEmpty {
+                    headers["QISCUS-SDK-TOKEN"] = user.token
+                }
+                if !user.id.isEmpty {
+                    headers["QISCUS-SDK-USER-ID"] = user.id
+                }
+            }
+            
+            if let customHeader = self.config.customHeader {
+                headers.merge(customHeader as! [String : String]){(_, new) in new}
+            }
+            
+            return headers
+        }
+    }
 
     
     private func heartBeatForSync(timeInterval : Double = 30){
@@ -389,6 +443,7 @@ public class QiscusCore: NSObject {
                 self.realtime.setup(appName: appID)
             }
             
+            self.config.syncInterval = 5
             // Background sync when realtime off
             self.heartBeat = QiscusHeartBeat.init(timeInterval: self.config.syncInterval)
             self.heartBeat?.eventHandler = {

@@ -11,12 +11,21 @@ class NetworkUpload {
     var qiscusCore : QiscusCore? = nil
     func createRequest(route: EndPoint, data: Data, filename: String) throws -> URLRequest {
         let boundary = "Boundary-\(UUID().uuidString)"
-        var request = URLRequest(url: route.baseURL.appendingPathComponent(route.path))
+        var request : URLRequest? = nil
+        if let url = self.qiscusCore?.BASEURL{
+            request = URLRequest(url: url.appendingPathComponent(route.path))
+        }
+        
+        guard var request = request else {
+            return URLRequest(url: URL.init(string: "https://api3.qiscus.com/api/v2/mobile")!.appendingPathComponent(route.path))
+        }
+
+       
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        if let header = route.header {
-            self.addAdditionalHeaders(header, request: &request)
-        }
+        //if let header = route.header {
+        self.addAdditionalHeaders(self.qiscusCore?.HEADERS, request: &request)
+        //}
         guard let user = qiscusCore?.config.user else { return request }
         request.httpBody = NetworkUpload().createBody(
                                       boundary: boundary,

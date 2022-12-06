@@ -29,23 +29,6 @@ internal enum APIRoom {
 }
 
 extension APIRoom : EndPoint {
-    var baseURL: URL {
-        get {
-            return BASEURL
-        }
-        set {
-            BASEURL = newValue
-        }
-    }
-    
-    var header: HTTPHeaders? {
-        get {
-            return HEADERS
-        }
-        set {
-            HEADERS = newValue!
-        }
-    }
     
     var path: String {
         switch self {

@@ -10,64 +10,12 @@ import Foundation
 import UIKit
 
 protocol EndPoint {
-    var baseURL     : URL { get set}
+    //var baseURL     : URL { get set}
     var path        : String { get }
     var httpMethod  : HTTPMethod { get }
-    var header      : HTTPHeaders? { get set}
+    //var header      : HTTPHeaders? { get set}
     var task        : HTTPTask { get }
 }
-
-// MARK: TODO Manage This
-var AUTHTOKEN : String {
-    get {
-//        if let user = ConfigManager.shared.user {
-//            return user.token
-//        }else {
-//            return ""
-//        }
-        
-        return ""
-        
-    }
-}
-
-var newDataBaseURL : URL = URL.init(string: "https://api.qiscus.com/api/v2/mobile")!
-var newDataHeader : HTTPHeaders = [
-    "QISCUS-SDK-PLATFORM": "iOS",
-    "QISCUS-SDK-DEVICE-BRAND": "Apple",
-    "QISCUS-SDK-VERSION": QiscusCore.qiscusCoreVersionNumber,
-    "QISCUS-SDK-DEVICE-MODEL" : UIDevice.modelName,
-    "QISCUS-SDK-DEVICE-OS-VERSION" : UIDevice.current.systemVersion
-]
-
-var BASEURL : URL {
-    get {
-        return newDataBaseURL
-    }
-    
-    set {
-        newDataBaseURL = newValue
-    }
-}
-
-var HEADERS : [String: String] {
-    get {
-        var headers = [
-            "QISCUS-SDK-PLATFORM": "iOS",
-            "QISCUS-SDK-DEVICE-BRAND": "Apple",
-            "QISCUS-SDK-VERSION": QiscusCore.qiscusCoreVersionNumber,
-            "QISCUS-SDK-DEVICE-MODEL" : UIDevice.modelName,
-            "QISCUS-SDK-DEVICE-OS-VERSION" : UIDevice.current.systemVersion
-            ]
-        
-        return newDataHeader
-    }
-    
-    set {
-        newDataHeader = newValue
-    }
-}
-/////
 
 
 // MARK: General API
@@ -89,23 +37,6 @@ internal enum APIClient {
 }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 extension APIClient : EndPoint {
-    var baseURL: URL {
-        get {
-            return BASEURL
-        }
-        set {
-            BASEURL = newValue
-        }
-    }
-    
-    var header: HTTPHeaders? {
-        get {
-            return HEADERS
-        }
-        set {
-            HEADERS = newValue!
-        }
-    }
     
     var path: String {
         switch self {
