@@ -43,7 +43,7 @@ public class QiscusCore: NSObject {
         }
     }
     
-    var reachability:QiscusReachability?
+   public var reachability:QiscusReachability?
     
     class func setupReachability(){
         QiscusCore.shared.reachability = QiscusReachability()
