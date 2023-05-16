@@ -1,4 +1,6 @@
+github "SwiftyJSON/SwiftyJSON" "5.0.1"
 github "daltoniam/Starscream" "3.1.1"
 github "emqx/CocoaMQTT" "dec874c56de97f3f44410e803913882f66b0ef9f"
 github "leeway1208/MqttCocoaAsyncSocket" "1.0.8"
+github "qiscus/QiscusCore-iOS" "c69c045fd37c798351db6acf723f9c91cf628508"
 github "qiscus/QiscusRealtime-iOS" "a018d1aa8c08f22ae8952fc1d616851ef9cc157f"

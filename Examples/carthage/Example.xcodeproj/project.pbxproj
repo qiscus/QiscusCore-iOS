@@ -7,14 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		20E002B12A13EB9600B99D7B /* CocoaMQTT.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AD2A13EB9500B99D7B /* CocoaMQTT.xcframework */; };
-		20E002B22A13EB9600B99D7B /* CocoaMQTT.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AD2A13EB9500B99D7B /* CocoaMQTT.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		20E002B32A13EB9600B99D7B /* Starscream.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AE2A13EB9500B99D7B /* Starscream.xcframework */; };
-		20E002B42A13EB9600B99D7B /* Starscream.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AE2A13EB9500B99D7B /* Starscream.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		20E002B52A13EB9600B99D7B /* MqttCocoaAsyncSocket.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AF2A13EB9500B99D7B /* MqttCocoaAsyncSocket.xcframework */; };
-		20E002B62A13EB9600B99D7B /* MqttCocoaAsyncSocket.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AF2A13EB9500B99D7B /* MqttCocoaAsyncSocket.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		20E002B72A13EB9600B99D7B /* QiscusRealtime.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002B02A13EB9600B99D7B /* QiscusRealtime.xcframework */; };
-		20E002B82A13EB9600B99D7B /* QiscusRealtime.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002B02A13EB9600B99D7B /* QiscusRealtime.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		20E002BA2A13F27300B99D7B /* QiscusRealtime.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002B02A13EB9600B99D7B /* QiscusRealtime.xcframework */; };
+		20E002BB2A13F27300B99D7B /* QiscusRealtime.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002B02A13EB9600B99D7B /* QiscusRealtime.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		20E002BC2A13F27400B99D7B /* CocoaMQTT.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AD2A13EB9500B99D7B /* CocoaMQTT.xcframework */; };
+		20E002BD2A13F27400B99D7B /* CocoaMQTT.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AD2A13EB9500B99D7B /* CocoaMQTT.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		20E002BE2A13F27400B99D7B /* Starscream.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AE2A13EB9500B99D7B /* Starscream.xcframework */; };
+		20E002BF2A13F27400B99D7B /* Starscream.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AE2A13EB9500B99D7B /* Starscream.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		20E002C02A13F27400B99D7B /* MqttCocoaAsyncSocket.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AF2A13EB9500B99D7B /* MqttCocoaAsyncSocket.xcframework */; };
+		20E002C12A13F27400B99D7B /* MqttCocoaAsyncSocket.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002AF2A13EB9500B99D7B /* MqttCocoaAsyncSocket.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		20E002C52A13F27400B99D7B /* SwiftyJSON.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002C32A13F27400B99D7B /* SwiftyJSON.xcframework */; };
+		20E002C62A13F27400B99D7B /* SwiftyJSON.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002C32A13F27400B99D7B /* SwiftyJSON.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		20E002C72A13F27400B99D7B /* QiscusCore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002C42A13F27400B99D7B /* QiscusCore.xcframework */; };
+		20E002C82A13F27400B99D7B /* QiscusCore.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002C42A13F27400B99D7B /* QiscusCore.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3D5E861524BDC3E10061D7E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E861424BDC3E10061D7E4 /* AppDelegate.swift */; };
 		3D5E861724BDC3E10061D7E4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E861624BDC3E10061D7E4 /* SceneDelegate.swift */; };
 		3D5E861924BDC3E10061D7E4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E861824BDC3E10061D7E4 /* ViewController.swift */; };
@@ -24,16 +28,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		20E002B92A13EB9600B99D7B /* Embed Frameworks */ = {
+		20E002C22A13F27400B99D7B /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				20E002B82A13EB9600B99D7B /* QiscusRealtime.xcframework in Embed Frameworks */,
-				20E002B42A13EB9600B99D7B /* Starscream.xcframework in Embed Frameworks */,
-				20E002B62A13EB9600B99D7B /* MqttCocoaAsyncSocket.xcframework in Embed Frameworks */,
-				20E002B22A13EB9600B99D7B /* CocoaMQTT.xcframework in Embed Frameworks */,
+				20E002C62A13F27400B99D7B /* SwiftyJSON.xcframework in Embed Frameworks */,
+				20E002BB2A13F27300B99D7B /* QiscusRealtime.xcframework in Embed Frameworks */,
+				20E002BF2A13F27400B99D7B /* Starscream.xcframework in Embed Frameworks */,
+				20E002C12A13F27400B99D7B /* MqttCocoaAsyncSocket.xcframework in Embed Frameworks */,
+				20E002C82A13F27400B99D7B /* QiscusCore.xcframework in Embed Frameworks */,
+				20E002BD2A13F27400B99D7B /* CocoaMQTT.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -45,6 +51,8 @@
 		20E002AE2A13EB9500B99D7B /* Starscream.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Starscream.xcframework; path = Carthage/Build/Starscream.xcframework; sourceTree = "<group>"; };
 		20E002AF2A13EB9500B99D7B /* MqttCocoaAsyncSocket.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MqttCocoaAsyncSocket.xcframework; path = Carthage/Build/MqttCocoaAsyncSocket.xcframework; sourceTree = "<group>"; };
 		20E002B02A13EB9600B99D7B /* QiscusRealtime.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = QiscusRealtime.xcframework; path = Carthage/Build/QiscusRealtime.xcframework; sourceTree = "<group>"; };
+		20E002C32A13F27400B99D7B /* SwiftyJSON.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SwiftyJSON.xcframework; path = Carthage/Build/SwiftyJSON.xcframework; sourceTree = "<group>"; };
+		20E002C42A13F27400B99D7B /* QiscusCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = QiscusCore.xcframework; path = Carthage/Build/QiscusCore.xcframework; sourceTree = "<group>"; };
 		3D1AC05E24BED7130040F736 /* QiscusDatabase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QiscusDatabase.framework; path = ../../QiscusDatabase.framework; sourceTree = "<group>"; };
 		3D5E861124BDC3E10061D7E4 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D5E861424BDC3E10061D7E4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -54,12 +62,6 @@
 		3D5E861D24BDC3E50061D7E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D5E862024BDC3E50061D7E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D5E862224BDC3E50061D7E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
-		3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QiscusCore.framework; path = Carthage/Build/iOS/QiscusCore.framework; sourceTree = "<group>"; };
-		3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
-		3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaMQTT.framework; path = Carthage/Build/iOS/CocoaMQTT.framework; sourceTree = "<group>"; };
-		3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QiscusRealtime.framework; path = Carthage/Build/iOS/QiscusRealtime.framework; sourceTree = "<group>"; };
-		3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,10 +69,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				20E002B72A13EB9600B99D7B /* QiscusRealtime.xcframework in Frameworks */,
-				20E002B32A13EB9600B99D7B /* Starscream.xcframework in Frameworks */,
-				20E002B52A13EB9600B99D7B /* MqttCocoaAsyncSocket.xcframework in Frameworks */,
-				20E002B12A13EB9600B99D7B /* CocoaMQTT.xcframework in Frameworks */,
+				20E002C52A13F27400B99D7B /* SwiftyJSON.xcframework in Frameworks */,
+				20E002BA2A13F27300B99D7B /* QiscusRealtime.xcframework in Frameworks */,
+				20E002BE2A13F27400B99D7B /* Starscream.xcframework in Frameworks */,
+				20E002C02A13F27400B99D7B /* MqttCocoaAsyncSocket.xcframework in Frameworks */,
+				20E002C72A13F27400B99D7B /* QiscusCore.xcframework in Frameworks */,
+				20E002BC2A13F27400B99D7B /* CocoaMQTT.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,17 +115,13 @@
 		3D5E865A24BDF6FC0061D7E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				20E002C42A13F27400B99D7B /* QiscusCore.xcframework */,
+				20E002C32A13F27400B99D7B /* SwiftyJSON.xcframework */,
 				20E002AD2A13EB9500B99D7B /* CocoaMQTT.xcframework */,
 				20E002AF2A13EB9500B99D7B /* MqttCocoaAsyncSocket.xcframework */,
 				20E002B02A13EB9600B99D7B /* QiscusRealtime.xcframework */,
 				20E002AE2A13EB9500B99D7B /* Starscream.xcframework */,
 				3D1AC05E24BED7130040F736 /* QiscusDatabase.framework */,
-				3D5E866024BDF6FC0061D7E4 /* CocoaAsyncSocket.framework */,
-				3D5E865E24BDF6FC0061D7E4 /* CocoaMQTT.framework */,
-				3D5E865C24BDF6FC0061D7E4 /* QiscusCore.framework */,
-				3D5E865F24BDF6FC0061D7E4 /* QiscusRealtime.framework */,
-				3D5E865B24BDF6FC0061D7E4 /* Starscream.framework */,
-				3D5E865D24BDF6FC0061D7E4 /* SwiftyJSON.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -137,7 +137,7 @@
 				3D5E860E24BDC3E10061D7E4 /* Frameworks */,
 				3D5E860F24BDC3E10061D7E4 /* Resources */,
 				3D5E866E24BDF70E0061D7E4 /* ShellScript */,
-				20E002B92A13EB9600B99D7B /* Embed Frameworks */,
+				20E002C22A13F27400B99D7B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -197,7 +197,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		3D5E866E24BDF70E0061D7E4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -209,7 +209,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
@@ -376,6 +376,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -399,6 +400,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
