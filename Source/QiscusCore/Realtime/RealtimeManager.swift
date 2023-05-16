@@ -7,6 +7,7 @@
 
 import Foundation
 import QiscusRealtime
+import UIKit
 
 typealias _roomEvent = (RoomEvent) -> Void
 typealias _roomTyping = (RoomTyping) -> Void
