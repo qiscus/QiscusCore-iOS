@@ -9,7 +9,7 @@
 import Foundation
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.10.1"
+    public static let qiscusCoreVersionNumber:String = "1.10.2"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -410,6 +410,11 @@ public class QiscusCore: NSObject {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
+       
+        if QiscusCore.hasSetupUser(){
+            QiscusCore.shared.stopQiscusCore()
+        }
+        
         network.getNonce(onSuccess: onSuccess, onError: onError)
     }
     
@@ -422,6 +427,11 @@ public class QiscusCore: NSObject {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
+        
+        if QiscusCore.hasSetupUser(){
+            QiscusCore.shared.stopQiscusCore()
+        }
+        
         network.getNonce(onSuccess: onSuccess, onError: onError)
     }
     
@@ -435,6 +445,11 @@ public class QiscusCore: NSObject {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
+        
+        if QiscusCore.hasSetupUser(){
+            QiscusCore.shared.stopQiscusCore()
+        }
+        
         network.login(email: userID, password: userKey, username: username, avatarUrl: avatarURL?.absoluteString, extras: extras, onSuccess: { (user) in
             // save user in local
             ConfigManager.shared.user = user
@@ -454,6 +469,11 @@ public class QiscusCore: NSObject {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
+        
+        if QiscusCore.hasSetupUser(){
+            QiscusCore.shared.stopQiscusCore()
+        }
+        
         network.login(email: userId, password: userKey, username: username, avatarUrl: avatarURL?.absoluteString, extras: extras, onSuccess: { (user) in
             // save user in local
             ConfigManager.shared.user = user
