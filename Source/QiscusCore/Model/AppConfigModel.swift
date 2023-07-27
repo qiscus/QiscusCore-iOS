@@ -21,6 +21,7 @@ public class AppConfigModel {
     public var enableSync : Bool = true
     public var enableSyncEvent : Bool = false
     public var autoRefreshToken: Bool = true
+    public var enableRefreshToken: Bool = false
     
     init(json: JSON) {
         self.baseURL  = json["base_url"].string ?? ""
@@ -34,5 +35,6 @@ public class AppConfigModel {
         self.enableSync = json["enable_sync"].bool ?? true
         self.enableSyncEvent = json["enable_sync_event"].bool ?? false
         self.autoRefreshToken = json["auto_refresh_token"].bool ?? true
+        self.enableRefreshToken = json["enable_refresh_token"].bool ?? false
     }
 }

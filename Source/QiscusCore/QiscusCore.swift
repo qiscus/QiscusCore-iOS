@@ -9,7 +9,7 @@
 import Foundation
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.10.2"
+    public static let qiscusCoreVersionNumber:String = "1.10.3"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -98,6 +98,7 @@ public class QiscusCore: NSObject {
     public static var enableSync : Bool = true
     public static var enableSyncEvent : Bool = false
     public static var enableExpiredToken : Bool = true
+    public static var enableRefreshToken : Bool = false
     
     @available(*, deprecated, message: "will soon become unavailable.")
     public static var enableDebugPrint: Bool = false
@@ -192,6 +193,7 @@ public class QiscusCore: NSObject {
             QiscusCore.enableSync = appConfig.enableSync
             QiscusCore.enableSyncEvent = appConfig.enableSyncEvent
             QiscusCore.enableExpiredToken = appConfig.autoRefreshToken
+            QiscusCore.enableRefreshToken = appConfig.enableRefreshToken
             
             //check old and new appServer
             if let oldConfig = config.server {
@@ -542,14 +544,18 @@ public class QiscusCore: NSObject {
     }
     
     private func flowLogOut(completion: @escaping (QError?) -> Void){
-        QiscusCore.shared.logout { success in
-            self.stopQiscusCore()
-            completion(nil)
-        } onError: { error in
+        if QiscusCore.enableRefreshToken == true {
+            QiscusCore.shared.logout { success in
+                self.stopQiscusCore()
+                completion(nil)
+            } onError: { error in
+                self.stopQiscusCore()
+                completion(nil)
+            }
+        }else{
             self.stopQiscusCore()
             completion(nil)
         }
-        
     }
     
     private func stopQiscusCore(){
