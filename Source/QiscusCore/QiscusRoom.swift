@@ -286,7 +286,7 @@ extension QiscusCore {
     ///
     /// - Parameter completion: First Completion will return data from local if exis, then return from server with meta data(totalpage,current). Response new Qiscus Room Object and error if exist.
     @available(*, deprecated, message: "will soon become unavailable.")
-    public func getAllRoom(limit: Int? = 20, page: Int? = 1, showRemoved: Bool = false, showEmpty: Bool = false,onSuccess: @escaping ([RoomModel],Meta?) -> Void, onError: @escaping (QError) -> Void) {
+    public func getAllRoom(limit: Int? = 20, page: Int? = 1, showRemoved: Bool = false, showEmpty: Bool = false, publishEvent: Bool = true,onSuccess: @escaping ([RoomModel],Meta?) -> Void, onError: @escaping (QError) -> Void) {
         // api get room lists
       
         QiscusCore.network.getRoomList(limit: limit, page: page, showRemoved: showRemoved, showEmpty: showEmpty) { (data, meta, error) in
@@ -295,11 +295,11 @@ extension QiscusCore {
                 QiscusCore.database.room.save(rooms)
                 rooms.forEach({ (_room) in
                     if let _comment = _room.lastComment {
-                        if _comment.id.contains("0"){
+                        if _comment.id == "0"{
                             //ignored
                         }else{
                             // save last comment
-                            QiscusCore.database.comment.save([_comment])
+                            QiscusCore.database.comment.save([_comment], publishEvent: publishEvent)
                         }
                     }
                 })
@@ -320,7 +320,7 @@ extension QiscusCore {
     ///   - showRemoved: Bool (true = include room that has been removed, false = exclude room that has been removed)
     ///   - showEmpty: Bool (true = it will show all rooms that have been created event there are no messages, default is false where only room that have at least one message will be shown)
     ///   - completion: @escaping when success get room list returning Optional([RoomModel]), Optional(Meta) contain page, total_room per page, Optional(String error message)
-    public func getAllChatRooms(showParticipant:Bool = true,showRemoved: Bool = false, showEmpty: Bool = false, roomType : RoomType? = nil, page: Int, limit: Int ,onSuccess: @escaping ([RoomModel],Meta?) -> Void, onError: @escaping (QError) -> Void) {
+    public func getAllChatRooms(showParticipant:Bool = true,showRemoved: Bool = false, showEmpty: Bool = false, roomType : RoomType? = nil, page: Int, limit: Int, publishEvent : Bool = true,onSuccess: @escaping ([RoomModel],Meta?) -> Void, onError: @escaping (QError) -> Void) {
         // api get room lists
         
         QiscusCore.network.getRoomList(showParticipant: showParticipant, limit: limit, page: page, roomType: roomType, showRemoved: showRemoved, showEmpty: showEmpty) { (data, meta, error) in
@@ -329,11 +329,11 @@ extension QiscusCore {
                 QiscusCore.database.room.save(rooms)
                 rooms.forEach({ (_room) in
                     if let _comment = _room.lastComment {
-                        if _comment.id.contains("0"){
+                        if _comment.id == "0"{
                             //ignored
                         }else{
                             // save last comment
-                            QiscusCore.database.comment.save([_comment])
+                            QiscusCore.database.comment.save([_comment], publishEvent: publishEvent)
                         }
                     }
                 })
