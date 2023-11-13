@@ -115,6 +115,18 @@ class QiscusWorkerManager {
                     }else{
                         id = latestComment
                     }
+                }else{
+                    if latestComment != ""{
+                        if id.isEmpty {
+                            id = latestComment
+                        }else{
+                            if id.contains(latestComment) == true {
+                                //id same
+                            }else{
+                                id = latestComment
+                            }
+                        }
+                    }
                 }
                 
                 QiscusCore.shared.synchronize(lastMessageId: id, onSuccess: { (comments) in
@@ -158,6 +170,18 @@ class QiscusWorkerManager {
                 //id same
             }else{
                 id = latestComment
+            }
+        }else{
+            if latestComment != ""{
+                if id.isEmpty {
+                    id = latestComment
+                }else{
+                    if id.contains(latestComment) == true {
+                        //id same
+                    }else{
+                        id = latestComment
+                    }
+                }
             }
         }
         

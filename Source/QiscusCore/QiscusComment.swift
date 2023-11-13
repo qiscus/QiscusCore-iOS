@@ -53,8 +53,16 @@ extension QiscusCore {
         QiscusCore.network.updateComment(message: message.message, payload: message.payload, extras: message.extras, uniqueTempId: message.uniqId) { (result, error) in
             
             if error != nil {
-                //save in local comment pending
-                QiscusCore.database.comment.save([_comment])
+                //check error
+                if (error?.contains("Validation error") == true){
+                    //save in local comment failed
+                    _comment.status = .failed
+                    QiscusCore.database.comment.save([_comment])
+                }else{
+                    //save in local comment pending
+                    _comment.status = .pending
+                    QiscusCore.database.comment.save([_comment])
+                }
             }
             
             if let commentResult = result {
@@ -107,9 +115,16 @@ extension QiscusCore {
         QiscusCore.network.postComment(roomId: comment.roomId, type: comment.type, message: comment.message, payload: comment.payload, extras: comment.extras, uniqueTempId: comment.uniqId) { (result, error) in
             
             if error != nil {
-                //save in local comment pending
-                _comment.status = .pending
-                QiscusCore.database.comment.save([_comment])
+                //check error
+                if (error?.contains("Validation error") == true){
+                    //save in local comment failed
+                    _comment.status = .failed
+                    QiscusCore.database.comment.save([_comment])
+                }else{
+                    //save in local comment pending
+                    _comment.status = .pending
+                    QiscusCore.database.comment.save([_comment])
+                }
             }
             
             if let commentResult = result {
@@ -192,9 +207,17 @@ extension QiscusCore {
         QiscusCore.network.postComment(roomId: message.roomId, type: message.type, message: message.message, payload: message.payload, extras: message.extras, uniqueTempId: message.uniqId) { (result, error) in
             
             if error != nil {
-                //save in local comment pending
-                _comment.status = .pending
-                QiscusCore.database.comment.save([_comment])
+                //check error
+                if (error?.contains("Validation error") == true){
+                    //save in local comment failed
+                    _comment.status = .failed
+                    QiscusCore.database.comment.save([_comment])
+                }else{
+                    //save in local comment pending
+                    _comment.status = .pending
+                    QiscusCore.database.comment.save([_comment])
+                }
+               
             }
             
             if let commentResult = result {
