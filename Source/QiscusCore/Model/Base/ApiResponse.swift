@@ -78,6 +78,11 @@ class UserApiResponse {
         return UserModel(json: comment)
     }
     
+    static func userWithoutToken(from json: JSON) -> UserModel {
+        let user = json["user"]
+        return UserModel(withoutToken: user)
+    }
+    
     static func successRegisterDeviceToken(from json: JSON) -> Bool {
         let changed = json["changed"].bool ?? false
         return changed

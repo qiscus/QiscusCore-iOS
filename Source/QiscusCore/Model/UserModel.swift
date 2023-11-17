@@ -38,6 +38,18 @@ public struct UserModel {
         refreshUserToken = json["refresh_token"].string ?? ""
         tokenExpiresAt = json["token_expires_at"].string ?? ""
     }
+    
+    init(withoutToken json: JSON) {
+        avatarUrl       = json["avatar_url"].url ?? URL(string: "http://")!
+        email           = json["email"].stringValue
+        id              = json["id_str"].stringValue
+        rtKey           = json["rtKey"].stringValue
+        token           =  QiscusCore.getUserData()?.token ?? ""
+        username        = json["username"].stringValue
+        extras          = json["extras"].rawString() ?? ""
+        refreshUserToken = QiscusCore.getUserData()?.refreshUserToken ?? ""
+        tokenExpiresAt = QiscusCore.getUserData()?.tokenExpiresAt ?? ""
+    }
 }
 
 open class MemberModel {

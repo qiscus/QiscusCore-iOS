@@ -440,7 +440,7 @@ extension NetworkManager {
                         return
                     }
                     let response = ApiResponse.decode(from: responseData)
-                    let user     = UserApiResponse.user(from: response)
+                    let user     = UserApiResponse.userWithoutToken(from: response)
                     if QiscusCore.hasSetupUser() == true {
                          onSuccess(user)
                     } else {
@@ -502,7 +502,7 @@ extension NetworkManager {
                         return
                     }
                     let response = ApiResponse.decode(from: responseData)
-                    let user = UserApiResponse.user(from: response)
+                    let user = UserApiResponse.userWithoutToken(from: response)
                         onSuccess(user)
 //                    }else {
 //                        onError(QError(message: "Failed to parsing results"))
