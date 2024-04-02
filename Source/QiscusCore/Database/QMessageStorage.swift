@@ -66,7 +66,7 @@ class QMessageStorage : QiscusStorage {
     
     func add(_ comment: QMessage, onCreate: @escaping (QMessage) -> Void, onUpdate: @escaping (QMessage) -> Void) {
             // filter if comment exist update, if not add
-            if let r = find(byUniqueID: comment.uniqId)  {
+            if let r = find(byUniqueID: comment.uniqueId)  {
                 // check new comment status, end status is read. sending - sent - deliverd - read
                 if comment.status.intValue <= r.status.intValue && comment.status != .deleted {
                     
