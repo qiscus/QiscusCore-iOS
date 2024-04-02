@@ -30,7 +30,7 @@ open class QMessage {
     public var chatRoomId                           : String        = ""
     public internal(set) var timestampString        : String        = ""
     public var type                                 : String        = "text"
-    public internal(set) var uniqueId               : String        = ""
+    public var uniqueId               : String        = ""
     public internal(set) var unixTimestamp          : Int64         = 0
     public var userAvatarUrl          : URL?          = nil
     public internal(set) var userId                 : String        = ""
