@@ -57,47 +57,91 @@ class CommentStorage : QiscusStorage {
     }
     
     func add(_ comment: CommentModel, onCreate: @escaping (CommentModel) -> Void, onUpdate: @escaping (CommentModel) -> Void) {
-        // filter if comment exist update, if not add
-        if let r = find(byUniqueID: comment.uniqId)  {
-            // check new comment status, end status is read. sending - sent - deliverd - read
-            if comment.status.intValue <= r.status.intValue && comment.status != .deleted {
-                
-                if comment.status == .failed {
-                     onUpdate(comment)
+            // filter if comment exist update, if not add
+            if let r = find(byUniqueID: comment.uniqId)  {
+                // check new comment status, end status is read. sending - sent - deliverd - read
+                if comment.status.intValue <= r.status.intValue && comment.status != .deleted {
+                    
+                    if comment.status == .failed {
+                         onUpdate(comment)
+                    }else{
+                        // update
+                        comment.status = r.status
+                        if !updateCommentDataEvent(old: r, new: comment) {
+                            // add new
+                            data.append(comment)
+                            onCreate(comment)
+                            save(comment)
+                        }else {
+                           save(comment)
+                           onUpdate(comment)
+                        }
+                       // return // just ignore, except delete(soft, connten ischanged) this part is trick from backend. after receiver update comment status then sender call api load comment somehow status still sent but sender already receive event status read/deliverd via mqtt
+                    }
                 }else{
-                    // update
-                    comment.status = r.status
                     if !updateCommentDataEvent(old: r, new: comment) {
                         // add new
                         data.append(comment)
                         onCreate(comment)
                         save(comment)
                     }else {
-                       save(comment)
-                       onUpdate(comment)
+                        // update
+                        save(comment)
+                        onUpdate(comment)
                     }
-                   // return // just ignore, except delete(soft, connten ischanged) this part is trick from backend. after receiver update comment status then sender call api load comment somehow status still sent but sender already receive event status read/deliverd via mqtt
+                   
                 }
-            }else{
-                if !updateCommentDataEvent(old: r, new: comment) {
+            }else {
+                //new mekanism
+                if let r = find(byID: comment.id)  {
+                    // check new comment status, end status is read. sending - sent - deliverd - read
+                    if comment.status.intValue <= r.status.intValue && comment.status != .deleted {
+                        
+                        if comment.status == .failed {
+                             onUpdate(comment)
+                        }else{
+                            // update
+                            comment.status = r.status
+                            if !updateCommentDataEvent(old: r, new: comment) {
+                                // add new
+                                data.append(comment)
+                                onCreate(comment)
+                                save(comment)
+                            }else {
+                               save(comment)
+                               onUpdate(comment)
+                            }
+                           // return // just ignore, except delete(soft, connten ischanged) this part is trick from backend. after receiver update comment status then sender call api load comment somehow status still sent but sender already receive event status read/deliverd via mqtt
+                        }
+                    }else{
+                        if !updateCommentDataEvent(old: r, new: comment) {
+                            // add new
+                            data.append(comment)
+                            onCreate(comment)
+                            save(comment)
+                        }else {
+                            // update
+                            save(comment)
+                            onUpdate(comment)
+                        }
+                       
+                    }
+                }else{
                     // add new
-                    data.append(comment)
-                    onCreate(comment)
-                    save(comment)
-                }else {
-                    // update
-                    save(comment)
-                    onUpdate(comment)
+                    if let r = find(byID: comment.id)  {
+                        // update
+                        save(comment)
+                        onUpdate(comment)
+                    }else{
+                        // add new
+                        data.append(comment)
+                        onCreate(comment)
+                        save(comment)
+                    }
                 }
-               
+
             }
-        }else {
-            // add new
-            data.append(comment)
-            onCreate(comment)
-            save(comment)
         }
-    }
     
     func find(byID id: String) -> CommentModel? {
         if data.isEmpty {

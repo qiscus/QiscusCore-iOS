@@ -14,8 +14,8 @@ let package = Package(
             targets: ["QiscusCore"]),
     ],
     dependencies: [
-       .package(url: "https://github.com/qiscus/QiscusRealtime-iOS.git", .upToNextMajor(from: "1.6.1")),
- 	.package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", from: "5.0.0")
+       .package(url: "https://github.com/qiscus/QiscusRealtime-iOS.git", .upToNextMajor(from: "1.7.0")),
+ 	.package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", from: "5.0.2")
     ],
     targets: [
         .target(

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -172,6 +172,7 @@
 		20E002932A13E47600B99D7B /* SwiftyJSON.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SwiftyJSON.xcframework; path = Carthage/Build/SwiftyJSON.xcframework; sourceTree = "<group>"; };
 		20E002942A13E47700B99D7B /* MqttCocoaAsyncSocket.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MqttCocoaAsyncSocket.xcframework; path = Carthage/Build/MqttCocoaAsyncSocket.xcframework; sourceTree = "<group>"; };
 		20E002952A13E47700B99D7B /* CocoaMQTT.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CocoaMQTT.xcframework; path = Carthage/Build/CocoaMQTT.xcframework; sourceTree = "<group>"; };
+		20E4BA322BBA859C009C437A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		OBJ_10 /* CommentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentStorage.swift; sourceTree = "<group>"; };
 		OBJ_101 /* MqttClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MqttClient.swift; sourceTree = "<group>"; };
 		OBJ_105 /* CocoaMQTT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaMQTT.swift; sourceTree = "<group>"; };
@@ -535,6 +536,7 @@
 		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
+				20E4BA322BBA859C009C437A /* PrivacyInfo.xcprivacy */,
 				OBJ_6 /* Package.swift */,
 				OBJ_7 /* Sources */,
 				OBJ_83 /* Tests */,

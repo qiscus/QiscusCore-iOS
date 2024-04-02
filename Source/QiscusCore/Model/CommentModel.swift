@@ -30,7 +30,7 @@ open class CommentModel {
     public var roomId               : String        = ""
     public internal(set) var timestamp            : String        = ""
     public var type                 : String        = "text"
-    public internal(set) var uniqId               : String        = ""
+    public var uniqId               : String        = ""
     public internal(set) var unixTimestamp        : Int64         = 0
     public internal(set) var userAvatarUrl        : URL?          = nil
     public internal(set) var userId               : String        = ""
