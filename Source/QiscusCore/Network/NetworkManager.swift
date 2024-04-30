@@ -73,7 +73,9 @@ class NetworkManager: NSObject {
                 QiscusCore.shared.refreshToken { isSuccess in
                     
                 } onError: { error in
-                    
+                    if let delegate = QiscusCore.delegate {
+                        delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                    }
                 }
             }else{
                 if let delegate = QiscusCore.delegate {

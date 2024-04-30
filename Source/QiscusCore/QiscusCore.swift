@@ -9,7 +9,7 @@
 import Foundation
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.11.0"
+    public static let qiscusCoreVersionNumber:String = "1.12.0"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -319,7 +319,9 @@ public class QiscusCore: NSObject {
                         QiscusCore.shared.refreshToken { success in
                             
                         } onError: { error in
-                            
+                            if let delegate = QiscusCore.delegate {
+                                delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                            }
                         }
 
                     }else{
