@@ -647,9 +647,9 @@ public class QiscusCore: NSObject {
     ///   - deviceToken: device token
     ///   - completion: The code to be executed once the request has finished
     @available(*, deprecated, message: "will soon become unavailable.")
-    public func register(deviceToken : String, isDevelopment:Bool = false, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
+    public func register(deviceToken : String, isDevelopment:Bool = false, bundleId : String = "", onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
         if QiscusCore.isLogined {
-            QiscusCore.network.registerDeviceToken(deviceToken: deviceToken, isDevelopment: isDevelopment, onSuccess: { (success) in
+            QiscusCore.network.registerDeviceToken(deviceToken: deviceToken, isDevelopment: isDevelopment, bundleId : bundleId , onSuccess: { (success) in
                 QiscusCore.config.deviceToken = deviceToken
                 onSuccess(success)
             }) { (error) in
@@ -666,9 +666,9 @@ public class QiscusCore: NSObject {
     ///   - token: device token
     ///   - isDevelopment : default is false / using production
     ///   - completion: The code to be executed once the request has finished
-    public func registerDeviceToken(token : String, isDevelopment:Bool = false, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
+    public func registerDeviceToken(token : String, isDevelopment:Bool = false, bundleId : String = "", onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
         if QiscusCore.isLogined {
-            QiscusCore.network.registerDeviceToken(deviceToken: token, isDevelopment: isDevelopment, onSuccess: { (success) in
+            QiscusCore.network.registerDeviceToken(deviceToken: token, isDevelopment: isDevelopment, bundleId: bundleId, onSuccess: { (success) in
                 onSuccess(success)
             }) { (error) in
                 onError(error)

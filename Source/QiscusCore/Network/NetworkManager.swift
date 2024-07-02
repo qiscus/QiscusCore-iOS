@@ -344,8 +344,8 @@ extension NetworkManager {
     ///   - deviceToken: string device token for push notification
     ///   - isDevelopment : default is false / using production
     ///   - completion: @escaping when success register device token to sdk server returning value bool(success or not) and Optional String(error message)
-    func registerDeviceToken(deviceToken: String, isDevelopment: Bool = false, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
-        clientRouter.request(.registerDeviceToken(token: deviceToken, isDevelopment: isDevelopment)) { (data, response, error) in
+    func registerDeviceToken(deviceToken: String, isDevelopment: Bool = false, bundleId : String = "", onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
+        clientRouter.request(.registerDeviceToken(token: deviceToken, isDevelopment: isDevelopment, bundleId: bundleId)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
