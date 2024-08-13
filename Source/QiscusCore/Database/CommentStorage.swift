@@ -26,6 +26,7 @@ class CommentStorage : QiscusStorage {
     
     func loadData() {
         self.data = self.loadFromLocal()
+        QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "finish loadData() comment \(QiscusLogger.getDateTime()) with data comment count \(self.data.count)")
     }
     
     func removeAll() {

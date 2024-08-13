@@ -18,6 +18,7 @@ class MemberDatabase {
     
     func loadData() {
         self.data = loadFromLocal()
+        QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "finish loadData() member \(QiscusLogger.getDateTime()) with data member count \(self.data.count)")
     }
     
     func removeAll() {

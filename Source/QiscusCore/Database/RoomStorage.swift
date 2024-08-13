@@ -22,6 +22,8 @@ class RoomStorage {
     func loadData() {
         let local = loadFromLocal()
         data = sort(local)
+        
+        QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "finish loadData() room \(QiscusLogger.getDateTime()) with data room count \(data.count)")
     }
     
     func removeAll() {

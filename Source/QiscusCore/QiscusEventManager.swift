@@ -12,6 +12,7 @@ class QiscusEventManager {
     // MARK: TODO delegate can't be accees from other class, please create setter/function
     var connectionDelegate : QiscusConnectionDelegate? = nil
     var delegate : QiscusCoreDelegate? = nil
+    var eventDelegate : QiscusCoreEventDelegate? = nil
     var roomDelegate : QiscusCoreRoomDelegate? = nil
     var room : RoomModel? = nil
     

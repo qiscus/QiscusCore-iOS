@@ -43,6 +43,15 @@ public class QiscusCore: NSObject {
         }
     }
     
+    public static var eventdelegate  : QiscusCoreEventDelegate? {
+        get {
+            return eventManager.eventDelegate
+        }
+        set {
+            eventManager.eventDelegate = newValue
+        }
+    }
+    
    public var reachability:QiscusReachability?
     
     class func setupReachability(){
@@ -128,6 +137,12 @@ public class QiscusCore: NSObject {
     /// - Parameter WithAppID: Qiscus SDK App ID
     @available(*, deprecated, message: "will soon become unavailable.")
     public class func setup(WithAppID id: String, server: QiscusServer? = nil) {
+        if QiscusCore.hasSetupUser() == true {
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup(WithAppID)", message: "start with was login \(QiscusLogger.getDateTime())")
+        }else{
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup(WithAppID)", message: "start with no login \(QiscusLogger.getDateTime())")
+        }
+        
         config.appID    = id
         if let _server = server {
             config.server = _server
@@ -140,6 +155,10 @@ public class QiscusCore: NSObject {
             QiscusCore.database.loadData()
         }
         
+        self.eventdelegate?.onDebugEvent("InitQiscus-setup(WithAppID)", message: "finish loadData() \(QiscusLogger.getDateTime())")
+        
+        self.eventdelegate?.onDebugEvent("InitQiscus-setup(WithAppID)", message: "start load getAppConfig \(QiscusLogger.getDateTime())")
+        
        getAppConfig()
     }
     
@@ -147,14 +166,26 @@ public class QiscusCore: NSObject {
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
     public class func setup(AppID: String) {
+        if QiscusCore.hasSetupUser() == true {
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup()", message: "start with was login \(QiscusLogger.getDateTime())")
+        }else{
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup()", message: "start with no login \(QiscusLogger.getDateTime())")
+        }
+        
         config.appID    = AppID
         
         config.server   = QiscusServer(url: URL.init(string: "https://api.qiscus.com")!, realtimeURL: self.defaultRealtimeURL, realtimePort: 1885, brokerLBUrl: self.defaultBrokerUrl)
+        
+       
         
         if QiscusCore.isLogined{
             // Populate data from db
             QiscusCore.database.loadData()
         }
+        
+        self.eventdelegate?.onDebugEvent("InitQiscus-setup()", message: "finish loadData() \(QiscusLogger.getDateTime())")
+        
+        self.eventdelegate?.onDebugEvent("InitQiscus-setup()", message: "start load getAppConfig \(QiscusLogger.getDateTime())")
         
         getAppConfig()
     }
@@ -168,6 +199,13 @@ public class QiscusCore: NSObject {
     /// brokerLBUrl: brokerLBUrl is optional, default using urlLB from qiscus
     
     public class func setupWithCustomServer(AppID: String, baseUrl: URL, brokerUrl: String, brokerLBUrl: String?) {
+       
+        if QiscusCore.hasSetupUser() == true {
+            self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start with was login \(QiscusLogger.getDateTime())")
+        }else{
+            self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start with no login \(QiscusLogger.getDateTime())")
+        }
+        
         config.appID    = AppID
         
         if brokerLBUrl != nil{
@@ -182,6 +220,10 @@ public class QiscusCore: NSObject {
             // Populate data from db
             QiscusCore.database.loadData()
         }
+        
+        self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "finish loadData() \(QiscusLogger.getDateTime())")
+        
+        self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start load getAppConfig \(QiscusLogger.getDateTime())")
         
         getAppConfig()
     }
@@ -257,7 +299,11 @@ public class QiscusCore: NSObject {
                 self.checkExpiredToken()
             }
             
+            self.eventdelegate?.onDebugEvent("InitQiscus-getAppConfig()", message: "finish load getAppConfig \(QiscusLogger.getDateTime())")
+            
         }) { (error) in
+            self.eventdelegate?.onDebugEvent("InitQiscus-getAppConfig()", message: "finish error load getAppConfig \(QiscusLogger.getDateTime()) with error =\(error.message)")
+            
             if let appID = config.appID {
                 realtime.setup(appName: appID)
             }

@@ -41,7 +41,7 @@ import PackageDescription
 let package = Package(
     name: "YOUR_PROJECT_NAME",
     dependencies: [
-        .package(url: "https://github.com/qiscus/QiscusCore-iOS.git", from: "1.13.0"),
+        .package(url: "https://github.com/qiscus/QiscusCore-iOS.git", from: "1.13.1"),
     ]
 )
 ```

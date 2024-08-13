@@ -152,3 +152,13 @@ public protocol QiscusCoreRoomDelegate {
     @available(*, deprecated, message: "will soon become unavailable.")
     func onRoom(update room: RoomModel)
 }
+
+public protocol QiscusCoreEventDelegate {
+    // MARK: Event debug
+    ///
+    /// - Parameters:
+    ///   - event: event debug
+    ///   - message: message debug
+    func onDebugEvent(_ event: String, message: String)
+    
+}

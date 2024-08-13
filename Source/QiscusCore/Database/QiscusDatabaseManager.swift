@@ -19,9 +19,18 @@ public class QiscusDatabaseManager {
     }
     
     public func loadData() {
+        QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "start loadData() member \(QiscusLogger.getDateTime())")
+        
         member.loadData()
+       
+        QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "start loadData() room \(QiscusLogger.getDateTime())")
+        
         room.loadData()
+        
+        QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "start loadData() comment \(QiscusLogger.getDateTime())")
+        
         comment.loadData()
+       
     }
     
     public func clear() {
