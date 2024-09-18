@@ -196,12 +196,8 @@ class QiscusWorkerManager {
     }
     
     private func pending() {
-        if Thread.isMainThread {
-           sendPendingMessage()
-        } else {
-            DispatchQueue.global(qos: .background).sync {
-                sendPendingMessage()
-            }
+        DispatchQueue.global(qos: .background).async {
+            self.sendPendingMessage()
         }
     }
     

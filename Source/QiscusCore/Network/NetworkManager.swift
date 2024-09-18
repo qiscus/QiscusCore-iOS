@@ -71,7 +71,9 @@ class NetworkManager: NSObject {
         if QiscusCore.enableExpiredToken == true {
             if errorMessage.lowercased() == "Unauthorized. Token is expired".lowercased(){
                 QiscusCore.shared.refreshToken { isSuccess in
-                    
+                    if let delegate = QiscusCore.delegate {
+                        delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isSuccessAutoRefreshToken)
+                    }
                 } onError: { error in
                     if let delegate = QiscusCore.delegate {
                         delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)

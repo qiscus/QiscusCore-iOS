@@ -25,6 +25,7 @@ public enum QiscusConnectionState : String{
 public enum QiscusRefreshTokenEvent : String {
     case isUnauthorized = "unauthorized"
     case isTokenExpired = "tokenexpired"
+    case isSuccessAutoRefreshToken = "success"
 }
 
 public protocol QiscusCoreDelegate {
