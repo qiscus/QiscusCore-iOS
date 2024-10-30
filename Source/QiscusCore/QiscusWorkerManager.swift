@@ -203,6 +203,12 @@ class QiscusWorkerManager {
     
     private func sendPendingMessage(){
         guard let comments = QiscusCore.database.comment.find(status: .pending) else { return }
+        
+        if comments.count >= 1 {
+            self.synchronize()
+        }
+       
+        
         comments.reversed().forEach { (c) in
             // validation comment prevent id
             if c.uniqId.isEmpty { QiscusCore.database.comment.evaluate(); return }

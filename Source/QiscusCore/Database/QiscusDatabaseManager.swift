@@ -267,9 +267,13 @@ public class CommentDB {
         let myCommentBefore = myComments.filter({ $0.unixTimestamp < comment.unixTimestamp })
         for c in myCommentBefore {
             // update comment
-            if c.status.intValue < comment.status.intValue {
-                c.status = .read
-                QiscusCore.database.comment.save([c])
+            if c.status.intValue < comment.status.intValue{
+                if c.status == .pending || c.status == .failed {
+                   //no action
+                }else{
+                    c.status = .read
+                    QiscusCore.database.comment.save([c])
+                }
             }
         }
     }

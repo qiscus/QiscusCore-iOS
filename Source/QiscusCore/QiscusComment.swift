@@ -116,7 +116,7 @@ extension QiscusCore {
             
             if error != nil {
                 //check error
-                if (error?.contains("Validation error") == true){
+                if (error?.contains("Validation error") == true || error?.contains("Response not JSON or undefined") == true){
                     //save in local comment failed
                     _comment.status = .failed
                     QiscusCore.database.comment.save([_comment])
@@ -208,7 +208,7 @@ extension QiscusCore {
             
             if error != nil {
                 //check error
-                if (error?.contains("Validation error") == true){
+                if (error?.contains("Validation error") == true || error?.contains("Response not JSON or undefined") == true){
                     //save in local comment failed
                     _comment.status = .failed
                     QiscusCore.database.comment.save([_comment])
