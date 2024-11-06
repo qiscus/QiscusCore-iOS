@@ -714,7 +714,15 @@ public class QiscusCore: NSObject {
     ///   - completion: The code to be executed once the request has finished
     public func registerDeviceToken(token : String, isDevelopment:Bool = false, bundleId : String = "", onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
         if QiscusCore.isLogined {
-            QiscusCore.network.registerDeviceToken(deviceToken: token, isDevelopment: isDevelopment, bundleId: bundleId, onSuccess: { (success) in
+            var bundleID = ""
+            if bundleId.isEmpty {
+                bundleID = Bundle.main.bundleIdentifier ?? ""
+            }else{
+                bundleID = bundleId
+            }
+            
+            let deviceId = getUUID(bundleId: bundleID) ?? ""
+            QiscusCore.network.registerDeviceToken(deviceToken: token, isDevelopment: isDevelopment, bundleId: bundleID, deviceId: deviceId, onSuccess: { (success) in
                 onSuccess(success)
             }) { (error) in
                 onError(error)
@@ -722,6 +730,32 @@ public class QiscusCore: NSObject {
         }else{
             onError(QError(message: "please login Qiscus first before register deviceToken"))
         }
+    }
+    
+    /// Creates a new unique user identifier or retrieves the last one created
+    private func getUUID(bundleId : String) -> String? {
+
+        // create a keychain helper instance
+        let keychain = QKeychainAccess()
+
+        // this is the key we'll use to store the uuid in the keychain
+        let uuidKey = "\(bundleId).unique_uuid"
+
+        // check if we already have a uuid stored, if so return it
+        if let uuid = try? keychain.queryKeychainData(itemKey: uuidKey), uuid != nil {
+            return uuid
+        }
+
+        // generate a new id
+        guard let newId = UIDevice.current.identifierForVendor?.uuidString else {
+            return nil
+        }
+
+        // store new identifier in keychain
+        try? keychain.addKeychainData(itemKey: uuidKey, itemValue: newId)
+
+        // return new id
+        return newId
     }
     
     /// Remove device token

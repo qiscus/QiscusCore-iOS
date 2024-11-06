@@ -46,7 +46,7 @@ let package = Package(
 )
 ```
 
-## Installation Carthage
+## Installation Carthage 
 [Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks. To integrate QiscusCore into your Xcode project using Carthage, specify it in your Cartfile:
 
 ```bash

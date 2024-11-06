@@ -79,7 +79,7 @@ internal enum APIClient {
     case sync(lastReceivedCommentId: String)
     case syncEvent(startEventId : String)
     case search(keyword: String, roomId: String?, lastCommentId: Int?)
-    case registerDeviceToken(token: String, isDevelopment: Bool, bundleId: String) //
+    case registerDeviceToken(token: String, isDevelopment: Bool, bundleId: String, deviceId: String) //
     case removeDeviceToken(token: String, isDevelopment: Bool) //
     case loginRegister(user: String, password: String , username: String?, avatarUrl: String?, extras: [String:Any]?) //
     case loginRegisterJWT(identityToken: String) //
@@ -107,7 +107,7 @@ extension APIClient : EndPoint {
             return "/sync_event"
         case .search( _, _, _):
             return "/search_messages"
-        case .registerDeviceToken( _, _, _):
+        case .registerDeviceToken( _, _, _, _):
             return "/set_user_device_token"
         case .removeDeviceToken( _, _):
             return "/remove_user_device_token"
@@ -177,12 +177,13 @@ extension APIClient : EndPoint {
             }
             
             return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
-        case .registerDeviceToken(let token, let isDevelopment, let bundleId):
+        case .registerDeviceToken(let token, let isDevelopment, let bundleId, let deviceId):
             let param = [
                 "device_token"                : token,
                 "device_platform"             : "ios",
                 "is_development"              : isDevelopment,
-                "bundle_id"                   : bundleId
+                "bundle_id"                   : bundleId,
+                "device_id"                   : deviceId
                 ] as [String : Any]
             return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .removeDeviceToken(let token, let isDevelopment):
