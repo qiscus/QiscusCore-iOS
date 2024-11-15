@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 public class QiscusCore: NSObject {
     public static let qiscusCoreVersionNumber:String = "1.12.0"
