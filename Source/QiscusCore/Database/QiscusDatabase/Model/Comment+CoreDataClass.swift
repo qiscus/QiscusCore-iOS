@@ -25,6 +25,12 @@ protocol ActiveRecord {
 extension Comment {
     // create behaviour like active record
      static func all() -> [Comment] {
+         if Thread.isMainThread {
+             QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "start load comment.ALL() with running in main thread with time \(QiscusLogger.getDateTime())")
+         }else{
+             QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "start load comment.ALL() with running in background thread with time \(QiscusLogger.getDateTime())")
+         }
+         
         let fetchRequest:NSFetchRequest<Comment> = Comment.fetchRequest()
         var results = [Comment]()
         var resultsNullData = [Comment]()
@@ -45,6 +51,13 @@ extension Comment {
         } catch  {
             
         }
+         
+         if Thread.isMainThread {
+             QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "finish load room.ALL() with running in main thread with time \(QiscusLogger.getDateTime())")
+         }else{
+             QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "finish load room.ALL() with running in background thread with time \(QiscusLogger.getDateTime())")
+         }
+         
         return results
     }
     

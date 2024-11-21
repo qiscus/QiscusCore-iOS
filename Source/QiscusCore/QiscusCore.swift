@@ -110,6 +110,9 @@ public class QiscusCore: NSObject {
     public static var enableExpiredToken : Bool = true
     public static var enableRefreshToken : Bool = false
     
+    public static var fromSetupWithCustomServer : Bool = false
+    public static var reconnectCounter : Int = 0
+    
     @available(*, deprecated, message: "will soon become unavailable.")
     public static var enableDebugPrint: Bool = false
     public class func enableDebugMode(value : Bool = false){
@@ -138,6 +141,12 @@ public class QiscusCore: NSObject {
     /// - Parameter WithAppID: Qiscus SDK App ID
     @available(*, deprecated, message: "will soon become unavailable.")
     public class func setup(WithAppID id: String, server: QiscusServer? = nil) {
+        if Thread.isMainThread {
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup(WithAppID)", message: "running in main thread with time \(QiscusLogger.getDateTime())")
+        }else{
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup(WithAppID)", message: "running in background thread with time \(QiscusLogger.getDateTime())")
+        }
+        
         if QiscusCore.hasSetupUser() == true {
             self.eventdelegate?.onDebugEvent("InitQiscus-setup(WithAppID)", message: "start with was login \(QiscusLogger.getDateTime())")
         }else{
@@ -145,20 +154,29 @@ public class QiscusCore: NSObject {
         }
         
         config.appID    = id
+        config.eventdelegate = self.eventdelegate
+        reconnectCounter = 0
+        
         if let _server = server {
             config.server = _server
         }else {
             config.server   = QiscusServer(url: URL.init(string: "https://api.qiscus.com")!, realtimeURL: self.defaultRealtimeURL, realtimePort: 1885, brokerLBUrl: self.defaultBrokerUrl)
         }
         
-        if QiscusCore.isLogined{
-            // Populate data from db
-            QiscusCore.database.loadData()
+        self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start check QiscusCore.isLogined \(QiscusLogger.getDateTime())")
+        self.fromSetupWithCustomServer = true
+        
+        QiscusThread.background {
+            if QiscusCore.isLogined{
+                // Populate data from db
+                QiscusCore.database.loadData()
+            }
+            
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup(WithAppID)", message: "finish loadData() \(QiscusLogger.getDateTime())")
+            
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup(WithAppID)", message: "start load getAppConfig \(QiscusLogger.getDateTime())")
         }
         
-        self.eventdelegate?.onDebugEvent("InitQiscus-setup(WithAppID)", message: "finish loadData() \(QiscusLogger.getDateTime())")
-        
-        self.eventdelegate?.onDebugEvent("InitQiscus-setup(WithAppID)", message: "start load getAppConfig \(QiscusLogger.getDateTime())")
         
        getAppConfig()
     }
@@ -167,6 +185,12 @@ public class QiscusCore: NSObject {
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
     public class func setup(AppID: String) {
+        if Thread.isMainThread {
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup()", message: "running in main thread with time \(QiscusLogger.getDateTime())")
+        }else{
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup()", message: "running in background thread with time \(QiscusLogger.getDateTime())")
+        }
+        
         if QiscusCore.hasSetupUser() == true {
             self.eventdelegate?.onDebugEvent("InitQiscus-setup()", message: "start with was login \(QiscusLogger.getDateTime())")
         }else{
@@ -174,19 +198,24 @@ public class QiscusCore: NSObject {
         }
         
         config.appID    = AppID
+        config.eventdelegate = self.eventdelegate
+        reconnectCounter = 0
         
         config.server   = QiscusServer(url: URL.init(string: "https://api.qiscus.com")!, realtimeURL: self.defaultRealtimeURL, realtimePort: 1885, brokerLBUrl: self.defaultBrokerUrl)
         
-       
+        self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start check QiscusCore.isLogined \(QiscusLogger.getDateTime())")
+        self.fromSetupWithCustomServer = true
         
-        if QiscusCore.isLogined{
-            // Populate data from db
-            QiscusCore.database.loadData()
+        QiscusThread.background {
+            if QiscusCore.isLogined{
+                // Populate data from db
+                QiscusCore.database.loadData()
+            }
+            
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup()", message: "finish loadData() \(QiscusLogger.getDateTime())")
+            
+            self.eventdelegate?.onDebugEvent("InitQiscus-setup()", message: "start load getAppConfig \(QiscusLogger.getDateTime())")
         }
-        
-        self.eventdelegate?.onDebugEvent("InitQiscus-setup()", message: "finish loadData() \(QiscusLogger.getDateTime())")
-        
-        self.eventdelegate?.onDebugEvent("InitQiscus-setup()", message: "start load getAppConfig \(QiscusLogger.getDateTime())")
         
         getAppConfig()
     }
@@ -200,7 +229,13 @@ public class QiscusCore: NSObject {
     /// brokerLBUrl: brokerLBUrl is optional, default using urlLB from qiscus
     
     public class func setupWithCustomServer(AppID: String, baseUrl: URL, brokerUrl: String, brokerLBUrl: String?) {
-       
+        
+        if Thread.isMainThread {
+            self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "running in main thread with time \(QiscusLogger.getDateTime())")
+        }else{
+            self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "running in background thread with time \(QiscusLogger.getDateTime())")
+        }
+        
         if QiscusCore.hasSetupUser() == true {
             self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start with was login \(QiscusLogger.getDateTime())")
         }else{
@@ -208,6 +243,8 @@ public class QiscusCore: NSObject {
         }
         
         config.appID    = AppID
+        config.eventdelegate = self.eventdelegate
+        reconnectCounter = 0
         
         if brokerLBUrl != nil{
             config.server   = QiscusServer(url: baseUrl, realtimeURL: brokerUrl, realtimePort: 1885, brokerLBUrl: brokerLBUrl)
@@ -217,14 +254,20 @@ public class QiscusCore: NSObject {
                 //realtime.setup(appName: AppID)
         }
         
-        if QiscusCore.isLogined{
-            // Populate data from db
-            QiscusCore.database.loadData()
+        self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start check QiscusCore.isLogined \(QiscusLogger.getDateTime())")
+        self.fromSetupWithCustomServer = true
+        
+        QiscusThread.background {
+            if QiscusCore.isLogined{
+                // Populate data from db
+                QiscusCore.database.loadData()
+            }
+            
+            self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "finish loadData() \(QiscusLogger.getDateTime())")
+            
+            self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start load getAppConfig \(QiscusLogger.getDateTime())")
+            
         }
-        
-        self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "finish loadData() \(QiscusLogger.getDateTime())")
-        
-        self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start load getAppConfig \(QiscusLogger.getDateTime())")
         
         getAppConfig()
     }
@@ -668,6 +711,12 @@ public class QiscusCore: NSObject {
                     return false
                 }
             }else{
+                if self.fromSetupWithCustomServer == true {
+                    self.eventdelegate?.onDebugEvent("InitQiscus-isLogined()", message: "finish check QiscusCore.isLogined return false \(QiscusLogger.getDateTime())")
+                    
+                    self.fromSetupWithCustomServer = false // just firstTime when call QiscusCoreWithCustomeServer()
+                }
+                
                 return false
             }
         }

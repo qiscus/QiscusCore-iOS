@@ -26,7 +26,7 @@ class CommentStorage : QiscusStorage {
     
     func loadData() {
         self.data = self.loadFromLocal()
-        QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "finish loadData() comment \(QiscusLogger.getDateTime()) with data comment count \(self.data.count)")
+        QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "finish loadData() comment loadFromLocal() with data comment count \(self.data.count) \(QiscusLogger.getDateTime())")
     }
     
     func removeAll() {
@@ -277,7 +277,7 @@ extension CommentStorage {
         }else {
             result = Comment.generate() // prepare create new
         }
-        QiscusThread.background {
+        //QiscusThread.background {
             result.id               = core.id
             result.type             = core.type
             result.userAvatarUrl    = core.userAvatarUrl?.absoluteString
@@ -302,7 +302,7 @@ extension CommentStorage {
             if let userExtras = core.userExtras {
                 result.userExtras   = userExtras.dict2json()
             }
-        }
+        //}
         return result
     }
     
@@ -323,7 +323,7 @@ extension CommentStorage {
         guard let timestamp = data.timestamp else { return result }
         guard let commentBeforeId = data.commentBeforeId else { return result }
         
-        QiscusThread.background {
+        //QiscusThread.background {
             result.id               = id
             result.type             = type
             result.userAvatarUrl    = URL(string: userAvatarUrl)
@@ -361,7 +361,7 @@ extension CommentStorage {
             }else {
                 result.userExtras          = nil
             }
-        }
+        //}
         return result
     }
     

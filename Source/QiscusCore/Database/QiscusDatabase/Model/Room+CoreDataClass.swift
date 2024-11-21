@@ -18,11 +18,19 @@ public class Room: NSManagedObject {
 extension Room {
     // create behaviour like active record
      static func all() -> [Room] {
+         if Thread.isMainThread {
+             QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "start load room.ALL() with running in main thread with time \(QiscusLogger.getDateTime())")
+         }else{
+             QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "start load room.ALL() with running in background thread with time \(QiscusLogger.getDateTime())")
+         }
+         
+         
         let fetchRequest:NSFetchRequest<Room> = Room.fetchRequest()
         var results = [Room]()
         var resultsNullData = [Room]()
         
         do {
+            // log disini
             results = try PresistentStore.context.fetch(fetchRequest)
             //check null data
             resultsNullData = results.filter{ $0.id == nil ||  $0.id == ""}
@@ -39,6 +47,13 @@ extension Room {
         } catch  {
             //
         }
+         
+        if Thread.isMainThread {
+            QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "finish load room.ALL() with running in main thread with time \(QiscusLogger.getDateTime())")
+        }else{
+            QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "finish load room.ALL() with running in background thread with time \(QiscusLogger.getDateTime())")
+        }
+         
         return results
     }
     

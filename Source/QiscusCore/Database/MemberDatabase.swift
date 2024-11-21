@@ -17,8 +17,8 @@ class MemberDatabase {
     }
     
     func loadData() {
-        self.data = loadFromLocal()
-        QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "finish loadData() member \(QiscusLogger.getDateTime()) with data member count \(self.data.count)")
+            self.data = self.loadFromLocal()
+            QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "finish loadData() member loadFromLocal() with data member count \(self.data.count) \(QiscusLogger.getDateTime())")
     }
     
     func removeAll() {
@@ -125,7 +125,7 @@ extension MemberDatabase {
         }else {
             result = Member.generate() // prepare create new
         }
-        QiscusThread.background {
+        //QiscusThread.background {
             result.id           = core.id
             result.avatarUrl    = core.avatarUrl?.absoluteString
             result.email        = core.email
@@ -136,7 +136,7 @@ extension MemberDatabase {
             if let extras = core.extras {
                 result.extras   = extras.dict2json()
             }
-        }
+        //}
         return result
     }
     
@@ -147,7 +147,6 @@ extension MemberDatabase {
         guard let name = member.username else { return result }
         guard let email = member.email else { return result }
         guard let avatarUrl = member.avatarUrl else { return result }
-        QiscusThread.background {
             result.id            = id
             result.username      = name
             result.email         = email
@@ -160,7 +159,6 @@ extension MemberDatabase {
             }else {
                 result.extras          = nil
             }
-        }
         return result
     }
     

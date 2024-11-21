@@ -12,7 +12,7 @@ class QiscusWorkerManager {
     var isBackground : Bool = false
     func resume() {
         // MARK : Improve realtime state acurate disconnected
-        if QiscusCore.isLogined {
+        if QiscusCore.hasSetupUser() {
             if ConfigManager.shared.isEnableDisableRealtimeManually == true{
                 if QiscusCore.enableSync == true {
                     self.sync()

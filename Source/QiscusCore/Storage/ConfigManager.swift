@@ -7,7 +7,8 @@
 
 import Foundation
 
-class ConfigManager : NSObject {
+public class ConfigManager : NSObject {
+    var eventdelegate  : QiscusCoreEventDelegate?
     static let shared = ConfigManager()
     private let prefix = "qcu_"
     fileprivate var userCache : UserModel? = nil
@@ -46,6 +47,8 @@ class ConfigManager : NSObject {
     var user    : UserModel? {
         get {
             if let user = userCache {
+                self.eventdelegate?.onDebugEvent("InitQiscus-isLogined()", message: "finish check QiscusCore.isLogined from userCache \(QiscusLogger.getDateTime())")
+                self.eventdelegate = nil // just firstTime when call QiscusCoreWithCustomeServer()
                 return user
             }else {
                 return loadUser()
@@ -143,8 +146,13 @@ class ConfigManager : NSObject {
             user.tokenExpiresAt = storage.string(forKey: filename("tokenExpiresAt")) ?? ""
 //            user.lastSyncEventId    = Int64(storage.integer(forKey: filename("username")))
             self.userCache  = user
+            
+            self.eventdelegate?.onDebugEvent("InitQiscus-isLogined()", message: "finish check QiscusCore.isLogined from loadUser() \(QiscusLogger.getDateTime())")
+            self.eventdelegate = nil // just firstTime when call setupWithCustomServer()
             return user
         }else {
+            self.eventdelegate?.onDebugEvent("InitQiscus-isLogined()", message: "finish check QiscusCore.isLogined from loadUser() with return nil (not login) \(QiscusLogger.getDateTime())")
+            self.eventdelegate = nil // just firstTime when call setupWithCustomServer()
             return nil
         }
     }

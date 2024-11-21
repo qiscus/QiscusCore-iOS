@@ -20,10 +20,10 @@ class RoomStorage {
     }
     
     func loadData() {
-        let local = loadFromLocal()
-        data = sort(local)
+        let local = self.loadFromLocal()
+        self.data = self.sort(local)
         
-        QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "finish loadData() room \(QiscusLogger.getDateTime()) with data room count \(data.count)")
+        QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-LoadData()", message: "finish loadData() room loadFromLocal() with data room count \(self.data.count) \(QiscusLogger.getDateTime())")
     }
     
     func removeAll() {

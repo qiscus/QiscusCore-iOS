@@ -60,7 +60,7 @@ class RealtimeManager {
     
     func connect(username: String, password: String) {
         guard let c = client else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
                 self.connect(username: username, password: password)
                 return
             }
@@ -752,6 +752,7 @@ class RealtimeManager {
         
         switch state {
         case .connected:
+            QiscusCore.reconnectCounter = 0
             ConfigManager.shared.isConnectedMqtt = true
             QiscusLogger.debugPrint("Qiscus realtime connected")
             DispatchQueue.main.async {
@@ -797,12 +798,26 @@ class RealtimeManager {
         
         if QiscusCore.hasSetupUser(){
             if QiscusCore.enableRealtime == true && ConfigManager.shared.isEnableDisableRealtimeManually == true{
-                QiscusCore.retryConnect { (success) in
-                    if success == true{
-                        if let user = QiscusCore.getProfile() {
-                            // connect qiscus realtime server
-                            QiscusCore.realtime.connect(username: user.email, password: user.token)
-                            QiscusLogger.debugPrint("try reconnect Qiscus realtime with server realtime from lb")
+                
+                if QiscusCore.reconnectCounter >= 20 {
+                    //stop call reconnect
+                    return
+                }else{
+                    QiscusCore.retryConnect { (success) in
+                        if success == true{
+                            if let user = QiscusCore.getProfile() {
+                                let periode = QiscusCore.reconnectCounter * 10
+                               
+                                let when = DispatchTime.now() + DispatchTimeInterval.seconds(periode)
+                                
+                                DispatchQueue.main.asyncAfter(deadline: when, execute: {
+                                    // connect qiscus realtime server
+                                    QiscusCore.reconnectCounter += 1
+                                    QiscusCore.realtime.connect(username: user.email, password: user.token)
+                                    QiscusLogger.debugPrint("try reconnect Qiscus realtime with server realtime from lb \(QiscusLogger.getDateTime())")
+                
+                                })
+                            }
                         }
                     }
                 }

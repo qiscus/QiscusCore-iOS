@@ -17,6 +17,12 @@ public class Member: NSManagedObject {
 extension Member {
     // create behaviour like active record
      static func all() -> [Member] {
+         if Thread.isMainThread {
+             QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "start load member.ALL() with running in main thread with time \(QiscusLogger.getDateTime())")
+         }else{
+             QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "start load member.ALL() with running in background thread with time \(QiscusLogger.getDateTime())")
+         }
+         
         let fetchRequest:NSFetchRequest<Member> = Member.fetchRequest()
         var results = [Member]()
         var resultsNullData = [Member]()
@@ -35,6 +41,13 @@ extension Member {
         } catch  {
             
         }
+         
+        if Thread.isMainThread {
+            QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "finish load member.ALL() with running in main thread with time \(QiscusLogger.getDateTime())")
+        }else{
+            QiscusCore.eventdelegate?.onDebugEvent("InitQiscus-loadData()", message: "finish load member.ALL() with running in background thread with time \(QiscusLogger.getDateTime())")
+        }
+         
         return results
     }
     
