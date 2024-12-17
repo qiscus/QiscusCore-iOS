@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.12.0"
+    public static let qiscusCoreVersionNumber:String = "1.13.6"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -112,6 +112,7 @@ public class QiscusCore: NSObject {
     
     public static var fromSetupWithCustomServer : Bool = false
     public static var reconnectCounter : Int = 0
+    public static var maxDayPeriodicClearLocalDB : Int = 7 //by default 7 days
     
     @available(*, deprecated, message: "will soon become unavailable.")
     public static var enableDebugPrint: Bool = false
@@ -163,6 +164,10 @@ public class QiscusCore: NSObject {
             config.server   = QiscusServer(url: URL.init(string: "https://api.qiscus.com")!, realtimeURL: self.defaultRealtimeURL, realtimePort: 1885, brokerLBUrl: self.defaultBrokerUrl)
         }
         
+        if QiscusCore.hasSetupUser(){
+            checkLastClearDB()
+        }
+        
         self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start check QiscusCore.isLogined \(QiscusLogger.getDateTime())")
         self.fromSetupWithCustomServer = true
         
@@ -201,7 +206,12 @@ public class QiscusCore: NSObject {
         config.eventdelegate = self.eventdelegate
         reconnectCounter = 0
         
+        
         config.server   = QiscusServer(url: URL.init(string: "https://api.qiscus.com")!, realtimeURL: self.defaultRealtimeURL, realtimePort: 1885, brokerLBUrl: self.defaultBrokerUrl)
+        
+        if QiscusCore.hasSetupUser(){
+            checkLastClearDB()
+        }
         
         self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start check QiscusCore.isLogined \(QiscusLogger.getDateTime())")
         self.fromSetupWithCustomServer = true
@@ -254,6 +264,10 @@ public class QiscusCore: NSObject {
                 //realtime.setup(appName: AppID)
         }
         
+        if QiscusCore.hasSetupUser(){
+            checkLastClearDB()
+        }
+        
         self.eventdelegate?.onDebugEvent("InitQiscus-setupWithCustomServer", message: "start check QiscusCore.isLogined \(QiscusLogger.getDateTime())")
         self.fromSetupWithCustomServer = true
         
@@ -270,6 +284,40 @@ public class QiscusCore: NSObject {
         }
         
         getAppConfig()
+    }
+    
+    private class func checkLastClearDB(){
+        if let last = self.config.lastClearDB{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"
+            dateFormatter.timeZone = .current
+
+            let dateString = last
+
+            if let date = dateFormatter.date(from: dateString) {
+                let dateNow = Date()
+                let differerence = Calendar.current.dateComponents([.day], from: date, to: dateNow)
+                if let dayDiff = differerence.day{
+                    if dayDiff >= maxDayPeriodicClearLocalDB {
+                        QiscusCore.database.clear()
+                        //save to sharedPref
+                        self.config.lastClearDB = self.getTimestamp()
+                    }
+                }
+            }
+        }else{
+            QiscusCore.database.clear()
+            //save to sharedPref
+            self.config.lastClearDB = self.getTimestamp()
+        }
+    }
+    
+    private class func getTimestamp() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat    = "yyyy-MM-dd'T'HH:mm:ssZ"
+        formatter.timeZone      = TimeZone.current
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter.string(from: Date())
     }
     
     private class func getAppConfig(){
@@ -547,6 +595,7 @@ public class QiscusCore: NSObject {
         network.login(email: userID, password: userKey, username: username, avatarUrl: avatarURL?.absoluteString, extras: extras, onSuccess: { (user) in
             // save user in local
             ConfigManager.shared.user = user
+            ConfigManager.shared.lastClearDB = self.getTimestamp()
             realtime.connect(username: user.email, password: user.token)
             onSuccess(user)
         }) { (error) in
@@ -571,6 +620,7 @@ public class QiscusCore: NSObject {
         network.login(email: userId, password: userKey, username: username, avatarUrl: avatarURL?.absoluteString, extras: extras, onSuccess: { (user) in
             // save user in local
             ConfigManager.shared.user = user
+            ConfigManager.shared.lastClearDB = self.getTimestamp()
             realtime.connect(username: user.email, password: user.token)
             onSuccess(user)
         }) { (error) in
@@ -592,6 +642,7 @@ public class QiscusCore: NSObject {
         network.login(identityToken: token, onSuccess: { (user) in
             // save user in local
             ConfigManager.shared.user = user
+            ConfigManager.shared.lastClearDB = self.getTimestamp()
             onSuccess(user)
         }) { (error) in
             onError(error)
@@ -610,6 +661,7 @@ public class QiscusCore: NSObject {
         network.login(identityToken: token, onSuccess: { (user) in
             // save user in local
             ConfigManager.shared.user = user
+            ConfigManager.shared.lastClearDB = self.getTimestamp()
             onSuccess(user)
         }) { (error) in
             onError(error)

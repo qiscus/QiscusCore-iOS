@@ -9,8 +9,10 @@ import Foundation
 
 class QiscusThread {
     static func background(_ work: @escaping () -> ()) {
-        DispatchQueue.global(qos: .background).sync {
-            work()
+        DispatchQueue.main.async{
+            DispatchQueue.global(qos: .background).sync {
+                work()
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name         = "QiscusCore"
-s.version      = "1.13.5"
+s.version      = "1.13.6"
 s.summary      = "Qiscus Core SDK for iOS"
 s.description  = <<-DESC
 Qiscus SDK for iOS contains Qiscus public Model.

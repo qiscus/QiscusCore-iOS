@@ -253,6 +253,28 @@ public class ConfigManager : NSObject {
         
     }
     
+    var lastClearDB : String?{
+        get{
+           return getLastClearDB()
+        }
+        set{
+            guard let value = newValue else { return }
+            setLastClearDB(value)
+        }
+    }
+    
+    private func setLastClearDB(_ value: String) {
+        // save in file
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: filename("lastClearDB"))
+    }
+    
+    private func getLastClearDB() -> String? {
+        // save in file
+        let defaults = UserDefaults.standard
+        return defaults.string(forKey: filename("lastClearDB")) ?? nil
+    }
+    
     func clearConfig() {
         // remove file user
         let storage = UserDefaults.standard
@@ -273,6 +295,7 @@ public class ConfigManager : NSObject {
         storage.removeObject(forKey: filename("enableDisableRealtimeManuallly"))
         storage.removeObject(forKey: filename("refreshToken"))
         storage.removeObject(forKey: filename("tokenExpiresAt"))
+        storage.removeObject(forKey: filename("lastClearDB"))
         self.userCache = nil
     }
 }
