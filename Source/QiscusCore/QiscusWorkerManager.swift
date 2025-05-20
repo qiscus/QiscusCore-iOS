@@ -196,7 +196,7 @@ class QiscusWorkerManager {
     }
     
     private func pending() {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .background).sync {
             self.sendPendingMessage()
         }
     }

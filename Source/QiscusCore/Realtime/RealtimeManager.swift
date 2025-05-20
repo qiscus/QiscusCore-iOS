@@ -710,7 +710,9 @@ class RealtimeManager {
         if let commentDB = QiscusCore.database.comment.find(id: comment.roomId){
             //ignored for status sent from my self / after postComment
         }else{
-            QiscusCore.database.comment.save([comment])
+            DispatchQueue.global(qos: .background).sync {
+                QiscusCore.database.comment.save([comment])
+            }
         }
         
         

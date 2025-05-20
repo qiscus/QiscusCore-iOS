@@ -189,11 +189,13 @@ class CommentStorage : QiscusStorage {
     
     // update/replace === identical object
     private func updateCommentDataEvent(old: CommentModel, new: CommentModel) -> Bool{
-        if let index = data.index(where: { $0 === old }) {
-            data[index] = new
-            return true
-        }else {
-            return false
+        DispatchQueue.global(qos: .background).sync {
+            if let index = data.index(where: { $0 === old }) {
+                data[index] = new
+                return true
+            }else {
+                return false
+            }
         }
     }
     
