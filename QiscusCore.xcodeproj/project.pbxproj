@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		207BB4B62DE044A500712B6B /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207BB4B52DE044A500712B6B /* Package.swift */; };
+		20E266E02DE06C9C002B38AC /* Package.resolved in Resources */ = {isa = PBXBuildFile; fileRef = 20E266DF2DE06C9C002B38AC /* Package.resolved */; };
 		20E4BA3B2BBBA846009C437A /* SwiftyJSON.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20F184FD28184377008A1F6B /* SwiftyJSON.xcframework */; };
 		20E4BA3C2BBBA846009C437A /* SwiftyJSON.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20F184FD28184377008A1F6B /* SwiftyJSON.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		20E4BA3D2BBBA846009C437A /* QiscusRealtime.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20F184FE28184377008A1F6B /* QiscusRealtime.xcframework */; };
@@ -121,6 +122,7 @@
 		20DE56F32817DDC5008B3FDB /* CocoaMQTT.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CocoaMQTT.xcframework; path = Carthage/Build/CocoaMQTT.xcframework; sourceTree = "<group>"; };
 		20DE56F42817DDC5008B3FDB /* Starscream.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Starscream.xcframework; path = Carthage/Build/Starscream.xcframework; sourceTree = "<group>"; };
 		20E002AA2A13E94A00B99D7B /* MqttCocoaAsyncSocket.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MqttCocoaAsyncSocket.xcframework; path = Carthage/Build/MqttCocoaAsyncSocket.xcframework; sourceTree = "<group>"; };
+		20E266DF2DE06C9C002B38AC /* Package.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Package.resolved; sourceTree = "<group>"; };
 		20E4BA312BBA8530009C437A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		20F184FD28184377008A1F6B /* SwiftyJSON.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SwiftyJSON.xcframework; path = Carthage/Build/SwiftyJSON.xcframework; sourceTree = "<group>"; };
 		20F184FE28184377008A1F6B /* QiscusRealtime.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = QiscusRealtime.xcframework; path = Carthage/Build/QiscusRealtime.xcframework; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 		3D55935A20FC89CD00AE35E5 = {
 			isa = PBXGroup;
 			children = (
+				20E266DF2DE06C9C002B38AC /* Package.resolved */,
 				207BB4B52DE044A500712B6B /* Package.swift */,
 				20E4BA312BBA8530009C437A /* PrivacyInfo.xcprivacy */,
 				3D3C885F2574697C00C50F70 /* MIGRATION_GUIDE.md */,
@@ -443,6 +446,7 @@
 			files = (
 				3D1AC03F24BEB8DB0040F736 /* README.md in Resources */,
 				3D3C88602574697C00C50F70 /* MIGRATION_GUIDE.md in Resources */,
+				20E266E02DE06C9C002B38AC /* Package.resolved in Resources */,
 				3D1AC03E24BEB8DB0040F736 /* QiscusCore.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
