@@ -11,7 +11,7 @@ import QiscusRealtime
 import CoreData
 import UIKit
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "3.0.0-beta.20"
+    public static let qiscusCoreVersionNumber:String = "3.0.0-beta.21"
     class var bundle:Bundle{
         get{
             #if SWIFT_PACKAGE
