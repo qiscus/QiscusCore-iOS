@@ -14,12 +14,16 @@ public class QiscusCore: NSObject {
     public static let qiscusCoreVersionNumber:String = "3.0.0-beta.20"
     class var bundle:Bundle{
         get{
-            let podBundle = Bundle(for: QiscusCore.self)
-            if let bundleURL = podBundle.url(forResource: "QiscusCore", withExtension: "bundle") {
-                return Bundle(url: bundleURL)!
-            }else{
-                return podBundle
-            }
+            #if SWIFT_PACKAGE
+                return .module
+            #else
+                let podBundle = Bundle(for: QiscusCore.self)
+                if let bundleURL = podBundle.url(forResource: "QiscusCore", withExtension: "bundle") {
+                    return Bundle(url: bundleURL)!
+                }else{
+                    return podBundle
+                }
+            #endif
         }
     }
     
