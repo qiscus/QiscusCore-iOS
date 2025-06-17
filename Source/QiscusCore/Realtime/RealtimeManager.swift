@@ -450,7 +450,7 @@ public class RealtimeManager {
     }
 }
 
- extension RealtimeManager: QiscusRealtimeDelegate {
+extension RealtimeManager: QiscusRealtimeDelegate {
     public func didReceiveRoomDelete(roomID: String, data: String){
         guard let payload = toDictionary(text: data) else { return }
         if let room = self.qiscusCore?.database.room.find(id: roomID) {
@@ -716,6 +716,30 @@ public class RealtimeManager {
             postTyping(typing)
         }
         
+    }
+    
+    public func didReceiveUserAI(roomId: String, data: String) {
+        let json = ApiResponse.decode(string: data)
+        
+        let userID = json["sender_id"].string ?? ""
+        let senderName = json["sender_name"].string ?? ""
+        let textMessage = json["text"].string ?? ""
+        let statusTyping = json["status"].string ?? "0"
+        var boolTyping = false
+        if statusTyping == "0" {
+            boolTyping = false
+        }else{
+            boolTyping = true
+        }
+        qiscusCore?.eventManager.gotTypingAI(roomID: roomId, user: userID, value: boolTyping, textMessage: textMessage, senderName : senderName)
+        
+       //typing event from outside room
+        if let room = self.qiscusCore?.database.room.find(id: roomId) {
+            guard let member = self.qiscusCore?.database.participant.find(byEmail: userID) else { return }
+            guard let postTyping = roomTypings[roomId] else { return }
+            let typing = RoomTyping(roomID: roomId, user: member, typing: boolTyping)
+            postTyping(typing)
+        }
     }
     
     public func connectionState(change state: QiscusRealtimeConnectionState) {
