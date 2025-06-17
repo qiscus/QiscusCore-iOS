@@ -139,6 +139,17 @@ public protocol QiscusCoreRoomDelegate {
     ///   - typing: true if user start typing and false when finish typin
     func onUserTyping(userId : String, roomId : String, typing: Bool)
     
+    
+    /// User  AI Typing Indicator
+    ///
+    /// - Parameters:
+    ///   - userId: object user or participant
+    ///   - roomId: roomId
+    ///   - typing: true if user start typing and false when finish typing
+    ///   - textMessage : message typing
+    ///   - senderName : name of sender
+    func onUserTypingAI(userId : String, roomId : String, typing: Bool, textMessage : String, senderName : String)
+    
     /// User Online status
     ///
     /// - Parameters:

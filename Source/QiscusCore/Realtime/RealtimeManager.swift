@@ -114,6 +114,12 @@ class RealtimeManager {
                         self.pendingSubscribeTopic.append(.typing(roomID: room.id))
                         QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
                     }
+                    
+                    if !c.subscribe(endpoint: .typingAI(roomID: room.id)) {
+                        self.pendingSubscribeTopic.append(.typingAI(roomID: room.id))
+                        QiscusLogger.errorPrint("failed to subscribe event typingAI from room \(room.name), then queue in pending")
+                    }
+                    
                     guard let participants = room.participants else { return }
                     for u in participants {
                         if !c.subscribe(endpoint: .onlineStatus(user: u.email)) {
@@ -219,6 +225,11 @@ class RealtimeManager {
                         self.pendingSubscribeTopic.append(.typing(roomID: room.id))
                         QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
                     }
+                    
+                    if !c.subscribe(endpoint: .typingAI(roomID: room.id)) {
+                        self.pendingSubscribeTopic.append(.typingAI(roomID: room.id))
+                        QiscusLogger.errorPrint("failed to subscribe event typingAI from room \(room.name), then queue in pending")
+                    }
                 }
             }
             
@@ -238,6 +249,7 @@ class RealtimeManager {
                     c.unsubscribe(endpoint: .delivery(roomID: room.id))
                     c.unsubscribe(endpoint: .read(roomID: room.id))
                     c.unsubscribe(endpoint: .typing(roomID: room.id))
+                    c.unsubscribe(endpoint: .typingAI(roomID: room.id))
                     guard let participants = room.participants else { return }
                     for u in participants {
                         c.unsubscribe(endpoint: .onlineStatus(user: u.email))
@@ -276,6 +288,7 @@ class RealtimeManager {
                     c.unsubscribe(endpoint: .delivery(roomID: room.id))
                     c.unsubscribe(endpoint: .read(roomID: room.id))
                     c.unsubscribe(endpoint: .typing(roomID: room.id))
+                    c.unsubscribe(endpoint: .typingAI(roomID: room.id))
                 }
             }
         }
@@ -471,7 +484,7 @@ class RealtimeManager {
     }
 }
 
- extension RealtimeManager: QiscusRealtimeDelegate {
+extension RealtimeManager: QiscusRealtimeDelegate {
     func didReceiveRoomDelete(roomID: String, data: String){
         guard let payload = toDictionary(text: data) else { return }
         if let room = QiscusCore.database.room.find(id: roomID) {
@@ -739,6 +752,32 @@ class RealtimeManager {
         }
         
     }
+    
+    
+    func didReceiveUserAI(roomId: String, data: String) {
+        let json = ApiResponse.decode(string: data)
+        
+        let userID = json["sender_id"].string ?? ""
+        let senderName = json["sender_name"].string ?? ""
+        let textMessage = json["text"].string ?? ""
+        let statusTyping = json["status"].string ?? "0"
+        var boolTyping = false
+        if statusTyping == "0" {
+            boolTyping = false
+        }else{
+            boolTyping = true
+        }
+        QiscusEventManager.shared.gotTypingAI(roomID: roomId, user: userID, value: boolTyping, textMessage: textMessage, senderName : senderName)
+        
+       //typing event from outside room
+        if let room = QiscusCore.database.room.find(id: roomId) {
+            guard let member = QiscusCore.database.member.find(byEmail: userID) else { return }
+            guard let postTyping = roomTypings[roomId] else { return }
+            let typing = RoomTyping(roomID: roomId, user: member, typing: boolTyping)
+            postTyping(typing)
+        }
+    }
+    
     
     func connectionState(change state: QiscusRealtimeConnectionState) {
         QiscusLogger.debugPrint("Qiscus realtime connection state \(state.rawValue)")

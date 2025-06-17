@@ -144,6 +144,16 @@ class QiscusEventManager {
         }
     }
     
+    func gotTypingAI(roomID: String, user: String, value: Bool, textMessage: String, senderName : String) {
+        // filter event for room or qiscuscore
+        if let r = QiscusEventManager.shared.room {
+            if r.id == roomID {
+                guard let member = QiscusCore.database.member.find(byEmail: user) else { return }
+                roomDelegate?.onUserTypingAI(userId: member.id, roomId: r.id, typing: value, textMessage : textMessage, senderName : senderName)
+            }
+        }
+    }
+    
     func gotEvent(email: String, isOnline: Bool, timestamp time: String) {
         guard let member = QiscusCore.database.member.find(byEmail: email) else { return }
         guard let validTime = self.components(time, length: 13).first else { return }
