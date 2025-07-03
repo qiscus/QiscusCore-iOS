@@ -85,25 +85,7 @@ extension Comment {
     
     /// Clear all comment data
      static func clear() {
-        QiscusDatabase.context.perform({
-            let fetchRequest:NSFetchRequest<Comment> = Comment.fetchRequest()
-            do {
-                  let delete = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-                try  QiscusDatabase.context.execute(delete)
-            } catch {
-                 // failed to clear data
-            }
-            
-        })
-        
-        
-//        let fetchRequest:NSFetchRequest<Comment> = Comment.fetchRequest()
-//        let delete = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-//        do {
-//            try  QiscusDatabase.context.execute(delete)
-//        } catch  {
-//            // failed to clear data
-//        }
+         QiscusDatabase.clearALLComment()
     }
     
     // non static

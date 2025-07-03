@@ -184,8 +184,12 @@ extension QiscusCore {
                 QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
                     if let data = rooms {
                         // save room
-                        QiscusCore.database.room.save(data)
-                        onSuccess(data)
+                        DispatchQueue.global(qos: .background).async {
+                            QiscusCore.database.room.save(data)
+                            DispatchQueue.main.async {
+                                onSuccess(data)
+                            }
+                        }
                     }else {
                         onError(error ?? QError(message: "Unexpected error"))
                     }
@@ -212,8 +216,12 @@ extension QiscusCore {
                 QiscusCore.network.getRoomInfo(roomIds: roomIds, roomUniqueIds: nil, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
                     if let data = rooms {
                         // save room
-                        QiscusCore.database.room.save(data)
-                        onSuccess(data)
+                        DispatchQueue.global(qos: .background).async {
+                            QiscusCore.database.room.save(data)
+                            DispatchQueue.main.async {
+                                onSuccess(data)
+                            }
+                        }
                     }else {
                         onError(error ?? QError(message: "Unexpected error"))
                     }
@@ -241,8 +249,13 @@ extension QiscusCore {
                 QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: ids, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
                     if let data = rooms {
                         // save room
-                        QiscusCore.database.room.save(data)
-                        onSuccess(data)
+                        
+                        DispatchQueue.global(qos: .background).async {
+                            QiscusCore.database.room.save(data)
+                            DispatchQueue.main.async {
+                                onSuccess(data)
+                            }
+                        }
                     }else {
                         onError(error ?? QError(message: "Unexpected error"))
                     }
@@ -268,8 +281,13 @@ extension QiscusCore {
                 QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: uniqueIds, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
                     if let data = rooms {
                         // save room
-                        QiscusCore.database.room.save(data)
-                        onSuccess(data)
+                        DispatchQueue.global(qos: .background).async {
+                            QiscusCore.database.room.save(data)
+                            DispatchQueue.main.async {
+                                onSuccess(data)
+                            }
+                        }
+                        
                     }else {
                         onError(error ?? QError(message: "Unexpected error"))
                     }
