@@ -336,10 +336,10 @@ public class CommentDB {
     }
     
     public func find(status: CommentStatus) -> [CommentModel]? {
-        if let comment = comment.find(status: status) {
-            return comment
-        }else {
-            return comment.find(predicate: NSPredicate(format: "status == %@", status.rawValue))
+        var result: [CommentModel]?
+        QiscusDatabase.context.performAndWait {
+            result = comment.find(predicate: NSPredicate(format: "status == %@", status.rawValue))
         }
+        return result
     }
 }

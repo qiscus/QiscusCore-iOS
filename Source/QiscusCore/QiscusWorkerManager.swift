@@ -208,8 +208,7 @@ class QiscusWorkerManager {
             self.synchronize()
         }
        
-        
-        comments.reversed().forEach { (c) in
+        comments.forEach { (c) in
             // validation comment prevent id
             if c.uniqId.isEmpty { QiscusCore.database.comment.evaluate(); return }
             QiscusCore.shared.sendMessage(message: c, onSuccess: { (response) in
