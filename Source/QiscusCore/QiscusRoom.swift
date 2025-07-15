@@ -281,7 +281,7 @@ extension QiscusCore {
                 QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: uniqueIds, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
                     if let data = rooms {
                         // save room
-                        DispatchQueue.global(qos: .background).async {
+                        QiscusDatabase.context.perform{
                             QiscusCore.database.room.save(data)
                             DispatchQueue.main.async {
                                 onSuccess(data)
