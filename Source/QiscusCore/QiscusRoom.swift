@@ -184,7 +184,7 @@ extension QiscusCore {
                 QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
                     if let data = rooms {
                         // save room
-                        DispatchQueue.global(qos: .background).async {
+                        QiscusDatabase.context.perform {
                             QiscusCore.database.room.save(data)
                             DispatchQueue.main.async {
                                 onSuccess(data)
@@ -216,7 +216,7 @@ extension QiscusCore {
                 QiscusCore.network.getRoomInfo(roomIds: roomIds, roomUniqueIds: nil, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
                     if let data = rooms {
                         // save room
-                        DispatchQueue.global(qos: .background).async {
+                        QiscusDatabase.context.perform {
                             QiscusCore.database.room.save(data)
                             DispatchQueue.main.async {
                                 onSuccess(data)
@@ -227,7 +227,7 @@ extension QiscusCore {
                     }
                 }
             }else{
-                onError(QError(message: "please login Qiscus first before register deviceToken"))
+                onError(QError(message: "please login Qiscus first before getChatRooms"))
             }
         }else{
             onError(QError(message: "please setupAPPID first before call api"))
@@ -250,7 +250,7 @@ extension QiscusCore {
                     if let data = rooms {
                         // save room
                         
-                        DispatchQueue.global(qos: .background).async {
+                        QiscusDatabase.context.perform {
                             QiscusCore.database.room.save(data)
                             DispatchQueue.main.async {
                                 onSuccess(data)
@@ -261,7 +261,7 @@ extension QiscusCore {
                     }
                 }
             }else{
-                onError(QError(message: "please login Qiscus first before register deviceToken"))
+                onError(QError(message: "please login Qiscus first before getChatRooms"))
             }
         }else{
             onError(QError(message: "please setupAPPID first before call api"))
@@ -293,7 +293,7 @@ extension QiscusCore {
                     }
                 }
             }else{
-                onError(QError(message: "please login Qiscus first before register deviceToken"))
+                onError(QError(message: "please login Qiscus first before getChatRooms"))
             }
         }else{
             onError(QError(message: "please setupAPPID first before call api"))
