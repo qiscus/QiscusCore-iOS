@@ -91,6 +91,11 @@ open class CommentModel {
             if let _payload = self.payload {
                 self.payload?.removeAll()
                 self.payload = getPayload(fromPayload: _payload)
+                
+                if payload == nil {
+                    self.payload?.removeAll()
+                    self.payload = getPayloadCustom(fromPayload: _payload)
+                }
             }
         }
         
@@ -130,6 +135,18 @@ extension CommentModel {
             if !payload.isEmpty {
                 return payload
             }else { return nil }
+        }else {
+            return nil
+        }
+    }
+    
+    private func getPayloadCustom(fromPayload data: [String:Any]) -> [String:Any]? {
+        if let payload = data as? [String:Any]{
+            if !payload.isEmpty {
+                return payload
+            }else {
+                return nil
+            }
         }else {
             return nil
         }

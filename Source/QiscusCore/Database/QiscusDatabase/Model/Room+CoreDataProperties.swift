@@ -24,7 +24,7 @@ extension Room {
     @NSManaged  var uniqueId: String?
     @NSManaged  var avatarUrl: String?
     @NSManaged  var options: String?
-    @NSManaged  var unreadCount: Int16
+    @NSManaged  var unreadCount: Int
     @NSManaged  var localData: String?
     @NSManaged public var members: NSSet?
 

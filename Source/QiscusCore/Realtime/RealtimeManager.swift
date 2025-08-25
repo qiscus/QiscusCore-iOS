@@ -81,6 +81,46 @@ class RealtimeManager {
         
     }
     
+    func unsubcribeCommentUpdateComemntNotification(){
+        guard let c = client else {
+            return
+        }
+        
+        if let user = QiscusCore.getUserData() {
+            if ConfigManager.shared.isEnableDisableRealtimeManually == true {
+                c.unsubscribe(endpoint: .comment(token: user.token))
+                c.unsubscribe(endpoint: .updateComment(token: user.token))
+                c.unsubscribe(endpoint: .notification(token: user.token))
+            }
+        }
+        
+        print("today check unsubcribeCommentUpdateComemntNotification")
+    }
+    
+    func subcribeCommentUpdateComemntNotification(){
+        guard let c = client else {
+            return
+        }
+        
+        if let user = QiscusCore.getUserData() {
+            if ConfigManager.shared.isEnableDisableRealtimeManually == true {
+                if !c.subscribe(endpoint: .comment(token: user.token)){
+                    self.pendingSubscribeTopic.append(.comment(token: user.token))
+                }
+                
+                if !c.subscribe(endpoint: .updateComment(token: user.token)){
+                    self.pendingSubscribeTopic.append(.updateComment(token: user.token))
+                }
+                
+                if !c.subscribe(endpoint: .notification(token: user.token)){
+                    self.pendingSubscribeTopic.append(.notification(token: user.token))
+                }
+            }
+        }
+        
+        print("today check subcribeCommentUpdateComemntNotification")
+    }
+    
     /// Subscribe comment(deliverd and read), typing by member in the room, and online status
     ///
     /// - Parameter rooms: array of rooms
