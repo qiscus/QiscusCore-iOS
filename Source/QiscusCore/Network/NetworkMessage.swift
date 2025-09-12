@@ -178,13 +178,25 @@ extension NetworkManager {
                             }else{
                                 switch response.statusCode {
                                 case 400...599:
-                                    if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
-                                        let failed = comment
-                                        failed.status  = .failed
-                                        QiscusCore.database.comment.save([failed])
-                                        completion(nil, "json: \(jsondata)")
+                                    
+                                    if response.statusCode == 403 && errorMessage.lowercased() == "Unauthorized. Token is expired".lowercased() {
+                                        if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                                            let failed = comment
+                                            failed.status  = .pending
+                                            QiscusCore.database.comment.save([failed])
+                                            completion(nil, "json: \(jsondata)")
+                                        }else{
+                                            completion(nil, "failed send message")
+                                        }
                                     }else{
-                                        completion(nil, "failed send message")
+                                        if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                                            let failed = comment
+                                            failed.status  = .failed
+                                            QiscusCore.database.comment.save([failed])
+                                            completion(nil, "json: \(jsondata)")
+                                        }else{
+                                            completion(nil, "failed send message")
+                                        }
                                     }
                                    
                                 default:

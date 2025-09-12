@@ -85,8 +85,8 @@ class NetworkManager: NSObject {
                         delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isTokenExpired)
                     }else if statusCode == 403 && errorMessage.lowercased() == "Unauthorized".lowercased(){
                         delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
-                    }else if statusCode == 401{
-                        delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                    }else if statusCode == 401 && errorMessage.lowercased() == "refresh token invalid".lowercased(){
+                        //ignored
                     }
                 }
             }
@@ -96,8 +96,8 @@ class NetworkManager: NSObject {
                     delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isTokenExpired)
                 }else if statusCode == 403 && errorMessage.lowercased() == "Unauthorized".lowercased(){
                     delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
-                }else if statusCode == 401{
-                    delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                }else if statusCode == 401 && errorMessage.lowercased() == "refresh token invalid".lowercased(){
+                    //ignored
                 }
             }
         }
@@ -1043,15 +1043,20 @@ extension NetworkManager : URLSessionDownloadDelegate {
                             if let delegate = QiscusCore.delegate {
                                 if status == 403 && errorMessage.lowercased() == "Unauthorized".lowercased(){
                                     delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
-                               }else if status == 401{
-                                    delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                                    onError(QError(message:errorMessage))
+                                }else if status == 401 && errorMessage.contains("refresh token invalid") == true{
+                                   onError(QError(message:"Please try again"))
                                }
+                            }else{
+                                onError(QError(message:errorMessage))
                             }
+                        }else{
+                            onError(QError(message:errorMessage))
                         }
                     } catch {
-                        
+                        onError(QError(message:errorMessage))
                     }
-                    onError(QError(message:errorMessage))
+                    
                 }
             }
         }
