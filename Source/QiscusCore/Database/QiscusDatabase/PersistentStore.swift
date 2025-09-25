@@ -119,22 +119,46 @@ class PresistentStore {
     
     static func clear() {
         do {
-            if #available(iOS 10.0, *) {
-                try persistentContainer.persistentStoreCoordinator.managedObjectModel.entities.forEach({ (entity) in
-                    if let name = entity.name {
-                        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: name)
-                        let request = NSBatchDeleteRequest(fetchRequest: fetch)
-                        try context.execute(request)
-                    }
-                })
-            } else {
-                // Fallback on earlier versions
+            // Pastikan tidak ada perubahan pending di context
+            if context.hasChanges {
+                context.reset()
             }
-            try context.save()
+
+            if #available(iOS 10.0, *) {
+                for entity in persistentContainer.managedObjectModel.entities {
+                    guard let name = entity.name else { continue }
+
+                    let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: name)
+                    let request = NSBatchDeleteRequest(fetchRequest: fetch)
+                    request.resultType = .resultTypeObjectIDs
+
+                    // Eksekusi batch delete
+                    let result = try context.execute(request) as? NSBatchDeleteResult
+                    if let objectIDs = result?.result as? [NSManagedObjectID] {
+                        let changes = [NSDeletedObjectsKey: objectIDs]
+                        // Merge supaya context tetap konsisten
+                        NSManagedObjectContext.mergeChanges(
+                            fromRemoteContextSave: changes,
+                            into: [context]
+                        )
+                    }
+                }
+            } else {
+                // Fallback iOS < 10: manual fetch + delete
+                for entity in persistentContainer.managedObjectModel.entities {
+                    guard let name = entity.name else { continue }
+                    let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: name)
+                    let objects = try context.fetch(fetch) as? [NSManagedObject] ?? []
+                    for obj in objects {
+                        context.delete(obj)
+                    }
+                }
+                try context.save()
+            }
+
         } catch {
             let saveError = error as NSError
-            QiscusLogger.errorPrint("Unable to clear DB")
-            QiscusLogger.errorPrint("\(saveError), \(saveError.localizedDescription)")
+            QiscusLogger.errorPrint("❌ Unable to clear DB: \(saveError), \(saveError.localizedDescription)")
         }
     }
 }

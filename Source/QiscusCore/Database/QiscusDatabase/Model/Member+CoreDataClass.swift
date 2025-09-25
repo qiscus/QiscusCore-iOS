@@ -76,31 +76,36 @@ extension Member {
     }
     
     /// Clear all member data
-     static func clear() {
-        QiscusDatabase.context.perform({
-            let fetchRequest:NSFetchRequest<Member> = Member.fetchRequest()
+    static func clear() {
+        let context = QiscusDatabase.context
+        context.perform {
+            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Member.fetchRequest()
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            deleteRequest.resultType = .resultTypeObjectIDs
+
             do {
-                let delete = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-                try  QiscusDatabase.context.execute(delete)
+                let result = try context.execute(deleteRequest) as? NSBatchDeleteResult
+                if let objectIDs = result?.result as? [NSManagedObjectID] {
+                    let changes: [AnyHashable: Any] = [NSDeletedObjectsKey: objectIDs]
+                    NSManagedObjectContext.mergeChanges(
+                        fromRemoteContextSave: changes,
+                        into: [context]
+                    )
+                }
+                try context.save()
             } catch {
-                // failed to clear data
+                QiscusLogger.errorPrint("❌ Failed to clear Member data")
+                QiscusLogger.errorPrint("\(error.localizedDescription)")
             }
-            
-        })
-        
-//        let fetchRequest:NSFetchRequest<Member> = Member.fetchRequest()
-//        let delete = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-//        do {
-//            try  QiscusDatabase.context.execute(delete)
-//        } catch  {
-//            // failed to clear data
-//        }
+        }
     }
     
     // non static
      func remove() {
-        QiscusDatabase.context.delete(self)
-        self.save()
+         QiscusDatabase.context.perform {
+             QiscusDatabase.context.delete(self)
+             self.save()
+        }
     }
     
      func update() {

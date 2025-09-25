@@ -27,15 +27,29 @@ class QiscusDatabase {
         PresistentStore.clear()
     }
     
-    static func clearALLComment(){
+    static func clearALLComment() {
         if #available(iOS 10.0, *) {
             let backgroundContext = PresistentStore.persistentContainer.newBackgroundContext()
             backgroundContext.perform {
                 let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Comment.fetchRequest()
                 let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+                deleteRequest.resultType = .resultTypeObjectIDs
 
                 do {
-                    try backgroundContext.execute(deleteRequest)
+                    // Eksekusi batch delete
+                    let result = try backgroundContext.execute(deleteRequest) as? NSBatchDeleteResult
+
+                    // Ambil object IDs yang terhapus
+                    if let objectIDs = result?.result as? [NSManagedObjectID] {
+                        let changes: [AnyHashable: Any] = [NSDeletedObjectsKey: objectIDs]
+
+                        // Merge perubahan ke viewContext agar sinkron
+                        NSManagedObjectContext.mergeChanges(
+                            fromRemoteContextSave: changes,
+                            into: [PresistentStore.persistentContainer.viewContext]
+                        )
+                    }
+
                     try backgroundContext.save()
                 } catch {
                     QiscusLogger.errorPrint("❌ Failed to clear Comment data")

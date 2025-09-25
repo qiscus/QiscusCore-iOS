@@ -90,8 +90,10 @@ extension Comment {
     
     // non static
      func remove() {
-        QiscusDatabase.context.delete(self)
-        self.save()
+         QiscusDatabase.context.perform {
+             QiscusDatabase.context.delete(self)
+             self.save()
+        }
     }
     
      func update() {
