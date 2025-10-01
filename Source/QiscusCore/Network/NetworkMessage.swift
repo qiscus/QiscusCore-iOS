@@ -25,7 +25,7 @@ extension NetworkManager {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -39,17 +39,21 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        
                         let data = JSON(jsondata)
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, QError(message: errorMessage))
+                            }
+                        }else{
+                            completion(nil, QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(nil, QError(message: errorMessage))
                     }
-                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -69,7 +73,7 @@ extension NetworkManager {
                 completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -80,38 +84,23 @@ extension NetworkManager {
                     let comment = CommentApiResponse.comment(from: response)
                     completion(comment, nil)
                 case .failure(let errorMessage):
-                    if data != nil {
-                        do {
-                            let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                            QiscusLogger.errorPrint("json: \(jsondata)")
-                            let data = JSON(jsondata)
-                            let status = data["status"].int ?? 0
-                            let errorMessage = data["error"]["message"].string ?? ""
-                            
-                            if status == 403 {
-                                self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, errorMessage)
                             }
-                            
-                            switch response.statusCode {
-                            case 400...599:
-                                if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
-                                    let failed = comment
-                                    failed.status  = .failed
-                                    QiscusCore.database.comment.save([failed])
-                                }
-                                completion(nil, "json: \(jsondata)")
-                            default:
-                                completion(nil, "json: \(jsondata)")
-                                break
-                            }
-                            
-                        } catch {
-                            QiscusLogger.errorPrint("Error updateComment Code =\(response.statusCode)\(errorMessage)")
-                            completion(nil, NetworkResponse.unableToDecode.rawValue)
+                        }else{
+                            completion(nil, errorMessage)
                         }
-                    }else{
-                        QiscusLogger.errorPrint("Error updateComment Code =\(response.statusCode)\(errorMessage)")
-                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                    } catch {
+                        completion(nil, errorMessage)
                     }
                 }
             }
@@ -135,7 +124,7 @@ extension NetworkManager {
                 completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -146,7 +135,7 @@ extension NetworkManager {
                     let comment = CommentApiResponse.comment(from: response)
                     completion(comment, nil)
                 case .failure(let errorMessage):
-                    if data != nil {
+                     if data != nil {
                         do {
                             let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                             QiscusLogger.errorPrint("json: \(jsondata)")
@@ -156,52 +145,98 @@ extension NetworkManager {
                             let errorMessage = dataJson["error"]["message"].string ?? ""
                             
                             if status == 403 {
-                                self.errorCheck(statusCode: status, errorMessage: errorMessage)
-                            }
-                            
-                            let data = "json: \(jsondata)"
-                            if data.range(of:"comment already exist") != nil {
-                                if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
-                                    let sent = comment
-                                    sent.status  = .sent
-                                    QiscusCore.database.comment.save([sent])
-                                    
-                                    QiscusCore.shared.getRoom(withID: roomId, onSuccess: { (roomModel, comment) in
-                                        
-                                    }, onError: { (error) in
-                                        
-                                    })
-                                }
-                                
-                                 completion(nil, "json: \(jsondata)")
-
-                            }else{
-                                switch response.statusCode {
-                                case 400...599:
-                                    
-                                    if response.statusCode == 403 && errorMessage.lowercased() == "Unauthorized. Token is expired".lowercased() {
+                                self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                    let data = "json: \(jsondata)"
+                                    if data.range(of:"comment already exist") != nil {
                                         if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
-                                            let failed = comment
-                                            failed.status  = .pending
-                                            QiscusCore.database.comment.save([failed])
-                                            completion(nil, "json: \(jsondata)")
-                                        }else{
-                                            completion(nil, "failed send message")
+                                            let sent = comment
+                                            sent.status  = .sent
+                                            QiscusCore.database.comment.save([sent])
+                                            
+                                            QiscusCore.shared.getRoom(withID: roomId, onSuccess: { (roomModel, comment) in
+                                                
+                                            }, onError: { (error) in
+                                                
+                                            })
                                         }
+                                        
+                                        completion(nil, errorMessage)
+
                                     }else{
-                                        if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
-                                            let failed = comment
-                                            failed.status  = .failed
-                                            QiscusCore.database.comment.save([failed])
+                                        switch response.statusCode {
+                                        case 400...599:
+                                            
+                                            if response.statusCode == 403 && errorMessage.lowercased() == "Unauthorized. Token is expired".lowercased() {
+                                                if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                                                    let failed = comment
+                                                    failed.status  = .pending
+                                                    QiscusCore.database.comment.save([failed])
+                                                    completion(nil, errorMessage)
+                                                }else{
+                                                    completion(nil, errorMessage)
+                                                }
+                                            }else{
+                                                if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                                                    let failed = comment
+                                                    failed.status  = .failed
+                                                    QiscusCore.database.comment.save([failed])
+                                                    completion(nil, errorMessage)
+                                                }else{
+                                                    completion(nil, errorMessage)
+                                                }
+                                            }
+                                           
+                                        default:
                                             completion(nil, "json: \(jsondata)")
-                                        }else{
-                                            completion(nil, "failed send message")
+                                            break
                                         }
                                     }
-                                   
-                                default:
-                                    completion(nil, "json: \(jsondata)")
-                                    break
+                                }
+                            }else{
+                                let data = "json: \(jsondata)"
+                                if data.range(of:"comment already exist") != nil {
+                                    if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                                        let sent = comment
+                                        sent.status  = .sent
+                                        QiscusCore.database.comment.save([sent])
+                                        
+                                        QiscusCore.shared.getRoom(withID: roomId, onSuccess: { (roomModel, comment) in
+                                            
+                                        }, onError: { (error) in
+                                            
+                                        })
+                                    }
+                                    
+                                    completion(nil, errorMessage)
+
+                                }else{
+                                    switch response.statusCode {
+                                    case 400...599:
+                                        
+                                        if response.statusCode == 403 && errorMessage.lowercased() == "Unauthorized. Token is expired".lowercased() {
+                                            if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                                                let failed = comment
+                                                failed.status  = .pending
+                                                QiscusCore.database.comment.save([failed])
+                                                completion(nil, errorMessage)
+                                            }else{
+                                                completion(nil, "failed send message")
+                                            }
+                                        }else{
+                                            if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                                                let failed = comment
+                                                failed.status  = .failed
+                                                QiscusCore.database.comment.save([failed])
+                                                completion(nil, errorMessage)
+                                            }else{
+                                                completion(nil, "failed send message")
+                                            }
+                                        }
+                                       
+                                    default:
+                                        completion(nil, errorMessage)
+                                        break
+                                    }
                                 }
                             }
                         } catch {
@@ -229,7 +264,7 @@ extension NetworkManager {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -243,18 +278,21 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        
                         let data = JSON(jsondata)
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, QError(message: errorMessage))
+                            }
+                        }else{
+                            completion(nil, QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(nil, QError(message: errorMessage))
                     }
-                    
-                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -276,7 +314,7 @@ extension NetworkManager {
             }
             
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                    return
@@ -290,7 +328,8 @@ extension NetworkManager {
                             let errorMessage = data["error"]["message"].string ?? ""
                             
                             if status == 403 {
-                                self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                                self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                }
                             }
                         }else{
                             
@@ -321,7 +360,7 @@ extension NetworkManager {
                 completion(0, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -332,21 +371,23 @@ extension NetworkManager {
                     completion(unread,nil)
                 case .failure(let errorMessage):
                     do {
-                        if let data = data{
-                            let jsondata = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
-                            QiscusLogger.errorPrint("json: \(jsondata)")
-                            let data = JSON(jsondata)
-                            let status = data["status"].int ?? 0
-                            let errorMessage = data["error"]["message"].string ?? ""
-                            
-                            if status == 403 {
-                                self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(0, QError(message: errorMessage))
                             }
+                        }else{
+                            completion(0, QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(0, QError(message: errorMessage))
                     }
-                    completion(0, QError(message: "Can't parse error, when request unread count."))
                 }
             }
         }
@@ -364,7 +405,7 @@ extension NetworkManager {
 //                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
 //            }
 //            if let response = response as? HTTPURLResponse {
-//                let result = self.handleNetworkResponse(response)
+//                let result = self.handleNetworkResponse(response, data: data)
 //                switch result {
 //                case .success:
 //                    guard let responseData = data else {
@@ -401,7 +442,7 @@ extension NetworkManager {
                 completion(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     completion(nil)
@@ -415,12 +456,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(QError(message: errorMessage))
+                            }
+                        }else{
+                            completion(QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(QError(message: errorMessage))
                     }
-                    completion(QError(message: errorMessage))
                 }
             }
         }
@@ -437,7 +481,7 @@ extension NetworkManager {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -466,18 +510,21 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        
                         let data = JSON(jsondata)
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, QError(message: errorMessage))
+                            }
+                        }else{
+                            completion(nil, QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(nil, QError(message: errorMessage))
                     }
-                    
-                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -500,7 +547,7 @@ extension NetworkManager {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -514,17 +561,21 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        
                         let data = JSON(jsondata)
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, QError(message: errorMessage))
+                            }
+                        }else{
+                            completion(nil, QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(nil, QError(message: errorMessage))
                     }
-                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -546,7 +597,7 @@ extension NetworkManager {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -560,17 +611,21 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        
                         let data = JSON(jsondata)
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, QError(message: errorMessage))
+                            }
+                        }else{
+                            completion(nil, QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(nil, QError(message: errorMessage))
                     }
-                    completion(nil, QError(message: errorMessage))
                 }
             }
         }

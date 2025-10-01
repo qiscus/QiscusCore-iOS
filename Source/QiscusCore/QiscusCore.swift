@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.14.7"
+    public static let qiscusCoreVersionNumber:String = "1.14.8"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -113,6 +113,8 @@ public class QiscusCore: NSObject {
     public static var fromSetupWithCustomServer : Bool = false
     public static var reconnectCounter : Int = 0
     public static var maxDayPeriodicClearLocalDB : Int = 7 //by default 7 days
+    
+    public static var maxErrorCountInvalidToken : Int = 0
     
     @available(*, deprecated, message: "will soon become unavailable.")
     public static var enableDebugPrint: Bool = false
@@ -457,8 +459,12 @@ public class QiscusCore: NSObject {
                         QiscusCore.shared.refreshToken { success in
                             
                         } onError: { error in
-                            if let delegate = QiscusCore.delegate {
-                                delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                            if error.message.lowercased() == "Please try again".lowercased() || error.message.lowercased() == "The request timed out.".lowercased(){
+                                //ignored
+                            }else{
+                                if let delegate = QiscusCore.delegate {
+                                    delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
+                                }
                             }
                         }
 
@@ -596,6 +602,7 @@ public class QiscusCore: NSObject {
             // save user in local
             ConfigManager.shared.user = user
             ConfigManager.shared.lastClearDB = self.getTimestamp()
+            QiscusCore.maxErrorCountInvalidToken = 0
             realtime.connect(username: user.email, password: user.token)
             onSuccess(user)
         }) { (error) in
@@ -621,6 +628,7 @@ public class QiscusCore: NSObject {
             // save user in local
             ConfigManager.shared.user = user
             ConfigManager.shared.lastClearDB = self.getTimestamp()
+            QiscusCore.maxErrorCountInvalidToken = 0
             realtime.connect(username: user.email, password: user.token)
             onSuccess(user)
         }) { (error) in
@@ -643,6 +651,7 @@ public class QiscusCore: NSObject {
             // save user in local
             ConfigManager.shared.user = user
             ConfigManager.shared.lastClearDB = self.getTimestamp()
+            QiscusCore.maxErrorCountInvalidToken = 0
             onSuccess(user)
         }) { (error) in
             onError(error)
@@ -662,6 +671,7 @@ public class QiscusCore: NSObject {
             // save user in local
             ConfigManager.shared.user = user
             ConfigManager.shared.lastClearDB = self.getTimestamp()
+            QiscusCore.maxErrorCountInvalidToken = 0
             onSuccess(user)
         }) { (error) in
             onError(error)
@@ -1466,22 +1476,40 @@ public class QiscusCore: NSObject {
                     }
                 }
                 
-                QiscusCore.shared.synchronize(lastMessageId: id, onSuccess: { (comments) in
-                    self.syncEvent()
-                    if let c = comments.first {
-                        ConfigManager.shared.syncId = c.id
-                    }
-                    QiscusLogger.debugPrint("success sync after refresh token")
-                    onSuccess(success)
-                }, onError: { (error) in
-                    QiscusLogger.errorPrint("sync error, \(error.message)")
-                    onSuccess(success)
-                })
-
-                
+                self.sendPendingMessage { onNext in
+                    QiscusCore.shared.synchronize(lastMessageId: id, onSuccess: { (comments) in
+                        self.syncEvent()
+                        if let c = comments.first {
+                            ConfigManager.shared.syncId = c.id
+                        }
+                        QiscusLogger.debugPrint("success sync after refresh token")
+                        onSuccess(success)
+                    }, onError: { (error) in
+                        QiscusLogger.errorPrint("sync error, \(error.message)")
+                        onSuccess(success)
+                    })
+                }
             } onError: { error in
                 onError(error)
             }
+        }
+    }
+    
+    private func sendPendingMessage(onNext: @escaping (Bool) -> Void){
+        guard let comments = QiscusCore.database.comment.find(status: .pending) else { return }
+       
+        comments.forEach { (c) in
+            // validation comment prevent id
+            if c.uniqId.isEmpty { QiscusCore.database.comment.evaluate(); return }
+            QiscusCore.shared.sendMessage(message: c, onSuccess: { (response) in
+                QiscusLogger.debugPrint("success send pending message \(response.uniqId)")
+                ConfigManager.shared.lastCommentId = response.id
+                
+                onNext(true)
+            }, onError: { (error) in
+                QiscusLogger.errorPrint("failed send pending message \(c.uniqId)")
+                onNext(false)
+            })
         }
     }
     

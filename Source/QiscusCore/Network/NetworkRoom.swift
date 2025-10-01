@@ -25,7 +25,7 @@ extension NetworkManager {
                 completion(nil, nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -46,14 +46,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, nil, errorMessage)
+                            }
+                        }else{
+                            completion(nil, nil, errorMessage)
                         }
-                        
                     } catch {
-                        
+                        completion(nil, nil, errorMessage)
                     }
-                    
-                    completion(nil, nil, errorMessage)
                 }
             }
         }
@@ -74,7 +75,7 @@ extension NetworkManager {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -94,13 +95,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, QError(message: errorMessage))
+                            }
+                        }else{
+                            completion(nil, QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(nil, QError(message: errorMessage))
                     }
-                    
-                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -121,7 +124,7 @@ extension NetworkManager {
                 completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -141,13 +144,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, errorMessage)
+                            }
+                        }else{
+                            completion(nil, errorMessage)
                         }
                     } catch {
-                        
+                        completion(nil, errorMessage)
                     }
-                    
-                    completion(nil, errorMessage)
                 }
             }
         }
@@ -167,7 +172,7 @@ extension NetworkManager {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -187,13 +192,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, QError(message: errorMessage))
+                            }
+                        }else{
+                            completion(nil, QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(nil, QError(message: errorMessage))
                     }
-                    
-                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -215,7 +222,7 @@ extension NetworkManager {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -236,12 +243,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                onError(QError(message: errorMessage))
+                            }
+                        }else{
+                            onError(QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        onError(QError(message: errorMessage))
                     }
-                    onError(QError(message: errorMessage))
                 }
             }
         }
@@ -260,7 +270,7 @@ extension NetworkManager {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -281,12 +291,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                onError(QError(message: errorMessage))
+                            }
+                        }else{
+                            onError(QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        onError(QError(message: errorMessage))
                     }
-                    onError(QError(message: errorMessage))
                 }
             }
         }
@@ -307,7 +320,7 @@ extension NetworkManager {
                 completion(nil, nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -328,13 +341,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, nil,errorMessage)
+                            }
+                        }else{
+                            completion(nil, nil, errorMessage)
                         }
                     } catch {
-                        
+                        completion(nil, nil, errorMessage)
                     }
-                    
-                    completion(nil, nil, errorMessage)
                 }
             }
         }
@@ -354,7 +369,7 @@ extension NetworkManager {
                 completion(nil, nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -375,13 +390,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, nil, errorMessage)
+                            }
+                        }else{
+                            completion(nil, nil, errorMessage)
                         }
                     } catch {
-                        
+                        completion(nil, nil, errorMessage)
                     }
-                    
-                    completion(nil, nil, errorMessage)
                 }
             }
         }
@@ -398,7 +415,7 @@ extension NetworkManager {
                 completion(nil, nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -419,13 +436,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, nil, errorMessage)
+                            }
+                        }else{
+                            completion(nil, nil, errorMessage)
                         }
                     } catch {
-                        
+                        completion(nil, nil, errorMessage)
                     }
-                    
-                    completion(nil, nil, errorMessage)
                 }
             }
         }
@@ -440,7 +459,7 @@ extension NetworkManager {
                 completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -460,13 +479,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, errorMessage)
+                            }
+                        }else{
+                            completion(nil, errorMessage)
                         }
                     } catch {
-                        
+                        completion(nil, errorMessage)
                     }
-                    
-                    completion(nil, errorMessage)
                 }
             }
         }
@@ -482,7 +503,7 @@ extension NetworkManager {
                 completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -496,18 +517,21 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        
                         let data = JSON(jsondata)
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, errorMessage)
+                            }
+                        }else{
+                            completion(nil, errorMessage)
                         }
                     } catch {
-                        
+                        completion(nil, errorMessage)
                     }
-                    
-                    completion(nil, errorMessage)
                 }
             }
         }
@@ -523,7 +547,7 @@ extension NetworkManager {
                 completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -537,18 +561,21 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
+                        
                         let data = JSON(jsondata)
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, errorMessage)
+                            }
+                        }else{
+                            completion(nil, errorMessage)
                         }
                     } catch {
-                        
+                        completion(nil, errorMessage)
                     }
-                    
-                    completion(nil, errorMessage)
                 }
             }
         }
@@ -564,7 +591,7 @@ extension NetworkManager {
                 completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -584,13 +611,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, errorMessage)
+                            }
+                        }else{
+                            completion(nil, errorMessage)
                         }
                     } catch {
-                        
+                        completion(nil, errorMessage)
                     }
-                    
-                    completion(nil, errorMessage)
                 }
             }
         }
@@ -608,7 +637,7 @@ extension NetworkManager {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -620,23 +649,25 @@ extension NetworkManager {
                     let comments    = CommentApiResponse.comments(from: response)
                     onSuccess(room,comments)
                 case .failure(let errorMessage):
-                    if let data = data{
-                        do {
-                            let jsondata = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
-                            QiscusLogger.errorPrint("json: \(jsondata)")
-                            let data = JSON(jsondata)
-                            let status = data["status"].int ?? 0
-                            let errorMessage = data["error"]["message"].string ?? ""
-                            
-                            if status == 403 {
-                                self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        if status == 403 {
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                
+                                onError(QError(message: errorMessage))
                             }
-                        } catch {
-                            
+                        }else{
+                            onError(QError(message: errorMessage))
                         }
+                    } catch {
+                        onError(QError(message: errorMessage))
                     }
-                    onError(QError(message: errorMessage))
-                    
                 }
             }
         }
@@ -656,7 +687,7 @@ extension NetworkManager {
                 completion(nil, nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -677,13 +708,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, nil, QError(message: errorMessage))
+                            }
+                        }else{
+                            completion(nil, nil, QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(nil, nil, QError(message: errorMessage))
                     }
-                    
-                    completion(nil, nil, QError(message: errorMessage))
                 }
             }
         }
@@ -701,7 +734,7 @@ extension NetworkManager {
                 completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -722,12 +755,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, QError(message: errorMessage))
+                            }
+                        }else{
+                            completion(nil, QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(nil, QError(message: errorMessage))
                     }
-                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -745,7 +781,7 @@ extension NetworkManager {
                 completion(false, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard data != nil else {
@@ -764,13 +800,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(false, QError(message: errorMessage))
+                            }
+                        }else{
+                            completion(false, QError(message: errorMessage))
                         }
                     } catch {
-                        
+                        completion(false, QError(message: errorMessage))
                     }
-                    
-                    completion(false, QError(message: errorMessage))
                 }
             }
         }
@@ -786,7 +824,7 @@ extension NetworkManager {
                 completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -806,13 +844,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, errorMessage)
+                            }
+                        }else{
+                            completion(nil, errorMessage)
                         }
                     } catch {
-                        
+                        completion(nil, errorMessage)
                     }
-                    
-                    completion(nil, errorMessage)
                 }
             }
         }
@@ -827,7 +867,7 @@ extension NetworkManager {
                 completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
+                let result = self.handleNetworkResponse(response, data: data)
                 switch result {
                 case .success:
                     guard let responseData = data else {
@@ -847,13 +887,15 @@ extension NetworkManager {
                         let errorMessage = data["error"]["message"].string ?? ""
                         
                         if status == 403 {
-                            self.errorCheck(statusCode: status, errorMessage: errorMessage)
+                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
+                                completion(nil, errorMessage)
+                            }
+                        }else{
+                            completion(nil, errorMessage)
                         }
                     } catch {
-                        
+                        completion(nil, errorMessage)
                     }
-                    
-                    completion(nil, errorMessage)
                 }
             }
         }
