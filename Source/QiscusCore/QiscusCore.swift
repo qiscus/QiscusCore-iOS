@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.14.8"
+    public static let qiscusCoreVersionNumber:String = "1.14.9"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -1496,21 +1496,29 @@ public class QiscusCore: NSObject {
     }
     
     private func sendPendingMessage(onNext: @escaping (Bool) -> Void){
-        guard let comments = QiscusCore.database.comment.find(status: .pending) else { return }
-       
-        comments.forEach { (c) in
-            // validation comment prevent id
-            if c.uniqId.isEmpty { QiscusCore.database.comment.evaluate(); return }
-            QiscusCore.shared.sendMessage(message: c, onSuccess: { (response) in
-                QiscusLogger.debugPrint("success send pending message \(response.uniqId)")
-                ConfigManager.shared.lastCommentId = response.id
-                
-                onNext(true)
-            }, onError: { (error) in
-                QiscusLogger.errorPrint("failed send pending message \(c.uniqId)")
-                onNext(false)
-            })
+        guard let comments = QiscusCore.database.comment.find(status: .pending) else {
+            onNext(true)
+            return
         }
+        
+        if comments.count == 0 {
+            onNext(true)
+        }else{
+            comments.forEach { (c) in
+                // validation comment prevent id
+                if c.uniqId.isEmpty { QiscusCore.database.comment.evaluate(); return }
+                QiscusCore.shared.sendMessage(message: c, onSuccess: { (response) in
+                    QiscusLogger.debugPrint("success send pending message \(response.uniqId)")
+                    ConfigManager.shared.lastCommentId = response.id
+                    
+                    onNext(true)
+                }, onError: { (error) in
+                    QiscusLogger.errorPrint("failed send pending message \(c.uniqId)")
+                    onNext(false)
+                })
+            }
+        }
+       
     }
     
     private func syncEvent() {
