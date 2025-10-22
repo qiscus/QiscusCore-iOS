@@ -164,20 +164,18 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
                     if let d = data,
                        let json = try? JSONSerialization.jsonObject(with: d) as? [String: Any],
                        let err = json["error"] as? [String: Any],
-                       let msg = err["message"] as? String,
-                       msg.lowercased() == "unauthorized. token is expired" {
-                        isTokenExpired = true
-                    }
-                    
-                    if let d = data,
-                       let json = try? JSONSerialization.jsonObject(with: d) as? [String: Any],
-                       let err = json["error"] as? [String: Any],
-                       let msg = err["message"] as? String,
-                       msg.lowercased() == "unauthorized" {
-                        isUnauthorized = true
-                        if let delegate = QiscusCore.delegate {
-                            DispatchQueue.main.async {
-                                delegate.onRefreshToken(event: .isUnauthorized)
+                       let msg = err["message"] as? String {
+                        
+                        let lowerMsg = msg.lowercased()
+                        if lowerMsg == "unauthorized. token is expired" {
+                            isTokenExpired = true
+                        }
+                        if lowerMsg == "unauthorized" {
+                            isUnauthorized = true
+                            if let delegate = QiscusCore.delegate {
+                                DispatchQueue.main.async {
+                                    delegate.onRefreshToken(event: .isUnauthorized)
+                                }
                             }
                         }
                     }
@@ -258,23 +256,18 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
                         if let d = data,
                            let json = try? JSONSerialization.jsonObject(with: d) as? [String: Any],
                            let err = json["error"] as? [String: Any],
-                           let msg = err["message"] as? String,
-                           msg.lowercased() == "unauthorized. token is expired" {
-                            DispatchQueue.main.async {
-                                delegate.onRefreshToken(event: .isTokenExpired)
-                            }
+                           let msg = err["message"] as? String {
                             
-                        }
-                        
-                        if let d = data,
-                           let json = try? JSONSerialization.jsonObject(with: d) as? [String: Any],
-                           let err = json["error"] as? [String: Any],
-                           let msg = err["message"] as? String,
-                           msg.lowercased() == "unauthorized" {
-                            DispatchQueue.main.async {
-                                delegate.onRefreshToken(event: .isUnauthorized)
+                            let lowerMsg = msg.lowercased()
+                            if lowerMsg == "unauthorized. token is expired" {
+                                DispatchQueue.main.async {
+                                    delegate.onRefreshToken(event: .isTokenExpired)
+                                }
+                            } else if lowerMsg == "unauthorized" {
+                                DispatchQueue.main.async {
+                                    delegate.onRefreshToken(event: .isUnauthorized)
+                                }
                             }
-                            
                         }
                     }
                 }
