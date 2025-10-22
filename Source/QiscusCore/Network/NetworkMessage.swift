@@ -44,13 +44,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                completion(nil, QError(message: errorMessage))
-                            }
-                        }else{
-                            completion(nil, QError(message: errorMessage))
-                        }
+                        completion(nil, QError(message: errorMessage))
                     } catch {
                         completion(nil, QError(message: errorMessage))
                     }
@@ -92,13 +86,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                completion(nil, errorMessage)
-                            }
-                        }else{
-                            completion(nil, errorMessage)
-                        }
+                        completion(nil, errorMessage)
                     } catch {
                         completion(nil, errorMessage)
                     }
@@ -144,108 +132,75 @@ extension NetworkManager {
                             let status = dataJson["status"].int ?? 0
                             let errorMessage = dataJson["error"]["message"].string ?? ""
                             
-                            if status == 403 {
-                                self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                    let data = "json: \(jsondata)"
-                                    if data.range(of:"comment already exist") != nil {
-                                        if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
-                                            let sent = comment
-                                            sent.status  = .sent
-                                            QiscusCore.database.comment.save([sent])
-                                            
-                                            QiscusCore.shared.getRoom(withID: roomId, onSuccess: { (roomModel, comment) in
-                                                
-                                            }, onError: { (error) in
-                                                
-                                            })
-                                        }
-                                        
-                                        completion(nil, errorMessage)
-
-                                    }else{
-                                        switch response.statusCode {
-                                        case 400...599:
-                                            
-                                            if response.statusCode == 403 && errorMessage.lowercased() == "Unauthorized. Token is expired".lowercased() {
-                                                if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
-                                                    let failed = comment
-                                                    failed.status  = .pending
-                                                    QiscusCore.database.comment.save([failed])
-                                                    completion(nil, errorMessage)
-                                                }else{
-                                                    completion(nil, errorMessage)
-                                                }
-                                            }else{
-                                                if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
-                                                    let failed = comment
-                                                    failed.status  = .failed
-                                                    QiscusCore.database.comment.save([failed])
-                                                    completion(nil, errorMessage)
-                                                }else{
-                                                    completion(nil, errorMessage)
-                                                }
-                                            }
-                                           
-                                        default:
-                                            completion(nil, "json: \(jsondata)")
-                                            break
-                                        }
-                                    }
-                                }
-                            }else{
-                                let data = "json: \(jsondata)"
-                                if data.range(of:"comment already exist") != nil {
-                                    if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
-                                        let sent = comment
-                                        sent.status  = .sent
-                                        QiscusCore.database.comment.save([sent])
-                                        
-                                        QiscusCore.shared.getRoom(withID: roomId, onSuccess: { (roomModel, comment) in
-                                            
-                                        }, onError: { (error) in
-                                            
-                                        })
-                                    }
+                            let data = "json: \(jsondata)"
+                            if data.range(of:"comment already exist") != nil {
+                                if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                                    let sent = comment
+                                    sent.status  = .sent
+                                    QiscusCore.database.comment.save([sent])
                                     
-                                    completion(nil, errorMessage)
-
-                                }else{
-                                    switch response.statusCode {
-                                    case 400...599:
+                                    QiscusCore.shared.getRoom(withID: roomId, onSuccess: { (roomModel, comment) in
                                         
-                                        if response.statusCode == 403 && errorMessage.lowercased() == "Unauthorized. Token is expired".lowercased() {
-                                            if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
-                                                let failed = comment
-                                                failed.status  = .pending
-                                                QiscusCore.database.comment.save([failed])
-                                                completion(nil, errorMessage)
-                                            }else{
-                                                completion(nil, "failed send message")
-                                            }
+                                    }, onError: { (error) in
+                                        
+                                    })
+                                }
+                                
+                                completion(nil, errorMessage)
+
+                            }else{
+                                switch response.statusCode {
+                                case 400...599:
+                                    
+                                    if response.statusCode == 403 && errorMessage.lowercased() == "Unauthorized. Token is expired".lowercased() {
+                                        if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                                            let failed = comment
+                                            failed.status  = .pending
+                                            QiscusCore.database.comment.save([failed])
+                                            completion(nil, errorMessage)
                                         }else{
-                                            if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
-                                                let failed = comment
-                                                failed.status  = .failed
-                                                QiscusCore.database.comment.save([failed])
-                                                completion(nil, errorMessage)
-                                            }else{
-                                                completion(nil, "failed send message")
-                                            }
+                                            completion(nil, errorMessage)
                                         }
-                                       
-                                    default:
-                                        completion(nil, errorMessage)
-                                        break
+                                    }else{
+                                        if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                                            let failed = comment
+                                            failed.status  = .failed
+                                            QiscusCore.database.comment.save([failed])
+                                            completion(nil, errorMessage)
+                                        }else{
+                                            completion(nil, errorMessage)
+                                        }
                                     }
+                                   
+                                default:
+                                    completion(nil, "json: \(jsondata)")
+                                    break
                                 }
                             }
+                            
                         } catch {
                             QiscusLogger.errorPrint("Error postComment Code =\(response.statusCode)\(errorMessage)")
-                            completion(nil, NetworkResponse.unableToDecode.rawValue)
+                            
+                            if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                                let failed = comment
+                                failed.status  = .failed
+                                QiscusCore.database.comment.save([failed])
+                                completion(nil, errorMessage)
+                            }else{
+                                completion(nil, errorMessage)
+                            }
                         }
                     }else{
                         QiscusLogger.errorPrint("Error postComment Code =\(response.statusCode)\(errorMessage)")
-                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                        
+                        if let comment = QiscusCore.database.comment.find(uniqueId: uniqueTempId){
+                            let failed = comment
+                            failed.status  = .failed
+                            QiscusCore.database.comment.save([failed])
+                            completion(nil, errorMessage)
+                        }else{
+                            completion(nil, errorMessage)
+                        }
                     }
                 }
             }
@@ -283,13 +238,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                completion(nil, QError(message: errorMessage))
-                            }
-                        }else{
-                            completion(nil, QError(message: errorMessage))
-                        }
+                        completion(nil, QError(message: errorMessage))
                     } catch {
                         completion(nil, QError(message: errorMessage))
                     }
@@ -327,10 +276,8 @@ extension NetworkManager {
                             let status = data["status"].int ?? 0
                             let errorMessage = data["error"]["message"].string ?? ""
                             
-                            if status == 403 {
-                                self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                }
-                            }
+                            QiscusLogger.errorPrint("Error updateCommentStatus Code =\(response.statusCode), \(errorMessage)")
+                            
                         }else{
                             
                             QiscusLogger.errorPrint("Error updateCommentStatus Code =\(response.statusCode), \(errorMessage)")
@@ -378,13 +325,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                completion(0, QError(message: errorMessage))
-                            }
-                        }else{
-                            completion(0, QError(message: errorMessage))
-                        }
+                        completion(0, QError(message: errorMessage))
                     } catch {
                         completion(0, QError(message: errorMessage))
                     }
@@ -455,13 +396,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                completion(QError(message: errorMessage))
-                            }
-                        }else{
-                            completion(QError(message: errorMessage))
-                        }
+                        completion(QError(message: errorMessage))
                     } catch {
                         completion(QError(message: errorMessage))
                     }
@@ -515,13 +450,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                completion(nil, QError(message: errorMessage))
-                            }
-                        }else{
-                            completion(nil, QError(message: errorMessage))
-                        }
+                        completion(nil, QError(message: errorMessage))
                     } catch {
                         completion(nil, QError(message: errorMessage))
                     }
@@ -566,13 +495,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                completion(nil, QError(message: errorMessage))
-                            }
-                        }else{
-                            completion(nil, QError(message: errorMessage))
-                        }
+                        completion(nil, QError(message: errorMessage))
                     } catch {
                         completion(nil, QError(message: errorMessage))
                     }
@@ -616,13 +539,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                completion(nil, QError(message: errorMessage))
-                            }
-                        }else{
-                            completion(nil, QError(message: errorMessage))
-                        }
+                        completion(nil, QError(message: errorMessage))
                     } catch {
                         completion(nil, QError(message: errorMessage))
                     }

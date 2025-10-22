@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.14.9"
+    public static let qiscusCoreVersionNumber:String = "1.14.10"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -107,8 +107,9 @@ public class QiscusCore: NSObject {
     public static var enableRealtime : Bool = true
     public static var enableSync : Bool = true
     public static var enableSyncEvent : Bool = false
-    public static var enableExpiredToken : Bool = true
+    public static var enableAutoRefreshToken : Bool = true
     public static var enableRefreshToken : Bool = false
+    public static var isConfigLoaded : Bool = false
     
     public static var fromSetupWithCustomServer : Bool = false
     public static var reconnectCounter : Int = 0
@@ -328,8 +329,11 @@ public class QiscusCore: NSObject {
             QiscusCore.enableRealtime = appConfig.enableRealtime
             QiscusCore.enableSync = appConfig.enableSync
             QiscusCore.enableSyncEvent = appConfig.enableSyncEvent
-            QiscusCore.enableExpiredToken = appConfig.autoRefreshToken
+            QiscusCore.enableAutoRefreshToken = appConfig.autoRefreshToken
             QiscusCore.enableRefreshToken = appConfig.enableRefreshToken
+            
+            QiscusCore.isConfigLoaded = true
+            NotificationCenter.default.post(name: NSNotification.Name("QiscusCoreConfigLoaded"), object: nil)
             
             //check old and new appServer
             if let oldConfig = config.server {
@@ -396,6 +400,9 @@ public class QiscusCore: NSObject {
             self.eventdelegate?.onDebugEvent("InitQiscus-getAppConfig()", message: "finish load getAppConfig \(QiscusLogger.getDateTime())")
             
         }) { (error) in
+            QiscusCore.isConfigLoaded = true
+            NotificationCenter.default.post(name: NSNotification.Name("QiscusCoreConfigLoaded"), object: nil)
+            
             self.eventdelegate?.onDebugEvent("InitQiscus-getAppConfig()", message: "finish error load getAppConfig \(QiscusLogger.getDateTime()) with error =\(error.message)")
             
             if let appID = config.appID {
@@ -422,7 +429,7 @@ public class QiscusCore: NSObject {
     
     private class func checkExpiredToken(){
         //1. check appConfig about token expired enable or disable
-        if enableExpiredToken == true {
+        if enableAutoRefreshToken == true && enableRefreshToken == true {
             let tokenExpiresAt = QiscusCore.getUserData()?.tokenExpiresAt ?? ""
             
             if !tokenExpiresAt.isEmpty{
@@ -459,7 +466,7 @@ public class QiscusCore: NSObject {
                         QiscusCore.shared.refreshToken { success in
                             
                         } onError: { error in
-                            if error.message.lowercased() == "Please try again".lowercased() || error.message.lowercased() == "The request timed out.".lowercased(){
+                            if error.message.lowercased() == "refresh token invalid".lowercased() || error.message.lowercased() == "The request timed out.".lowercased(){
                                 //ignored
                             }else{
                                 if let delegate = QiscusCore.delegate {
@@ -699,6 +706,7 @@ public class QiscusCore: NSObject {
     
     private func flowLogOut(completion: @escaping (QError?) -> Void){
         if QiscusCore.enableRefreshToken == true {
+            QiscusCore.maxErrorCountInvalidToken = 0
             QiscusCore.shared.logout { success in
                 self.stopQiscusCore()
                 completion(nil)
@@ -1449,9 +1457,15 @@ public class QiscusCore: NSObject {
         if  userID.isEmpty == true || refreshUserToken.isEmpty == true {
             onError(QError(message: "Please force logout and setUser first"))
         }else{
-            QiscusCore.realtime.unsubcribeCommentUpdateComemntNotification()
+            DispatchQueue.main.async {
+                QiscusCore.realtime.unsubcribeCommentUpdateComemntNotification()
+            }
+           
             QiscusCore.network.refreshUserToken(userId: userID, refreshToken: refreshUserToken) { success in
-                QiscusCore.realtime.subcribeCommentUpdateComemntNotification()
+                DispatchQueue.main.async {
+                    QiscusCore.realtime.subcribeCommentUpdateComemntNotification()
+                }
+               
                 
                 var id = ConfigManager.shared.syncId
                 let latestComment = ConfigManager.shared.lastCommentId
@@ -1489,6 +1503,64 @@ public class QiscusCore: NSObject {
                         onSuccess(success)
                     })
                 }
+            } onError: { error in
+                onError(error)
+            }
+        }
+    }
+    
+    //for automatic refresh token = true
+    public func autoRefreshToken(onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void ){
+    
+        let refreshUserToken = QiscusCore.getUserData()?.refreshUserToken ?? ""
+        let userID = QiscusCore.getUserData()?.email ?? ""
+        if  userID.isEmpty == true || refreshUserToken.isEmpty == true {
+            onError(QError(message: "Please force logout and setUser first"))
+        }else{
+            DispatchQueue.main.async {
+                QiscusCore.realtime.unsubcribeCommentUpdateComemntNotification()
+            }
+           
+            QiscusCore.network.refreshUserToken(userId: userID, refreshToken: refreshUserToken) { success in
+                DispatchQueue.main.async {
+                    QiscusCore.realtime.subcribeCommentUpdateComemntNotification()
+                }
+               
+                
+                var id = ConfigManager.shared.syncId
+                let latestComment = ConfigManager.shared.lastCommentId
+                
+                if latestComment != "" && id != "" {
+                    if id.contains(latestComment) == true {
+                        //id same
+                    }else{
+                        id = latestComment
+                    }
+                }else{
+                    if latestComment != ""{
+                        if id.isEmpty {
+                            id = latestComment
+                        }else{
+                            if id.contains(latestComment) == true {
+                                //id same
+                            }else{
+                                id = latestComment
+                            }
+                        }
+                    }
+                }
+                
+                QiscusCore.shared.synchronize(lastMessageId: id, onSuccess: { (comments) in
+                    self.syncEvent()
+                    if let c = comments.first {
+                        ConfigManager.shared.syncId = c.id
+                    }
+                    QiscusLogger.debugPrint("success sync after refresh token")
+                    onSuccess(success)
+                }, onError: { (error) in
+                    QiscusLogger.errorPrint("sync error, \(error.message)")
+                    onSuccess(success)
+                })
             } onError: { error in
                 onError(error)
             }

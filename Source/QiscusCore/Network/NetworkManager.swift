@@ -85,76 +85,6 @@ class NetworkManager: NSObject {
             }
         }
     }
-    
-    func errorCheckForRefreshToken(
-        statusCode: Int = 0,
-        errorMessage: String = "",
-        completion: ((QiscusRefreshTokenEvent?) -> Void)? = nil
-    ) {
-        
-        if QiscusCore.enableRefreshToken == false {
-            // ignored
-            completion?(nil)
-        }else{
-            // show to delegate
-            if QiscusCore.enableExpiredToken == true {
-                if errorMessage.lowercased() == "unauthorized. token is expired" {
-                    QiscusCore.shared.refreshToken { isSuccess in
-                        if let delegate = QiscusCore.delegate {
-                            delegate.onRefreshToken(event: .isSuccessAutoRefreshToken)
-                        }
-                        completion?(.isSuccessAutoRefreshToken)
-                    } onError: { error in
-                        if error.message.lowercased() == "please try again" ||
-                           error.message.lowercased() == "the request timed out." {
-                            // no action
-                            completion?(nil)
-                        } else {
-                            if let delegate = QiscusCore.delegate {
-                                delegate.onRefreshToken(event: .isUnauthorized)
-                            }
-                            completion?(.isUnauthorized)
-                        }
-                    }
-                } else {
-                    if let delegate = QiscusCore.delegate {
-                        if statusCode == 403 && errorMessage.lowercased() == "unauthorized. token is expired" {
-                            delegate.onRefreshToken(event: .isTokenExpired)
-                            completion?(.isTokenExpired)
-                        } else if statusCode == 403 && errorMessage.lowercased() == "unauthorized" {
-                            delegate.onRefreshToken(event: .isUnauthorized)
-                            completion?(.isUnauthorized)
-                        } else if statusCode == 401 && errorMessage.lowercased() == "refresh token invalid" {
-                            // ignored
-                            completion?(nil)
-                        }
-                    }else{
-                        // ignored
-                        completion?(nil)
-                    }
-                }
-            } else {
-                if let delegate = QiscusCore.delegate {
-                    if statusCode == 403 && errorMessage.lowercased() == "unauthorized. token is expired" {
-                        delegate.onRefreshToken(event: .isTokenExpired)
-                        completion?(.isTokenExpired)
-                    } else if statusCode == 403 && errorMessage.lowercased() == "unauthorized" {
-                        delegate.onRefreshToken(event: .isUnauthorized)
-                        completion?(.isUnauthorized)
-                    } else if statusCode == 401 && errorMessage.lowercased() == "refresh token invalid" {
-                        // ignored
-                        completion?(nil)
-                    }else{
-                        // ignored
-                        completion?(nil)
-                    }
-                }else{
-                    // ignored
-                    completion?(nil)
-                }
-            }
-        }
-    }
 
 }
 // MARK: Client
@@ -231,13 +161,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -276,13 +200,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -430,13 +348,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -521,13 +433,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -574,13 +480,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -615,13 +515,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -655,13 +549,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -696,13 +584,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                completion(nil, errorMessage)
-                            }
-                        }else{
-                            completion(nil, errorMessage)
-                        }
+                        completion(nil, errorMessage)
                     } catch {
                         completion(nil, errorMessage)
                     }
@@ -737,13 +619,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -782,13 +658,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -826,13 +696,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -885,13 +749,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -983,13 +841,7 @@ extension NetworkManager {
                         let status = data["status"].int ?? 0
                         let errorMessage = data["error"]["message"].string ?? ""
                         
-                        if status == 403 {
-                            self.errorCheckForRefreshToken(statusCode: 403, errorMessage: errorMessage) { event in
-                                onError(QError(message: errorMessage))
-                            }
-                        }else{
-                            onError(QError(message: errorMessage))
-                        }
+                        onError(QError(message: errorMessage))
                     } catch {
                         onError(QError(message: errorMessage))
                     }
@@ -1118,12 +970,8 @@ extension NetworkManager : URLSessionDownloadDelegate {
                                     delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
                                     onError(QError(message:errorMessage))
                                 }else if status == 401 && errorMessage.contains("refresh token invalid") == true{
-                                    QiscusCore.maxErrorCountInvalidToken += 1
-                                    if QiscusCore.maxErrorCountInvalidToken == 25 {
-                                        //need to force logout & login (race condition)
-                                        delegate.onRefreshToken(event: QiscusRefreshTokenEvent.isUnauthorized)
-                                    }
-                                   onError(QError(message:"Please try again"))
+                                    
+                                   onError(QError(message: errorMessage))
                                }
                             }else{
                                 onError(QError(message:errorMessage))

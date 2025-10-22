@@ -93,8 +93,6 @@ class RealtimeManager {
                 c.unsubscribe(endpoint: .notification(token: user.token))
             }
         }
-        
-        print("today check unsubcribeCommentUpdateComemntNotification")
     }
     
     func subcribeCommentUpdateComemntNotification(){
@@ -117,8 +115,6 @@ class RealtimeManager {
                 }
             }
         }
-        
-        print("today check subcribeCommentUpdateComemntNotification")
     }
     
     /// Subscribe comment(deliverd and read), typing by member in the room, and online status

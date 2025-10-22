@@ -185,6 +185,16 @@ class QiscusWorkerManager {
             }
         }
         
+        if id.isEmpty == true && QiscusCore.enableRefreshToken == true {
+            //db 0 and was expired token
+            QiscusCore.shared.getUserData { user in
+                
+            } onError: { error in
+                
+            }
+
+        }
+        
         QiscusCore.shared.synchronize(lastMessageId: id, onSuccess: { (comments) in
             self.syncEvent()
             if let c = comments.first {

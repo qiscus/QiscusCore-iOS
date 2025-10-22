@@ -29,4 +29,6 @@ internal enum HTTPTask {
         bodyEncoding: ParameterEncoding,
         urlParameters: Parameters?,
         additionHeaders: HTTPHeaders?)
+    
+    case requestCompositeParameters(bodyParameters: Parameters?, bodyEncoding: ParameterEncoding, urlParameters: Parameters?)
 }
