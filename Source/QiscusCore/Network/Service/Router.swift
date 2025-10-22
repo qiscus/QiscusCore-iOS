@@ -1,4 +1,5 @@
 import Foundation
+import SwiftyJSON
 
 internal typealias NetworkRouterCompletion = (_ data: Data?, _ response: URLResponse?, _ error: Error?) -> ()
 
@@ -162,13 +163,13 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
                 if httpResponse.statusCode == 401 || httpResponse.statusCode == 403 {
                     isAuthError = true
                     
-                    if let d = data,
-                       let jsonAny = try? JSONSerialization.jsonObject(with: d),
-                       let json = jsonAny as? [String: Any],
-                       let err = json["error"] as? [String: Any],
-                       let msg = err["message"] as? String {
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
                         
-                        let lowerMsg = msg.lowercased()
+                        let lowerMsg = errorMessage.lowercased()
                         if lowerMsg == "unauthorized. token is expired" {
                             isTokenExpired = true
                         }
@@ -180,6 +181,8 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
                                 }
                             }
                         }
+                    } catch {
+                        QiscusLogger.debugPrint("[Router] 🕒 error parsing json \(statusCode)")
                     }
                 }
 
@@ -255,12 +258,13 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
 
                 if let delegate = QiscusCore.delegate {
                     if statusCode == 403 {
-                        if let d = data,
-                           let jsonAny = try? JSONSerialization.jsonObject(with: d),
-                           let json = jsonAny as? [String: Any],
-                           let err = json["error"] as? [String: Any],
-                           let msg = err["message"] as? String {
-                            let lowerMsg = msg.lowercased()
+                        do {
+                            let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                            let data = JSON(jsondata)
+                            let status = data["status"].int ?? 0
+                            let errorMessage = data["error"]["message"].string ?? ""
+                            
+                            let lowerMsg = errorMessage.lowercased()
                             if lowerMsg == "unauthorized. token is expired" {
                                 DispatchQueue.main.async {
                                     delegate.onRefreshToken(event: .isTokenExpired)
@@ -270,6 +274,8 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
                                     delegate.onRefreshToken(event: .isUnauthorized)
                                 }
                             }
+                        } catch {
+                            QiscusLogger.debugPrint("[Router] 🕒 error parsing json \(statusCode)")
                         }
                     }
                 }
