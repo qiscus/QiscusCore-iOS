@@ -161,8 +161,10 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
 
                 if httpResponse.statusCode == 401 || httpResponse.statusCode == 403 {
                     isAuthError = true
+                    
                     if let d = data,
-                       let json = try? JSONSerialization.jsonObject(with: d) as? [String: Any],
+                       let jsonAny = try? JSONSerialization.jsonObject(with: d),
+                       let json = jsonAny as? [String: Any],
                        let err = json["error"] as? [String: Any],
                        let msg = err["message"] as? String {
                         
@@ -254,10 +256,10 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
                 if let delegate = QiscusCore.delegate {
                     if statusCode == 403 {
                         if let d = data,
-                           let json = try? JSONSerialization.jsonObject(with: d) as? [String: Any],
+                           let jsonAny = try? JSONSerialization.jsonObject(with: d),
+                           let json = jsonAny as? [String: Any],
                            let err = json["error"] as? [String: Any],
                            let msg = err["message"] as? String {
-                            
                             let lowerMsg = msg.lowercased()
                             if lowerMsg == "unauthorized. token is expired" {
                                 DispatchQueue.main.async {
