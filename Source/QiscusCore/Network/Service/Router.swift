@@ -71,17 +71,6 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
             }
             
             
-            if self.tokenIsInvalid {
-                QiscusLogger.debugPrint("[Router] 🚫 Token is invalid, reject request \(route.path)")
-                DispatchQueue.main.async {
-                    let error = NSError(domain: "com.qiscus.router", code: 401, userInfo: [
-                        NSLocalizedDescriptionKey: "Token is invalid. Please login again."
-                    ])
-                    completion(nil, nil, error)
-                }
-                return
-            }
-            
             if QiscusCore.enableRefreshToken && QiscusCore.enableAutoRefreshToken {
                 self.performRequest(route, retryCount: 0, completion: completion)
             } else {
@@ -114,12 +103,20 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
 
             QiscusLogger.debugPrint("[Router] 🔁 Config finished loading, retry \(queued.count) request")
             let group = DispatchGroup()
+
             for req in queued {
                 group.enter()
+                var hasLeft = false
+
                 DispatchQueue.global().asyncAfter(deadline: .now() + 0.3) {
                     self.performRequest(req.route, retryCount: req.retryCount) { data, response, error in
                         req.completion(data, response, error)
-                        group.leave()
+                        if !hasLeft {
+                            hasLeft = true
+                            group.leave()
+                        } else {
+                            QiscusLogger.debugPrint("[Router] ⚠️ Duplicate leave avoided for \(req.route.path)")
+                        }
                     }
                 }
             }
@@ -295,16 +292,6 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
 
     private func enqueueRequest(route: EndPointType, retryCount: Int, completion: @escaping NetworkRouterCompletion) {
         queue.sync {
-            if self.tokenIsInvalid {
-                QiscusLogger.debugPrint("[Router] 🚫 Token is invalid, reject request \(route.path)")
-                DispatchQueue.main.async {
-                    let error = NSError(domain: "com.qiscus.router", code: 401, userInfo: [
-                        NSLocalizedDescriptionKey: "Token is invalid. Please login again."
-                    ])
-                    completion(nil, nil, error)
-                }
-                return
-            }
 
             let requestBox = QueuedRequestBox(route: route, retryCount: retryCount, completion: completion)
             self.queuedRequests.append(requestBox)
@@ -366,11 +353,18 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
                     for req in queued {
                         let route = req.route
                         group.enter()
+                        var hasLeft = false
                         QiscusLogger.debugPrint("[Router] 🔁 Retrying queued request: \(route.path) retryCount \(req.retryCount + 1)")
+                        
                         DispatchQueue.global().asyncAfter(deadline: .now() + 0.3) {
                             self.performRequest(route, retryCount: req.retryCount + 1) { data, response, error in
                                 req.completion(data, response, error)
-                                group.leave()
+                                if !hasLeft {
+                                    hasLeft = true
+                                    group.leave()
+                                } else {
+                                    QiscusLogger.debugPrint("[Router] ⚠️ Duplicate leave avoided for \(route.path)")
+                                }
                             }
                         }
                     }
