@@ -92,6 +92,7 @@ internal enum APIClient {
     case appConfig
     case refreshUserToken(userId : String, refreshToken: String)
     case logout(userId : String, token : String)
+    case myMQTT //
 }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 extension APIClient : EndPoint {
@@ -133,12 +134,15 @@ extension APIClient : EndPoint {
             return "/refresh_user_token"
         case .logout( _, _):
             return "/logout"
+        case .myMQTT:
+            //dummy base url need to update
+            return "/mqtt"
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
-        case .sync, .syncEvent, .unread, .myProfile, .appConfig:
+        case .sync, .syncEvent, .unread, .myProfile, .appConfig, .myMQTT:
             return .get
         case .search, .registerDeviceToken, .removeDeviceToken, .loginRegister, .loginRegisterJWT, .upload, .nonce, .eventReport, .refreshUserToken, .logout:
             return .post
@@ -262,6 +266,8 @@ extension APIClient : EndPoint {
                 "token"         : token
                 ] as [String : Any]
             return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
+        case .myMQTT :
+               return .requestParameters(bodyParameters: nil, bodyEncoding: .jsonUrlEncoding, urlParameters: nil)
         }
     }
 }

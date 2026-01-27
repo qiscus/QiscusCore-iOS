@@ -1,4 +1,5 @@
 {
+  "originHash" : "f5419004f55128563b69b7463d76f871240a5436a8e55023ddb128456ee3147f",
   "pins" : [
     {
       "identity" : "cocoamqtt",
@@ -23,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/qiscus/QiscusRealtime-iOS.git",
       "state" : {
-        "revision" : "fb6cb211a00047ecfa454fa48a1b7241c2a011f1",
-        "version" : "1.6.1"
+        "revision" : "3f196b68cf26607a584fe3cfaeff6a31f52b2c72",
+        "version" : "1.9.0"
       }
     },
     {
@@ -55,5 +56,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

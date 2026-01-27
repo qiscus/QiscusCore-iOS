@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		207C8E502F289B3B00428F63 /* MQTTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207C8E4F2F289B3B00428F63 /* MQTTModel.swift */; };
 		208EBBDF28BC6116002DBF9D /* BundleExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208EBBDE28BC6116002DBF9D /* BundleExtention.swift */; };
 		20D4B75C2948616800E6D475 /* QiscusRealtime in Frameworks */ = {isa = PBXBuildFile; productRef = 20D4B75B2948616800E6D475 /* QiscusRealtime */; };
 		20E002962A13E47700B99D7B /* QiscusRealtime.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E002912A13E47600B99D7B /* QiscusRealtime.xcframework */; };
@@ -166,6 +167,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		207C8E4F2F289B3B00428F63 /* MQTTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTModel.swift; sourceTree = "<group>"; };
 		208EBBDE28BC6116002DBF9D /* BundleExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtention.swift; sourceTree = "<group>"; };
 		20E002912A13E47600B99D7B /* QiscusRealtime.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = QiscusRealtime.xcframework; path = Carthage/Build/QiscusRealtime.xcframework; sourceTree = "<group>"; };
 		20E002922A13E47600B99D7B /* Starscream.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Starscream.xcframework; path = Carthage/Build/Starscream.xcframework; sourceTree = "<group>"; };
@@ -476,6 +478,7 @@
 		OBJ_27 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				207C8E4F2F289B3B00428F63 /* MQTTModel.swift */,
 				OBJ_28 /* AppConfigModel.swift */,
 				OBJ_29 /* Base */,
 				OBJ_31 /* CommentInfo.swift */,
@@ -1027,6 +1030,7 @@
 				OBJ_244 /* ParameterEncoding.swift in Sources */,
 				OBJ_245 /* NetworkManager.swift in Sources */,
 				OBJ_246 /* NetworkMessage.swift in Sources */,
+				207C8E502F289B3B00428F63 /* MQTTModel.swift in Sources */,
 				OBJ_247 /* NetworkRoom.swift in Sources */,
 				OBJ_248 /* NetworkUpload.swift in Sources */,
 				OBJ_249 /* DownloadService.swift in Sources */,
@@ -1749,7 +1753,7 @@
 			repositoryURL = "https://github.com/qiscus/QiscusRealtime-iOS.git";
 			requirement = {
 				kind = exactVersion;
-				version = 1.6.1;
+				version = 1.9.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

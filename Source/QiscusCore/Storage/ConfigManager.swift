@@ -44,23 +44,34 @@ public class ConfigManager : NSObject {
         }
     }
     
-    var user    : UserModel? {
+    private let userQueue = DispatchQueue(label: "com.qiscus.sdk.core", attributes: .concurrent)
+    
+    var user: UserModel? {
         get {
-            if let user = userCache {
-                self.eventdelegate?.onDebugEvent("InitQiscus-isLogined()", message: "finish check QiscusCore.isLogined from userCache \(QiscusLogger.getDateTime())")
-                self.eventdelegate = nil // just firstTime when call QiscusCoreWithCustomeServer()
-                return user
-            }else {
-                return loadUser()
+            return userQueue.sync {
+                if let cached = userCache {
+                    return cached // struct otomatis copy
+                }
+                if let loaded = loadUser() {
+                    userCache = loaded
+                    return loaded
+                }
+                return nil
             }
         }
         set {
-            if let value = newValue {
-                self.userCache = nil
-                saveUser(value)
+            userQueue.async(flags: .barrier) {
+                guard let newUser = newValue else {
+                    self.userCache = nil
+                    return
+                }
+                self.userCache = newUser // struct value copy
+                self.saveUser(newUser)
             }
         }
     }
+
+    
     var syncEventId : String {
         get {
             return self.getSyncEventId()

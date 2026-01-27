@@ -136,11 +136,12 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
         do {
             let request = try buildRequest(from: route)
             QiscusLogger.debugPrint("[Router] ▶️ Request: \(route.path) retryCount: \(retryCount)")
-
+            QiscusLogger.networkLogger(request: request)
             var task: URLSessionTask!
             task = session.dataTask(with: request) { [weak self] data, response, error in
                 guard let self = self else { return }
 
+               
                 self.queue.async {
                     self.tasks.removeAll { $0 == task }
                 }
@@ -148,6 +149,8 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
                 let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
                 QiscusLogger.debugPrint("[Router] ⬅️ Response: \(route.path) status: \(statusCode)")
 
+                QiscusLogger.networkLogger(request: request, response: data)
+                
                 guard let httpResponse = response as? HTTPURLResponse else {
                     DispatchQueue.main.async { completion(data, response, error) }
                     return
@@ -245,6 +248,8 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
         do {
             let request = try buildRequest(from: route)
             QiscusLogger.debugPrint("[Router] ▶️ Request: \(route.path)")
+            
+            QiscusLogger.networkLogger(request: request)
 
             var task: URLSessionTask!
             task = session.dataTask(with: request) { [weak self] data, response, error in
@@ -252,7 +257,8 @@ class Router<EndPointType: EndPoint>: NetworkRouter {
                 
                 let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
                 QiscusLogger.debugPrint("[Router] ⬅️ Response: \(route.path) status: \(statusCode)")
-
+                QiscusLogger.networkLogger(request: request, response: data)
+                
                 if let delegate = QiscusCore.delegate {
                     if statusCode == 403 {
                         do {

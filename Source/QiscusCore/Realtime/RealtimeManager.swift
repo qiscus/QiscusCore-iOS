@@ -67,18 +67,30 @@ class RealtimeManager {
             return
         }
         
+        //active this code if api is ready
+//        QiscusCore.network.getMqtt { mqttData in
+//            self.subsribeAndConnect(clientRealtime: c, usernameSDK: username, passwordSDK: password, usernameMQTT: mqttData.usernameMQTT, passwordMQTT: mqttData.passwordMQTT)
+//        } onError: { error in
+            self.subsribeAndConnect(clientRealtime: c, usernameSDK: username, passwordSDK: password, usernameMQTT:"", passwordMQTT: "")
+//        }
+
+        
+       
+        
+    }
+    
+    private func subsribeAndConnect(clientRealtime : QiscusRealtime, usernameSDK : String, passwordSDK : String, usernameMQTT : String, passwordMQTT : String){
         if QiscusCore.enableRealtime == true{
-            self.pendingSubscribeTopic.append(.comment(token: password))
-            self.pendingSubscribeTopic.append(.updateComment(token: password))
-            self.pendingSubscribeTopic.append(.notification(token: password))
+            self.pendingSubscribeTopic.append(.comment(token: passwordSDK))
+            self.pendingSubscribeTopic.append(.updateComment(token: passwordSDK))
+            self.pendingSubscribeTopic.append(.notification(token: passwordSDK))
             
-            if  ConfigManager.shared.isEnableDisableRealtimeManually == true && c.isConnect == false {
-                c.connect(username: username, password: password, delegate: self)
+            if  ConfigManager.shared.isEnableDisableRealtimeManually == true && clientRealtime.isConnect == false {
+                clientRealtime.connect(usernameSDK: usernameSDK, passwordSDK: passwordSDK, usernameMQTT: usernameMQTT, passwordMQTT: passwordMQTT, delegate: self)
             }
         } else {
             ConfigManager.shared.isConnectedMqtt = false
         }
-        
     }
     
     func unsubcribeCommentUpdateComemntNotification(){

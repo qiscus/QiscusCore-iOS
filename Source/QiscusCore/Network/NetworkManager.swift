@@ -1021,4 +1021,42 @@ extension NetworkManager : URLSessionDownloadDelegate {
         }
     }
     
+    /// get mqtt data
+    ///
+    /// - Parameter completion: @escaping when success get user profile, return Optional(UserModel) and Optional(String error)
+    func getMqtt(onSuccess: @escaping (MQTTModel) -> Void, onError: @escaping (QError) -> Void) {
+        clientRouter.request(.myMQTT) { (data, response, error) in
+            if error != nil {
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response, data: data)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        onError(QError(message:NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let mqttData = UserApiResponse.getMQTTData(from: response)
+                    onSuccess(mqttData)
+                   
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        
+                        let data = JSON(jsondata)
+                        let status = data["status"].int ?? 0
+                        let errorMessage = data["error"]["message"].string ?? ""
+                        
+                        onError(QError(message: errorMessage))
+                    } catch {
+                        onError(QError(message: errorMessage))
+                    }
+                }
+            }
+        }
+    }
+    
 }

@@ -55,7 +55,8 @@ class QiscusLogger {
             logOutput += "\n \(NSString(data: body, encoding: String.Encoding.utf8.rawValue) ?? "")"
         }
         
-        print(logOutput)
+        QiscusLogger.debugPrint(logOutput)
+        //print(logOutput)
     }
     
     static func networkLogger(request: URLRequest, response: Data?) {
@@ -75,7 +76,8 @@ class QiscusLogger {
         URL: \(urlAsString) \n
         Response: \(responseMessage)
         """
-        print(logOutput)
+        //print(logOutput)
+        QiscusLogger.debugPrint(logOutput)
     }
     
     static func getDateTime() -> String{
