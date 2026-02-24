@@ -99,66 +99,78 @@ class PresistentStore {
     }()
     
     // MARK: Core Data Saving support
-    static func saveContext () {
-        // persistentContainer.performBackgroundTask { (_context) in
-            context.perform {
-                do {
-                    if context.hasChanges {
-                        try context.save()
-                    }else {
-                        // QiscusLogger.debugPrint("no changes db")
+    static func saveContext() {
+        context.perform {
+            guard context.hasChanges else {
+                return
+            }
+            
+            do {
+                // ✅ Process pending changes
+                context.processPendingChanges()
+                
+                // ✅ Save
+                try context.save()
+                
+            } catch let error as NSError {
+                QiscusLogger.errorPrint("❌ Save error: \(error)")
+                QiscusLogger.errorPrint("Error domain: \(error.domain)")
+                QiscusLogger.errorPrint("Error code: \(error.code)")
+                
+                // ✅ Rollback
+                context.rollback()
+                
+                // ✅ Log detailed errors
+                if let detailedErrors = error.userInfo[NSDetailedErrorsKey] as? [NSError] {
+                    for detailError in detailedErrors {
+                        QiscusLogger.errorPrint("Detailed error: \(detailError)")
                     }
-                } catch {
-                    let saveError = error as NSError
-                    QiscusLogger.errorPrint("Unable to Save Changes of Managed Object Context")
-                    QiscusLogger.errorPrint("\(saveError), \(saveError.localizedDescription)")
                 }
             }
-        // }
+        }
     }
     
     static func clear() {
-        do {
-            // Pastikan tidak ada perubahan pending di context
-            if context.hasChanges {
-                context.reset()
-            }
-
-            if #available(iOS 10.0, *) {
-                for entity in persistentContainer.managedObjectModel.entities {
-                    guard let name = entity.name else { continue }
-
-                    let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: name)
-                    let request = NSBatchDeleteRequest(fetchRequest: fetch)
-                    request.resultType = .resultTypeObjectIDs
-
-                    // Eksekusi batch delete
-                    let result = try context.execute(request) as? NSBatchDeleteResult
-                    if let objectIDs = result?.result as? [NSManagedObjectID] {
-                        let changes = [NSDeletedObjectsKey: objectIDs]
-                        // Merge supaya context tetap konsisten
-                        NSManagedObjectContext.mergeChanges(
-                            fromRemoteContextSave: changes,
-                            into: [context]
-                        )
+        let backgroundContext = PresistentStore.persistentContainer.newBackgroundContext()
+            backgroundContext.perform {
+                do {
+                    // ✅ 1. Fetch semua Room (akan auto-delete Comment via cascade jika di-set di model)
+                    let roomFetch: NSFetchRequest<Room> = Room.fetchRequest()
+                    let rooms = try backgroundContext.fetch(roomFetch)
+                    
+                    for room in rooms {
+                        backgroundContext.delete(room)
                     }
-                }
-            } else {
-                // Fallback iOS < 10: manual fetch + delete
-                for entity in persistentContainer.managedObjectModel.entities {
-                    guard let name = entity.name else { continue }
-                    let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: name)
-                    let objects = try context.fetch(fetch) as? [NSManagedObject] ?? []
-                    for obj in objects {
-                        context.delete(obj)
+                    
+                    // ✅ 2. Fetch dan delete Member
+                    let memberFetch: NSFetchRequest<Member> = Member.fetchRequest()
+                    let members = try backgroundContext.fetch(memberFetch)
+                    
+                    for member in members {
+                        backgroundContext.delete(member)
                     }
+                    
+                    // ✅ 3. Fetch dan delete remaining Comment (jika ada)
+                    let commentFetch: NSFetchRequest<Comment> = Comment.fetchRequest()
+                    let comments = try backgroundContext.fetch(commentFetch)
+                    
+                    for comment in comments {
+                        backgroundContext.delete(comment)
+                    }
+                    
+                    // ✅ 4. Save
+                    try backgroundContext.save()
+                    
+                    // ✅ 5. Refresh view context
+                    DispatchQueue.main.async {
+                        PresistentStore.persistentContainer.viewContext.refreshAllObjects()
+                        QiscusLogger.debugPrint("✅ All data cleared successfully")
+                    }
+                    
+                } catch {
+                    QiscusLogger.errorPrint("❌ Failed to clear data: \(error)")
+                    backgroundContext.rollback()
                 }
-                try context.save()
             }
-
-        } catch {
-            let saveError = error as NSError
-            QiscusLogger.errorPrint("❌ Unable to clear DB: \(saveError), \(saveError.localizedDescription)")
-        }
     }
 }

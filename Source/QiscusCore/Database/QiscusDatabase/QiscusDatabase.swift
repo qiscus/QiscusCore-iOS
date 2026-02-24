@@ -36,24 +36,34 @@ class QiscusDatabase {
                 deleteRequest.resultType = .resultTypeObjectIDs
 
                 do {
-                    // Eksekusi batch delete
+                    // ✅ PERBAIKAN 1: Execute batch delete
                     let result = try backgroundContext.execute(deleteRequest) as? NSBatchDeleteResult
 
-                    // Ambil object IDs yang terhapus
-                    if let objectIDs = result?.result as? [NSManagedObjectID] {
-                        let changes: [AnyHashable: Any] = [NSDeletedObjectsKey: objectIDs]
-
-                        // Merge perubahan ke viewContext agar sinkron
-                        NSManagedObjectContext.mergeChanges(
-                            fromRemoteContextSave: changes,
-                            into: [PresistentStore.persistentContainer.viewContext]
-                        )
-                    }
-
+                    // ✅ PERBAIKAN 2: Save background context dulu
                     try backgroundContext.save()
+                    
+                    // ✅ PERBAIKAN 3: Merge ke main thread dengan delay
+                    if let objectIDs = result?.result as? [NSManagedObjectID] {
+                        DispatchQueue.main.async {
+                            let changes: [AnyHashable: Any] = [NSDeletedObjectsKey: objectIDs]
+                            
+                            // ✅ PERBAIKAN 4: Merge ke view context
+                            NSManagedObjectContext.mergeChanges(
+                                fromRemoteContextSave: changes,
+                                into: [PresistentStore.persistentContainer.viewContext]
+                            )
+                            
+                            // ✅ PERBAIKAN 5: Refresh untuk clear fault objects
+                            PresistentStore.persistentContainer.viewContext.refreshAllObjects()
+                        }
+                    }
+                    
+                    QiscusLogger.debugPrint("✅ Batch delete completed")
+                    
                 } catch {
                     QiscusLogger.errorPrint("❌ Failed to clear Comment data")
                     QiscusLogger.errorPrint("\(error.localizedDescription)")
+                    backgroundContext.rollback()
                 }
             }
         }
