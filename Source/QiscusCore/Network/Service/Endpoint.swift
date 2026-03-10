@@ -136,7 +136,7 @@ extension APIClient : EndPoint {
             return "/logout"
         case .myMQTT:
             //dummy base url need to update
-            return "/mqtt"
+            return "/mqtt_config"
         }
     }
     

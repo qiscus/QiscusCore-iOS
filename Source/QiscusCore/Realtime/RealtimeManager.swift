@@ -67,16 +67,18 @@ class RealtimeManager {
             return
         }
         
-        //active this code if api is ready
-//        QiscusCore.network.getMqtt { mqttData in
-//            self.subsribeAndConnect(clientRealtime: c, usernameSDK: username, passwordSDK: password, usernameMQTT: mqttData.usernameMQTT, passwordMQTT: mqttData.passwordMQTT)
-//        } onError: { error in
-            self.subsribeAndConnect(clientRealtime: c, usernameSDK: username, passwordSDK: password, usernameMQTT:"", passwordMQTT: "")
-//        }
-
-        
-       
-        
+        if QiscusCore.defaultUserMqtt.isEmpty == true || QiscusCore.defaultPassMqtt.isEmpty == true {
+            //active this code if api is ready
+            QiscusCore.network.getMqtt { mqttData in
+                QiscusCore.defaultUserMqtt = mqttData.usernameMQTT
+                QiscusCore.defaultPassMqtt = mqttData.passwordMQTT
+                self.subsribeAndConnect(clientRealtime: c, usernameSDK: username, passwordSDK: password, usernameMQTT: mqttData.usernameMQTT, passwordMQTT: mqttData.passwordMQTT)
+            } onError: { error in
+                self.subsribeAndConnect(clientRealtime: c, usernameSDK: username, passwordSDK: password, usernameMQTT: QiscusCore.defaultUserMqtt, passwordMQTT: QiscusCore.defaultPassMqtt)
+            }
+        }else{
+            self.subsribeAndConnect(clientRealtime: c, usernameSDK: username, passwordSDK: password, usernameMQTT: QiscusCore.defaultUserMqtt, passwordMQTT: QiscusCore.defaultPassMqtt)
+        }
     }
     
     private func subsribeAndConnect(clientRealtime : QiscusRealtime, usernameSDK : String, passwordSDK : String, usernameMQTT : String, passwordMQTT : String){

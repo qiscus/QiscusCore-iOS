@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "1.14.14"
+    public static let qiscusCoreVersionNumber:String = "1.14.15"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -24,6 +24,8 @@ public class QiscusCore: NSObject {
     
     public static var defaultBrokerUrl : String  = "https://realtime-lb.qiscus.com"
     public static var defaultRealtimeURL: String = "realtime-jogja.qiscus.com"
+    public static var defaultUserMqtt: String = ""
+    public static var defaultPassMqtt: String = ""
     
     public static let shared    : QiscusCore            = QiscusCore()
     private static var config   : ConfigManager         = ConfigManager.shared
@@ -738,7 +740,11 @@ public class QiscusCore: NSObject {
         // clear config
         ConfigManager.shared.clearConfig()
         // realtime disconnect
+        QiscusCore.defaultUserMqtt = ""
+        QiscusCore.defaultPassMqtt = ""
         QiscusCore.realtime.disconnect()
+        
+        
     }
     
     public static func openRealtimeConnection() -> Bool{

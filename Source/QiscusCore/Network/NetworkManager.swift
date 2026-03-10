@@ -1023,7 +1023,7 @@ extension NetworkManager : URLSessionDownloadDelegate {
     
     /// get mqtt data
     ///
-    /// - Parameter completion: @escaping when success get user profile, return Optional(UserModel) and Optional(String error)
+    /// - Parameter completion: @escaping when success get user profile, return Optional(MQTTModel) and Optional(String error)
     func getMqtt(onSuccess: @escaping (MQTTModel) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.myMQTT) { (data, response, error) in
             if error != nil {

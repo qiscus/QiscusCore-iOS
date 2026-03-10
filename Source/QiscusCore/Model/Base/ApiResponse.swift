@@ -117,8 +117,7 @@ class UserApiResponse {
     }
     
     static func getMQTTData(from json: JSON) -> MQTTModel {
-        let user = json["mqtt"]
-        return MQTTModel(json: user)
+        return MQTTModel(json: json)
     }
 }
 
