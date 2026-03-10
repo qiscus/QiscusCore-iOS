@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2042F61E2F5F7FCB005972FE /* MQTTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2042F61D2F5F7FCB005972FE /* MQTTModel.swift */; };
 		207BB4B62DE044A500712B6B /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207BB4B52DE044A500712B6B /* Package.swift */; };
 		20E266E02DE06C9C002B38AC /* Package.resolved in Resources */ = {isa = PBXBuildFile; fileRef = 20E266DF2DE06C9C002B38AC /* Package.resolved */; };
 		20E4BA3B2BBBA846009C437A /* SwiftyJSON.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20F184FD28184377008A1F6B /* SwiftyJSON.xcframework */; };
@@ -117,6 +118,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2042F61D2F5F7FCB005972FE /* MQTTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTModel.swift; sourceTree = "<group>"; };
 		207BB4B52DE044A500712B6B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		20DE56F22817DDC5008B3FDB /* CocoaAsyncSocket.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CocoaAsyncSocket.xcframework; path = Carthage/Build/CocoaAsyncSocket.xcframework; sourceTree = "<group>"; };
 		20DE56F32817DDC5008B3FDB /* CocoaMQTT.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CocoaMQTT.xcframework; path = Carthage/Build/CocoaMQTT.xcframework; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 		3D55935A20FC89CD00AE35E5 = {
 			isa = PBXGroup;
 			children = (
+				2042F61D2F5F7FCB005972FE /* MQTTModel.swift */,
 				20E266DF2DE06C9C002B38AC /* Package.resolved */,
 				207BB4B52DE044A500712B6B /* Package.swift */,
 				20E4BA312BBA8530009C437A /* PrivacyInfo.xcprivacy */,
@@ -532,6 +535,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2042F61E2F5F7FCB005972FE /* MQTTModel.swift in Sources */,
 				3D1AC0C324BEDAC10040F736 /* UIDeviceInfo.swift in Sources */,
 				3D1AC08C24BEDA900040F736 /* NetworkUpload.swift in Sources */,
 				3D1AC08D24BEDA900040F736 /* NetworkManager.swift in Sources */,

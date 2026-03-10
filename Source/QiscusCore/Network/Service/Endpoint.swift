@@ -34,6 +34,7 @@ internal enum APIClient {
     case upload
     case eventReport(moduleName: String, event: String, message: String)
     case appConfig
+    case myMQTT //
 }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 extension APIClient : EndPoint {
@@ -68,12 +69,15 @@ extension APIClient : EndPoint {
             return "/event_report"
         case .appConfig:
             return "/config"
+        case .myMQTT:
+            //dummy base url need to update
+            return "/mqtt_config"
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
-        case .sync, .syncEvent, .unread, .myProfile, .appConfig:
+        case .sync, .syncEvent, .unread, .myProfile, .appConfig, .myMQTT:
             return .get
         case .search, .registerDeviceToken, .removeDeviceToken, .loginRegister, .loginRegisterJWT, .upload, .nonce, .eventReport:
             return .post
@@ -179,6 +183,9 @@ extension APIClient : EndPoint {
             
         case .appConfig :
             return .requestParameters(bodyParameters: nil, bodyEncoding: .jsonUrlEncoding, urlParameters: nil)
+            
+        case .myMQTT :
+               return .requestParameters(bodyParameters: nil, bodyEncoding: .jsonUrlEncoding, urlParameters: nil)
         }
     }
 }

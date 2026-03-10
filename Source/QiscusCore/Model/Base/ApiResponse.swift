@@ -113,6 +113,10 @@ class UserApiResponse {
         let meta = json["meta"]
         return Meta(json: meta)
     }
+    
+    static func getMQTTData(from json: JSON) -> MQTTModel {
+        return MQTTModel(json: json)
+    }
 }
 
 class RoomApiResponse {

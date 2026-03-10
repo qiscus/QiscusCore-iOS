@@ -66,17 +66,34 @@ public class RealtimeManager {
             return
         }
         
-        if self.qiscusCore?.enableRealtime == true{
-            self.pendingSubscribeTopic.append(.comment(token: password))
-            self.pendingSubscribeTopic.append(.updateComment(token: password))
-            self.pendingSubscribeTopic.append(.notification(token: password))
-            
-            c.connect(username: username, password: password, delegate: self)
-        } else {
-            self.qiscusCore?.config.isConnectedMqtt = false
+        if self.qiscusCore?.defaultUserMqtt.isEmpty == true || self.qiscusCore?.defaultPassMqtt.isEmpty == true {
+            //active this code if api is ready
+            self.qiscusCore?.network.getMqtt { mqttData in
+                self.qiscusCore?.defaultUserMqtt = mqttData.usernameMQTT
+                self.qiscusCore?.defaultPassMqtt = mqttData.passwordMQTT
+                self.subsribeAndConnect(clientRealtime: c, usernameSDK: username, passwordSDK: password, usernameMQTT: mqttData.usernameMQTT, passwordMQTT: mqttData.passwordMQTT)
+            } onError: { error in
+                self.subsribeAndConnect(clientRealtime: c, usernameSDK: username, passwordSDK: password, usernameMQTT: self.qiscusCore?.defaultUserMqtt ?? "", passwordMQTT: self.qiscusCore?.defaultPassMqtt ?? "")
+            }
+        }else{
+            self.subsribeAndConnect(clientRealtime: c, usernameSDK: username, passwordSDK: password, usernameMQTT: self.qiscusCore?.defaultUserMqtt ?? "", passwordMQTT: self.qiscusCore?.defaultPassMqtt ?? "")
         }
 
         
+    }
+    
+    private func subsribeAndConnect(clientRealtime : QiscusRealtime, usernameSDK : String, passwordSDK : String, usernameMQTT : String, passwordMQTT : String){
+        if self.qiscusCore?.enableRealtime == true{
+            self.pendingSubscribeTopic.append(.comment(token: passwordSDK))
+            self.pendingSubscribeTopic.append(.updateComment(token: passwordSDK))
+            self.pendingSubscribeTopic.append(.notification(token: passwordSDK))
+            
+            if  self.qiscusCore?.config.isEnableDisableRealtimeManually == true && clientRealtime.isConnect == false {
+                clientRealtime.connect(usernameSDK: usernameSDK, passwordSDK: passwordSDK, usernameMQTT: usernameMQTT, passwordMQTT: passwordMQTT, delegate: self)
+            }
+        } else {
+            self.qiscusCore?.config.isConnectedMqtt = false
+        }
     }
     
     /// Subscribe comment(deliverd and read), typing by member in the room, and online status

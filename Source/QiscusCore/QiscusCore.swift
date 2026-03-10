@@ -11,7 +11,7 @@ import QiscusRealtime
 import CoreData
 import UIKit
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "3.0.0-beta.22"
+    public static let qiscusCoreVersionNumber:String = "3.0.0-beta.23"
     class var bundle:Bundle{
         get{
             #if SWIFT_PACKAGE
@@ -34,6 +34,8 @@ public class QiscusCore: NSObject {
     public var appID : String = ""
     public var enableEventReport : Bool = false
     public var enableRealtime : Bool = true
+    public var defaultUserMqtt: String = ""
+    public var defaultPassMqtt: String = ""
     
     //MQTT
     var client : QiscusRealtime? = nil
@@ -731,6 +733,8 @@ public class QiscusCore: NSObject {
         // clear config
         self.config.clearConfig()
         // realtime disconnect
+        self.defaultUserMqtt = ""
+        self.defaultPassMqtt = ""
         self.realtime.disconnect()
     }
     
