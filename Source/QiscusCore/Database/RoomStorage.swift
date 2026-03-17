@@ -10,6 +10,7 @@
 //  get rooms from local storage
 
 import Foundation
+import CoreData
 
 class RoomStorage {
     private var data : [RoomModel] = [RoomModel]()
@@ -246,28 +247,83 @@ extension RoomStorage {
     ///   - data: db model, if exist just update falue
     /// - Returns: db object
     internal func map(_ core: RoomModel, data: Room? = nil) -> Room {
-        var result : Room
-        if let _result = data {
-            result = _result // Update data
-        }else {
-            result = Room.generate() // prepare create new
+        let context = PresistentStore.context
+        
+        // ✅ Get or create room OUTSIDE closure
+        let room: Room
+        if let existingRoom = data {
+            room = existingRoom
+        } else {
+            room = Room.generate()
         }
-        result.id            = core.id
-        result.uniqueId      = core.uniqueId
-        result.unreadCount   = core.unreadCount
-        result.name          = core.name
-        result.avatarUrl     = core.avatarUrl?.absoluteString ?? ""
-        result.options       = core.options
-        result.lastCommentId    = core.lastComment?.id
-        result.type          = core.type.rawValue
-        // participants
-        if let participants = core.participants {
-            for p in participants {
-                let member = QiscusCore.database.member.map(p)
-                result.addToMembers(member)
+        
+        // ✅ Update properties INSIDE closure
+        context.performAndWait {
+            // Validate room
+            guard !room.isDeleted, room.managedObjectContext != nil else {
+                QiscusLogger.errorPrint("❌ Room is invalid")
+                return
+            }
+            
+            // Refresh if existing
+            if data != nil {
+                context.refresh(room, mergeChanges: true)
+            }
+            
+            // Map basic properties
+            room.id = core.id
+            room.uniqueId = core.uniqueId
+            room.unreadCount = core.unreadCount
+            room.name = core.name
+            room.avatarUrl = core.avatarUrl?.absoluteString ?? ""
+            room.options = core.options
+            room.lastCommentId = core.lastComment?.id
+            room.type = core.type.rawValue
+            
+            // Handle relationship safely
+            updateMembers(for: room, participants: core.participants, in: context)
+            
+            // Process pending changes
+            context.processPendingChanges()
+        }
+        
+        return room
+    }
+    
+    // ✅ Separate method untuk update members relationship
+    private func updateMembers(for room: Room, participants: [MemberModel]?, in context: NSManagedObjectContext) {
+        guard let participants = participants, !participants.isEmpty else {
+            return
+        }
+        
+        // Get existing members
+        let existingMembers = room.members?.allObjects as? [Member] ?? []
+        
+        // Build new members set
+        var newMembers = Set<Member>()
+        
+        for participant in participants {
+            // Check if member already exists
+            if let existingMember = existingMembers.first(where: { $0.email == participant.email }) {
+                // Validate before reusing
+                if !existingMember.isDeleted && existingMember.managedObjectContext != nil {
+                    // Update existing member
+                    QiscusCore.database.member.map(participant, data: existingMember)
+                    newMembers.insert(existingMember)
+                } else {
+                    // Create new if existing is invalid
+                    let newMember = QiscusCore.database.member.map(participant)
+                    newMembers.insert(newMember)
+                }
+            } else {
+                // Create new member
+                let newMember = QiscusCore.database.member.map(participant)
+                newMembers.insert(newMember)
             }
         }
-        return result
+        
+        // ✅ Set relationship ONCE
+        room.members = NSSet(set: newMembers)
     }
     
     private func map(_ room: Room) -> RoomModel {

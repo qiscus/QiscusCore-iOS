@@ -116,28 +116,49 @@ extension MemberDatabase {
     ///
     /// - Parameters:
     ///   - core: core model
-    ///   - data: db model, if exist just update falue
+    ///   - data: db model, if exist just update value
     /// - Returns: db object
     internal func map(_ core: MemberModel, data: Member? = nil) -> Member {
-        var result : Member
-        if let _result = data {
-            result = _result // Update data
-        }else {
-            result = Member.generate() // prepare create new
+        let context = PresistentStore.context
+        
+        // ✅ Get or create member OUTSIDE closure
+        let member: Member
+        if let existingMember = data {
+            member = existingMember
+        } else {
+            member = Member.generate()
         }
-        //QiscusThread.background {
-            result.id           = core.id
-            result.avatarUrl    = core.avatarUrl?.absoluteString
-            result.email        = core.email
-            result.username     = core.username
-            result.lastCommentReadId        = Int64(core.lastCommentReadId)
-            result.lastCommentReceivedId    = Int64(core.lastCommentReceivedId)
+        
+        // ✅ Update properties INSIDE closure
+        context.performAndWait {
+            // Validate member
+            guard !member.isDeleted, member.managedObjectContext != nil else {
+                QiscusLogger.errorPrint("❌ Member is invalid")
+                return
+            }
+            
+            // Refresh if existing
+            if data != nil {
+                context.refresh(member, mergeChanges: true)
+            }
+            
+            // Map properties
+            member.id = core.id
+            member.avatarUrl = core.avatarUrl?.absoluteString
+            member.email = core.email
+            member.username = core.username
+            member.lastCommentReadId = Int64(core.lastCommentReadId)
+            member.lastCommentReceivedId = Int64(core.lastCommentReceivedId)
             
             if let extras = core.extras {
-                result.extras   = extras.dict2json()
+                member.extras = extras.dict2json()
             }
-        //}
-        return result
+            
+            // Process pending changes
+            context.processPendingChanges()
+        }
+        
+        return member
     }
     
     internal func map(_ member: Member) -> MemberModel {

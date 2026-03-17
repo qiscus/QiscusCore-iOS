@@ -17,7 +17,7 @@ class PresistentStore {
     private init() {
     }
     
-    static var context:NSManagedObjectContext {
+    static var context: NSManagedObjectContext {
         if #available(iOS 10.0, *) {
             return persistentContainer.viewContext
         } else {
@@ -32,18 +32,59 @@ class PresistentStore {
     static var persistentContainer: NSPersistentContainer = {
         if let modelURL = QiscusCore.bundle.url(forResource: DB_NAME, withExtension: "momd") {
             let container = NSPersistentContainer.init(name: DB_NAME, managedObjectModel: NSManagedObjectModel(contentsOf: modelURL)!)
+            
             container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+                // ✅ Set merge policy
                 container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+                
+                // ✅ Auto merge changes from parent
+                container.viewContext.automaticallyMergesChangesFromParent = true
+                
+                // ✅ Add observer untuk merge changes
+                NotificationCenter.default.addObserver(
+                    forName: .NSManagedObjectContextDidSave,
+                    object: nil,
+                    queue: nil
+                ) { notification in
+                    guard let context = notification.object as? NSManagedObjectContext,
+                          context != container.viewContext else { return }
+                    
+                    container.viewContext.perform {
+                        container.viewContext.mergeChanges(fromContextDidSave: notification)
+                    }
+                }
+                
                 if let error = error as NSError? {
                     QiscusLogger.errorPrint("Unresolved error \(error.localizedDescription), \(error.userInfo)")
                 }
             })
             return container
-        }else{
+            
+        } else {
             let modelURL = Bundle.moduleData.url(forResource: DB_NAME, withExtension: "momd")!
             let container = NSPersistentContainer.init(name: DB_NAME, managedObjectModel: NSManagedObjectModel(contentsOf: modelURL)!)
+            
             container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+                // ✅ Set merge policy
                 container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+                
+                // ✅ Auto merge changes from parent
+                container.viewContext.automaticallyMergesChangesFromParent = true
+                
+                // ✅ Add observer untuk merge changes
+                NotificationCenter.default.addObserver(
+                    forName: .NSManagedObjectContextDidSave,
+                    object: nil,
+                    queue: nil
+                ) { notification in
+                    guard let context = notification.object as? NSManagedObjectContext,
+                          context != container.viewContext else { return }
+                    
+                    container.viewContext.perform {
+                        container.viewContext.mergeChanges(fromContextDidSave: notification)
+                    }
+                }
+                
                 if let error = error as NSError? {
                     QiscusLogger.errorPrint("Unresolved error \(error.localizedDescription), \(error.userInfo)")
                 }
@@ -98,6 +139,38 @@ class PresistentStore {
         return managedObjectContext
     }()
     
+//    // MARK: Core Data Saving support
+//    static func saveContext() {
+//        context.perform {
+//            guard context.hasChanges else {
+//                return
+//            }
+//            
+//            do {
+//                // ✅ Process pending changes
+//                context.processPendingChanges()
+//                
+//                // ✅ Save
+//                try context.save()
+//                
+//            } catch let error as NSError {
+//                QiscusLogger.errorPrint("❌ Save error: \(error)")
+//                QiscusLogger.errorPrint("Error domain: \(error.domain)")
+//                QiscusLogger.errorPrint("Error code: \(error.code)")
+//                
+//                // ✅ Rollback
+//                context.rollback()
+//                
+//                // ✅ Log detailed errors
+//                if let detailedErrors = error.userInfo[NSDetailedErrorsKey] as? [NSError] {
+//                    for detailError in detailedErrors {
+//                        QiscusLogger.errorPrint("Detailed error: \(detailError)")
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
     // MARK: Core Data Saving support
     static func saveContext() {
         context.perform {
@@ -106,28 +179,166 @@ class PresistentStore {
             }
             
             do {
-                // ✅ Process pending changes
+                // ✅ 1. Process pending changes FIRST
                 context.processPendingChanges()
                 
-                // ✅ Save
+                // ✅ 2. Validate all objects BEFORE save
+                try validateAllObjects()
+                
+                // ✅ 3. Clean up relationships
+                cleanupRelationships()
+                
+                // ✅ 4. Validate again after cleanup
+                context.processPendingChanges()
+                
+                // ✅ 5. Try to save
                 try context.save()
                 
+                QiscusLogger.debugPrint("✅ Context saved successfully")
+                
+            } catch let validationError as NSError where validationError.domain == NSCocoaErrorDomain {
+                // ✅ Handle validation errors
+                handleValidationError(validationError)
+                
             } catch let error as NSError {
-                QiscusLogger.errorPrint("❌ Save error: \(error)")
-                QiscusLogger.errorPrint("Error domain: \(error.domain)")
-                QiscusLogger.errorPrint("Error code: \(error.code)")
+                // ✅ Handle other errors
+                handleSaveError(error)
+            }
+        }
+    }
+
+    // ✅ Validate all objects
+    private static func validateAllObjects() throws {
+        let allObjects = context.insertedObjects
+            .union(context.updatedObjects)
+            .union(context.deletedObjects)
+        
+        var validationErrors: [Error] = []
+        
+        for object in allObjects {
+            guard !object.isFault, !object.isDeleted else { continue }
+            
+            // ✅ Validate each property individually untuk catch specific errors
+            do {
+                try object.validateForUpdate()
+            } catch let error as NSError {
+                QiscusLogger.errorPrint("❌ Validation failed for \(object.entity.name ?? "unknown"): \(error)")
                 
-                // ✅ Rollback
-                context.rollback()
+                // ✅ Collect errors instead of throwing immediately
+                validationErrors.append(error)
                 
-                // ✅ Log detailed errors
-                if let detailedErrors = error.userInfo[NSDetailedErrorsKey] as? [NSError] {
-                    for detailError in detailedErrors {
-                        QiscusLogger.errorPrint("Detailed error: \(detailError)")
+                // ✅ Try to fix common issues
+                if error.code == NSValidationMissingMandatoryPropertyError {
+                    // Handle missing required property
+                    if let key = error.userInfo[NSValidationKeyErrorKey] as? String {
+                        QiscusLogger.errorPrint("  Missing required property: \(key)")
+                        // Optionally set default value
                     }
                 }
             }
         }
+        
+        // ✅ If there were validation errors, throw the first one
+        if let firstError = validationErrors.first {
+            throw firstError
+        }
+    }
+
+    // ✅ Clean up relationships
+    private static func cleanupRelationships() {
+        let allObjects = context.insertedObjects.union(context.updatedObjects)
+        
+        for object in allObjects {
+            guard !object.isFault, !object.isDeleted else { continue }
+            
+            let entity = object.entity
+            
+            // Check to-many relationships
+            for (name, relationship) in entity.relationshipsByName where relationship.isToMany {
+                guard let relatedSet = object.value(forKey: name) as? NSSet else {
+                    QiscusLogger.debugPrint("⚠️ Relationship '\(name)' is not NSSet")
+                    continue
+                }
+                
+                // Filter out deleted/invalid objects
+                let validObjects = relatedSet.filter { obj in
+                    guard let managedObj = obj as? NSManagedObject else { return false }
+                    return !managedObj.isDeleted && managedObj.managedObjectContext != nil
+                }
+                
+                // Update if different
+                if validObjects.count != relatedSet.count {
+                    QiscusLogger.debugPrint("🧹 Cleaned relationship '\(name)' in \(entity.name ?? "unknown")")
+                    object.setValue(NSSet(array: Array(validObjects)), forKey: name)
+                }
+            }
+            
+            // Check to-one relationships
+            for (name, relationship) in entity.relationshipsByName where !relationship.isToMany {
+                guard let relatedObject = object.value(forKey: name) as? NSManagedObject else { continue }
+                
+                // Remove if deleted or invalid
+                if relatedObject.isDeleted || relatedObject.managedObjectContext == nil {
+                    QiscusLogger.debugPrint("🧹 Removed invalid relationship '\(name)' in \(entity.name ?? "unknown")")
+                    object.setValue(nil, forKey: name)
+                }
+            }
+        }
+    }
+
+    // ✅ Handle validation errors
+    private static func handleValidationError(_ error: NSError) {
+        QiscusLogger.errorPrint("❌ Validation error: \(error)")
+        QiscusLogger.errorPrint("Error code: \(error.code)")
+        
+        // Log which object failed
+        if let object = error.userInfo[NSValidationObjectErrorKey] as? NSManagedObject {
+            QiscusLogger.errorPrint("Failed object: \(object.entity.name ?? "unknown")")
+            QiscusLogger.errorPrint("Object: \(object)")
+        }
+        
+        // Log which property failed
+        if let key = error.userInfo[NSValidationKeyErrorKey] as? String {
+            QiscusLogger.errorPrint("Failed property: \(key)")
+        }
+        
+        // Log validation value
+        if let value = error.userInfo[NSValidationValueErrorKey] {
+            QiscusLogger.errorPrint("Failed value: \(value)")
+        }
+        
+        // ✅ Rollback
+        context.rollback()
+    }
+
+    // ✅ Handle save errors
+    private static func handleSaveError(_ error: NSError) {
+        QiscusLogger.errorPrint("❌ Save error: \(error)")
+        QiscusLogger.errorPrint("Error domain: \(error.domain)")
+        QiscusLogger.errorPrint("Error code: \(error.code)")
+        QiscusLogger.errorPrint("Error description: \(error.localizedDescription)")
+        
+        // ✅ Log detailed errors
+        if let detailedErrors = error.userInfo[NSDetailedErrorsKey] as? [NSError] {
+            for (index, detailError) in detailedErrors.enumerated() {
+                QiscusLogger.errorPrint("Detailed error \(index): \(detailError)")
+                QiscusLogger.errorPrint("  Domain: \(detailError.domain)")
+                QiscusLogger.errorPrint("  Code: \(detailError.code)")
+                
+                // Check for constraint violations
+                if detailError.code == 133021 { // NSValidationMultipleErrorsError
+                    QiscusLogger.errorPrint("  ⚠️ Multiple validation errors")
+                } else if detailError.code == 1550 { // NSManagedObjectConstraintMergeError
+                    QiscusLogger.errorPrint("  ⚠️ Constraint merge conflict")
+                }
+            }
+        }
+        
+        // ✅ Rollback
+        context.rollback()
+        
+        // ✅ Optionally refresh objects
+        context.refreshAllObjects()
     }
     
     static func clear() {

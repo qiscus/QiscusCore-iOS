@@ -270,42 +270,65 @@ extension CommentStorage {
     ///
     /// - Parameters:
     ///   - core: core model
-    ///   - data: db model, if exist just update falue
+    ///   - data: db model, if exist just update value
     /// - Returns: db object
     private func map(_ core: CommentModel, data: Comment? = nil) -> Comment {
-        var result : Comment
-        if let _result = data {
-            result = _result // Update data
-        }else {
-            result = Comment.generate() // prepare create new
+        let context = PresistentStore.context
+        
+        // ✅ Get or create comment OUTSIDE closure
+        let comment: Comment
+        if let existingComment = data {
+            comment = existingComment
+        } else {
+            comment = Comment.generate()
         }
-        //QiscusThread.background {
-            result.id               = core.id
-            result.type             = core.type
-            result.userAvatarUrl    = core.userAvatarUrl?.absoluteString
-            result.username         = core.username
-            result.userEmail        = core.userEmail
-            result.userId           = core.userId
-            result.message          = core.message
-            result.uniqId           = core.uniqId
-            result.roomId           = core.roomId
-            result.commentBeforeId  = core.commentBeforeId
-            result.status           = core.status.rawValue
-            result.unixTimestamp    = Int64(core.unixTimestamp)
-            result.timestamp        = core.timestamp
-            result.isPublicChannel  = core.isPublicChannel
-            if let payload = core.payload {
-                result.payload = payload.dict2json()
+        
+        // ✅ Update properties INSIDE closure
+        context.performAndWait {
+            // Validate comment
+            guard !comment.isDeleted, comment.managedObjectContext != nil else {
+                QiscusLogger.errorPrint("❌ Comment is invalid")
+                return
             }
+            
+            // Refresh if existing
+            if data != nil {
+                context.refresh(comment, mergeChanges: true)
+            }
+            
+            // ✅ Map all properties
+            comment.id = core.id
+            comment.type = core.type
+            comment.userAvatarUrl = core.userAvatarUrl?.absoluteString
+            comment.username = core.username
+            comment.userEmail = core.userEmail
+            comment.userId = core.userId
+            comment.message = core.message
+            comment.uniqId = core.uniqId
+            comment.roomId = core.roomId
+            comment.commentBeforeId = core.commentBeforeId
+            comment.status = core.status.rawValue
+            comment.unixTimestamp = Int64(core.unixTimestamp)
+            comment.timestamp = core.timestamp
+            comment.isPublicChannel = core.isPublicChannel
+            
+            if let payload = core.payload {
+                comment.payload = payload.dict2json()
+            }
+            
             if let extras = core.extras {
-                result.extras   = extras.dict2json()
+                comment.extras = extras.dict2json()
             }
             
             if let userExtras = core.userExtras {
-                result.userExtras   = userExtras.dict2json()
+                comment.userExtras = userExtras.dict2json()
             }
-        //}
-        return result
+            
+            // Process pending changes
+            context.processPendingChanges()
+        }
+        
+        return comment
     }
     
     /// map from db model to core model
