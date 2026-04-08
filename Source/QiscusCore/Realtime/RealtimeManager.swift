@@ -34,6 +34,34 @@ class RealtimeManager {
         defer { pendingSubscribeTopicLock.unlock() }
         pendingSubscribeTopic.removeAll()
     }
+
+    // CocoaMQTT (underlying QiscusRealtime transport) processes inbound
+    // packets — including SUBACK / PUBACK / UNSUBACK — on its delegate
+    // queue (the main queue by default). Outbound calls that mutate the
+    // same internal subscription/ack dictionaries (subscribe, unsubscribe,
+    // publish, connect, disconnect) must run on that same queue, otherwise
+    // concurrent dictionary mutation corrupts the storage and crashes in
+    // `Dictionary.removeValue(forKey:)` during didReceive(suback:).
+    //
+    // These helpers marshal calls onto the main queue. When already on
+    // main they execute inline to avoid deadlocks for reentrant paths
+    // (e.g. QiscusRealtime delegate callbacks that call back into us on
+    // main and then trigger more subscribe work).
+    private func mqttSync<T>(_ block: () -> T) -> T {
+        if Thread.isMainThread {
+            return block()
+        } else {
+            return DispatchQueue.main.sync(execute: block)
+        }
+    }
+
+    private func mqttAsync(_ block: @escaping () -> Void) {
+        if Thread.isMainThread {
+            block()
+        } else {
+            DispatchQueue.main.async(execute: block)
+        }
+    }
     
     private var roomTypings : [String : _roomTyping] = [String : _roomTyping]()
     func setup(appName: String) {
@@ -70,7 +98,7 @@ class RealtimeManager {
         guard let c = client else {
             return
         }
-        c.disconnect()
+        mqttAsync { c.disconnect() }
         self.removeAllPendingSubscribeTopic()
     }
     
@@ -102,9 +130,13 @@ class RealtimeManager {
             self.appendPendingSubscribeTopic(.comment(token: passwordSDK))
             self.appendPendingSubscribeTopic(.updateComment(token: passwordSDK))
             self.appendPendingSubscribeTopic(.notification(token: passwordSDK))
-            
-            if  ConfigManager.shared.isEnableDisableRealtimeManually == true && clientRealtime.isConnect == false {
-                clientRealtime.connect(usernameSDK: usernameSDK, passwordSDK: passwordSDK, usernameMQTT: usernameMQTT, passwordMQTT: passwordMQTT, delegate: self)
+
+            if ConfigManager.shared.isEnableDisableRealtimeManually == true {
+                mqttAsync {
+                    if clientRealtime.isConnect == false {
+                        clientRealtime.connect(usernameSDK: usernameSDK, passwordSDK: passwordSDK, usernameMQTT: usernameMQTT, passwordMQTT: passwordMQTT, delegate: self)
+                    }
+                }
             }
         } else {
             ConfigManager.shared.isConnectedMqtt = false
@@ -115,32 +147,34 @@ class RealtimeManager {
         guard let c = client else {
             return
         }
-        
+
         if let user = QiscusCore.getUserData() {
             if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-                c.unsubscribe(endpoint: .comment(token: user.token))
-                c.unsubscribe(endpoint: .updateComment(token: user.token))
-                c.unsubscribe(endpoint: .notification(token: user.token))
+                mqttAsync {
+                    c.unsubscribe(endpoint: .comment(token: user.token))
+                    c.unsubscribe(endpoint: .updateComment(token: user.token))
+                    c.unsubscribe(endpoint: .notification(token: user.token))
+                }
             }
         }
     }
-    
+
     func subcribeCommentUpdateComemntNotification(){
         guard let c = client else {
             return
         }
-        
+
         if let user = QiscusCore.getUserData() {
             if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-                if !c.subscribe(endpoint: .comment(token: user.token)){
+                if !mqttSync({ c.subscribe(endpoint: .comment(token: user.token)) }) {
                     self.appendPendingSubscribeTopic(.comment(token: user.token))
                 }
 
-                if !c.subscribe(endpoint: .updateComment(token: user.token)){
+                if !mqttSync({ c.subscribe(endpoint: .updateComment(token: user.token)) }) {
                     self.appendPendingSubscribeTopic(.updateComment(token: user.token))
                 }
 
-                if !c.subscribe(endpoint: .notification(token: user.token)){
+                if !mqttSync({ c.subscribe(endpoint: .notification(token: user.token)) }) {
                     self.appendPendingSubscribeTopic(.notification(token: user.token))
                 }
             }
@@ -160,35 +194,35 @@ class RealtimeManager {
             for room in rooms {
                 if room.type == .channel{
                     if let appId = ConfigManager.shared.appID {
-                        if !c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)){
+                        if !mqttSync({ c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)) }) {
                              self.appendPendingSubscribeTopic(.roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
                              QiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
                         }
                     }
                 }else{
                     // subscribe comment deliverd receipt
-                    if !c.subscribe(endpoint: .delivery(roomID: room.id)){
+                    if !mqttSync({ c.subscribe(endpoint: .delivery(roomID: room.id)) }) {
                         self.appendPendingSubscribeTopic(.delivery(roomID: room.id))
                         QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
                     }
                     // subscribe comment read
-                    if !c.subscribe(endpoint: .read(roomID: room.id)) {
+                    if !mqttSync({ c.subscribe(endpoint: .read(roomID: room.id)) }) {
                         self.appendPendingSubscribeTopic(.read(roomID: room.id))
                         QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
                     }
-                    if !c.subscribe(endpoint: .typing(roomID: room.id)) {
+                    if !mqttSync({ c.subscribe(endpoint: .typing(roomID: room.id)) }) {
                         self.appendPendingSubscribeTopic(.typing(roomID: room.id))
                         QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
                     }
 
-                    if !c.subscribe(endpoint: .typingAI(roomID: room.id)) {
+                    if !mqttSync({ c.subscribe(endpoint: .typingAI(roomID: room.id)) }) {
                         self.appendPendingSubscribeTopic(.typingAI(roomID: room.id))
                         QiscusLogger.errorPrint("failed to subscribe event typingAI from room \(room.name), then queue in pending")
                     }
 
                     guard let participants = room.participants else { return }
                     for u in participants {
-                        if !c.subscribe(endpoint: .onlineStatus(user: u.email)) {
+                        if !mqttSync({ c.subscribe(endpoint: .onlineStatus(user: u.email)) }) {
                             self.appendPendingSubscribeTopic(.onlineStatus(user: u.email))
                             QiscusLogger.errorPrint("failed to subscribe online status user \(u.email), then queue in pending")
                         }
@@ -211,7 +245,7 @@ class RealtimeManager {
         }
         
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            if !c.subscribe(endpoint: .onlineStatus(user: userId)) {
+            if !mqttSync({ c.subscribe(endpoint: .onlineStatus(user: userId)) }) {
                 self.appendPendingSubscribeTopic(.onlineStatus(user: userId))
                 QiscusLogger.errorPrint("failed to subscribe online status user \(userId), then queue in pending")
             }
@@ -228,7 +262,7 @@ class RealtimeManager {
         
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
             for userId in userIds {
-                if !c.subscribe(endpoint: .onlineStatus(user: userId)) {
+                if !mqttSync({ c.subscribe(endpoint: .onlineStatus(user: userId)) }) {
                     self.appendPendingSubscribeTopic(.onlineStatus(user: userId))
                     QiscusLogger.errorPrint("failed to subscribe online status user \(userId), then queue in pending")
                 }
@@ -240,20 +274,22 @@ class RealtimeManager {
         guard let c = client else {
             return
         }
-        
+
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            c.unsubscribe(endpoint: .onlineStatus(user: userId))
+            mqttAsync { c.unsubscribe(endpoint: .onlineStatus(user: userId)) }
         }
     }
-    
+
     func unsubscribeUserOnlinePresence(userIds : [String]){
         guard let c = client else {
             return
         }
-        
+
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            for userId in userIds {
-                c.unsubscribe(endpoint: .onlineStatus(user: userId))
+            mqttAsync {
+                for userId in userIds {
+                    c.unsubscribe(endpoint: .onlineStatus(user: userId))
+                }
             }
         }
     }
@@ -271,28 +307,28 @@ class RealtimeManager {
             for room in rooms {
                 if room.type == .channel{
                     if let appId = ConfigManager.shared.appID {
-                        if !c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)){
+                        if !mqttSync({ c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)) }) {
                             self.appendPendingSubscribeTopic(.roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
                             QiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
                         }
                     }
                 }else{
                     // subscribe comment deliverd receipt
-                    if !c.subscribe(endpoint: .delivery(roomID: room.id)){
+                    if !mqttSync({ c.subscribe(endpoint: .delivery(roomID: room.id)) }) {
                         self.appendPendingSubscribeTopic(.delivery(roomID: room.id))
                         QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
                     }
                     // subscribe comment read
-                    if !c.subscribe(endpoint: .read(roomID: room.id)) {
+                    if !mqttSync({ c.subscribe(endpoint: .read(roomID: room.id)) }) {
                         self.appendPendingSubscribeTopic(.read(roomID: room.id))
                         QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
                     }
-                    if !c.subscribe(endpoint: .typing(roomID: room.id)) {
+                    if !mqttSync({ c.subscribe(endpoint: .typing(roomID: room.id)) }) {
                         self.appendPendingSubscribeTopic(.typing(roomID: room.id))
                         QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
                     }
 
-                    if !c.subscribe(endpoint: .typingAI(roomID: room.id)) {
+                    if !mqttSync({ c.subscribe(endpoint: .typingAI(roomID: room.id)) }) {
                         self.appendPendingSubscribeTopic(.typingAI(roomID: room.id))
                         QiscusLogger.errorPrint("failed to subscribe event typingAI from room \(room.name), then queue in pending")
                     }
@@ -307,54 +343,60 @@ class RealtimeManager {
         guard let c = client else {
             return
         }
-        
+
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            for room in rooms {
-                if room.type != .channel {
-                    // unsubcribe room event
-                    c.unsubscribe(endpoint: .delivery(roomID: room.id))
-                    c.unsubscribe(endpoint: .read(roomID: room.id))
-                    c.unsubscribe(endpoint: .typing(roomID: room.id))
-                    c.unsubscribe(endpoint: .typingAI(roomID: room.id))
-                    guard let participants = room.participants else { return }
-                    for u in participants {
-                        c.unsubscribe(endpoint: .onlineStatus(user: u.email))
+            mqttAsync {
+                for room in rooms {
+                    if room.type != .channel {
+                        // unsubcribe room event
+                        c.unsubscribe(endpoint: .delivery(roomID: room.id))
+                        c.unsubscribe(endpoint: .read(roomID: room.id))
+                        c.unsubscribe(endpoint: .typing(roomID: room.id))
+                        c.unsubscribe(endpoint: .typingAI(roomID: room.id))
+                        guard let participants = room.participants else { return }
+                        for u in participants {
+                            c.unsubscribe(endpoint: .onlineStatus(user: u.email))
+                        }
                     }
                 }
             }
         }
     }
-    
+
     func unsubscribeRoomsChannel(rooms: [RoomModel]) {
         guard let c = client else {
             return
         }
-        
+
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            for room in rooms {
-                if room.type == .channel {
-                    if let appId = ConfigManager.shared.appID {
-                        c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
+            mqttAsync {
+                for room in rooms {
+                    if room.type == .channel {
+                        if let appId = ConfigManager.shared.appID {
+                            c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
+                        }
                     }
                 }
             }
         }
-        
+
     }
-    
+
     func unsubscribeRoomsWithoutOnlineStatus(rooms: [RoomModel]) {
         guard let c = client else {
             return
         }
-        
+
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            for room in rooms {
-                if room.type != .channel {
-                    // unsubcribe room event
-                    c.unsubscribe(endpoint: .delivery(roomID: room.id))
-                    c.unsubscribe(endpoint: .read(roomID: room.id))
-                    c.unsubscribe(endpoint: .typing(roomID: room.id))
-                    c.unsubscribe(endpoint: .typingAI(roomID: room.id))
+            mqttAsync {
+                for room in rooms {
+                    if room.type != .channel {
+                        // unsubcribe room event
+                        c.unsubscribe(endpoint: .delivery(roomID: room.id))
+                        c.unsubscribe(endpoint: .read(roomID: room.id))
+                        c.unsubscribe(endpoint: .typing(roomID: room.id))
+                        c.unsubscribe(endpoint: .typingAI(roomID: room.id))
+                    }
                 }
             }
         }
@@ -365,23 +407,23 @@ class RealtimeManager {
         guard let c = client else {
             return
         }
-        
+
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            if !c.publish(endpoint: .isTyping(value: value, roomID: roomID)) {
+            if !mqttSync({ c.publish(endpoint: .isTyping(value: value, roomID: roomID)) }) {
                 QiscusLogger.errorPrint("failed to send typing to roomID \(roomID)")
             }
         }
-        
+
     }
-    
+
     func isOnline(_ value: Bool) {
         guard let c = client else {
             return
         }
-        
+
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            if !c.publish(endpoint: .onlineStatus(value: value)) {
-                if c.isConnect == false {
+            if !mqttSync({ c.publish(endpoint: .onlineStatus(value: value)) }) {
+                if mqttSync({ c.isConnect }) == false {
                     QiscusCore.retryConnect { (success) in
                         if success == true{
                             if let user = QiscusCore.getProfile() {
@@ -400,30 +442,38 @@ class RealtimeManager {
     }
     
     func resumePendingSubscribeTopic() {
+        // Always drain on the MQTT delegate queue (main). Doing the whole
+        // iterate-and-remove on main means we never hold
+        // pendingSubscribeTopicLock while blocking on main queue, which
+        // would deadlock against main calls that try to briefly acquire
+        // the same lock via appendPendingSubscribeTopic().
+        mqttAsync { [weak self] in
+            self?.drainPendingSubscribeTopicOnMainQueue()
+        }
+    }
+
+    private func drainPendingSubscribeTopicOnMainQueue() {
+        // Precondition: executing on the main queue.
         guard let client = client else {
             return
         }
+        guard ConfigManager.shared.isEnableDisableRealtimeManually == true else {
+            return
+        }
 
-        if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            QiscusLogger.debugPrint("Resume pending subscribe")
-            // Serialize access so we don't iterate while another thread
-            // appends/removes from pendingSubscribeTopic.
-            pendingSubscribeTopicLock.lock()
-            defer { pendingSubscribeTopicLock.unlock() }
+        QiscusLogger.debugPrint("Resume pending subscribe")
+        pendingSubscribeTopicLock.lock()
+        defer { pendingSubscribeTopicLock.unlock() }
 
-            // resume pending subscribe
-            if !pendingSubscribeTopic.isEmpty {
-                for (i,t) in pendingSubscribeTopic.enumerated().reversed() {
-                    // check if success subscribe
-                    if client.subscribe(endpoint: t) {
-                        // remove from pending list
-                       self.pendingSubscribeTopic.remove(at: i)
-                    }
+        if !pendingSubscribeTopic.isEmpty {
+            for (i,t) in pendingSubscribeTopic.enumerated().reversed() {
+                if client.subscribe(endpoint: t) {
+                    self.pendingSubscribeTopic.remove(at: i)
                 }
             }
-
-            QiscusLogger.debugPrint("pendingSubscribeTopic count = \(pendingSubscribeTopic.count)")
         }
+
+        QiscusLogger.debugPrint("pendingSubscribeTopic count = \(pendingSubscribeTopic.count)")
     }
     
     // MARK : Typing event
@@ -437,8 +487,8 @@ class RealtimeManager {
         guard let c = client else { return }
         
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            if c.isConnect{
-                if !c.subscribe(endpoint: .typing(roomID: roomID)) {
+            if mqttSync({ c.isConnect }) {
+                if !mqttSync({ c.subscribe(endpoint: .typing(roomID: roomID)) }) {
                     self.appendPendingSubscribeTopic(.typing(roomID: roomID))
                     QiscusLogger.errorPrint("failed to subscribe event typing from room \(roomID), then queue in pending")
                 }else{
@@ -469,7 +519,7 @@ class RealtimeManager {
                 return
             }
             // unsubcribe room event
-            c.unsubscribe(endpoint: .typing(roomID: roomID))
+            mqttAsync { c.unsubscribe(endpoint: .typing(roomID: roomID)) }
         }
        
     }
@@ -485,9 +535,9 @@ class RealtimeManager {
         }
         
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            if c.isConnect{
+            if mqttSync({ c.isConnect }) {
                 // subcribe user token to get new comment
-                if !c.subscribe(endpoint: .roomEvent(roomID: roomID)) {
+                if !mqttSync({ c.subscribe(endpoint: .roomEvent(roomID: roomID)) }) {
                     self.appendPendingSubscribeTopic(.roomEvent(roomID: roomID))
                     QiscusLogger.errorPrint("failed to subscribe room Event, then queue in pending")
                 }else {
@@ -517,7 +567,7 @@ class RealtimeManager {
                 
                 if self.roomEvents.removeValue(forKey: roomID) != nil{
                     // unsubcribe room event
-                    c.unsubscribe(endpoint: .roomEvent(roomID: roomID))
+                    self.mqttAsync { c.unsubscribe(endpoint: .roomEvent(roomID: roomID)) }
                 }
             }
         }
@@ -528,9 +578,9 @@ class RealtimeManager {
         guard let c = client else {
             return false
         }
-        
+
         if ConfigManager.shared.isEnableDisableRealtimeManually == true {
-            if c.publish(endpoint: .roomEvent(roomID: roomID, payload: payload.dict2json())) {
+            if mqttSync({ c.publish(endpoint: .roomEvent(roomID: roomID, payload: payload.dict2json())) }) {
                 return true //
             }else {
                 return false
@@ -538,8 +588,8 @@ class RealtimeManager {
         }else{
             return false
         }
-        
-       
+
+
     }
     
     // util
