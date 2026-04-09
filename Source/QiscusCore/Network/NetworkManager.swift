@@ -793,7 +793,9 @@ extension NetworkManager {
         
         self.onProgressDownload = { progressUpload in
             // find progress in active download queue
-            for d in self.downloadService.activeDownloads {
+            // Iterate a snapshot — the underlying dictionary is mutated
+            // from the URLSession delegate queue and background queues.
+            for d in self.downloadService.activeDownloadsSnapshot() {
                 if d.key == file.url {
                     d.value.onProgress = { progress in
                         onProgress(progress)
@@ -887,21 +889,23 @@ extension NetworkManager {
 extension NetworkManager : URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         guard let sourceURL = downloadTask.originalRequest?.url else { return }
-        let download = downloadService.activeDownloads[sourceURL]
-        downloadService.activeDownloads[sourceURL] = nil
+        // Atomically fetch-and-remove to avoid racing with didWriteData on
+        // the same URLSession delegate queue and with startDownload from
+        // background queues.
+        let download = downloadService.removeDownload(for: sourceURL)
         if QiscusCore.fileManager.move(fromURL: sourceURL, to: location) {
             download?.file.downloaded = true
             download?.onCompleted(true)
         }
     }
-    
+
     // Updates progress info
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
                     didWriteData bytesWritten: Int64, totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64) {
         // 1
         guard let url = downloadTask.originalRequest?.url,
-            let download = downloadService.activeDownloads[url]  else { return }
+            let download = downloadService.download(for: url) else { return }
         // 2
         download.progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
         download.totalBytes = totalBytesExpectedToWrite
